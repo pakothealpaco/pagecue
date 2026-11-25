@@ -24,7 +24,7 @@ More of what we present is now made with Claude: reports, research, dashboards, 
 
 pagecue gives any page a presenter view, built around Claude. Tell Claude what you want to say; it finds where each part of the page starts and writes a short cue for it. While you rehearse, ask for changes and watch them appear. Then share only the page, and your cues follow along in a window no one else sees.
 
-**Try it in two minutes:** [install the extension](#install), open the [demo report](https://pakothealpaco.github.io/pagecue/demo/) and click the pagecue icon. The cues are already there.
+**Try it in two minutes:** [install the extension](#install), open the [demo report](https://usepagecue.com/demo/) and click the pagecue icon. The cues are already there.
 
 ## How it works with Claude
 
