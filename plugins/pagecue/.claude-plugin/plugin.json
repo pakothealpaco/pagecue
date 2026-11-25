@@ -1,6 +1,6 @@
 {
   "name": "pagecue",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Lets Claude write and change your pagecue speaker cues: plans the breakpoints, writes short cues, and edits them live while you rehearse.",
   "author": {
     "name": "Daniel Kheyfets",

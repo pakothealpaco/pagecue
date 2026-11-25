@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 (2026-11-25)
 
 - The prompter's "No cues on this page yet" card now copies `/pagecue:add-cues <page>`, which starts the skill in Claude Code directly, and links to the plugin's install steps when you don't have it yet.
 - Links to the user guide and to GitHub in the ··· menu and under every empty state.

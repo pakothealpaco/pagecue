@@ -35,7 +35,7 @@ const STATE_FRESH_MS = 6000;
 /** How long an agent waits for the prompter to carry out a command. */
 const COMMAND_TIMEOUT_MS = 10_000;
 const MAX_BODY_BYTES = 1_000_000;
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 /** A server started by `publish` exits after this long without requests. */
 const IDLE_EXIT_MS = 4 * 60 * 60 * 1000;
 
