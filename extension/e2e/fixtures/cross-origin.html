@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cross-origin cue file</title>
+    <!-- The test server rewrites __OTHER_ORIGIN__ to a different origin serving the same files. -->
+    <link rel="alternate" type="application/vnd.pagecue+json" href="__OTHER_ORIGIN__/report.cues.json" />
+  </head>
+  <body>
+    <section data-pagecue="summary">
+      <h2>Summary</h2>
+      <p>Only the attribute should be used.</p>
+    </section>
+  </body>
+</html>

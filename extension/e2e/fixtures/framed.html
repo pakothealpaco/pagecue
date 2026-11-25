@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Framed report</title>
+    <!-- A shell like claude.ai's artifact page: the content is a full-size frame from another origin pagecue can read. -->
+    <script type="application/vnd.pagecue+json">
+      {
+        "pagecue": 1,
+        "title": "Framed report",
+        "cues": [
+          { "id": "plan", "anchor": { "tag": "h2", "text": "The plan" }, "title": "One plan, two tracks", "notes": [] },
+          {
+            "id": "costs",
+            "anchor": { "tag": "h2", "text": "What it costs" },
+            "title": "Costs stay flat",
+            "notes": []
+          },
+          { "id": "risks", "anchor": { "tag": "h2", "text": "Risks" }, "title": "Two risks to watch", "notes": [] },
+          {
+            "id": "next",
+            "anchor": { "tag": "h2", "text": "Next steps" },
+            "title": "Three approvals needed",
+            "notes": []
+          }
+        ]
+      }
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        font:
+          14px system-ui,
+          sans-serif;
+      }
+      header {
+        height: 44px;
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        border-bottom: 1px solid #ddd;
+      }
+      iframe {
+        display: block;
+        width: 100%;
+        height: calc(100% - 45px);
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>App shell</header>
+    <iframe src="__FRAME_ORIGIN__/framed-content.html"></iframe>
+  </body>
+</html>

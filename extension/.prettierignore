@@ -1,0 +1,6 @@
+.output
+.output-e2e
+.output-qa
+.wxt
+node_modules
+package-lock.json

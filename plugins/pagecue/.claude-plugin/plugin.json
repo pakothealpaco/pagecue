@@ -1,0 +1,20 @@
+{
+  "name": "pagecue",
+  "version": "0.2.0",
+  "description": "Lets Claude write and change your pagecue speaker cues: plans the breakpoints, writes short cues, and edits them live while you rehearse.",
+  "author": {
+    "name": "Daniel Kheyfets",
+    "email": "pakothealpaco@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "presentation",
+    "speaker-notes",
+    "presenter-view",
+    "teleprompter",
+    "reports",
+    "chrome-extension"
+  ],
+  "homepage": "https://github.com/pakothealpaco/pagecue",
+  "repository": "https://github.com/pakothealpaco/pagecue"
+}

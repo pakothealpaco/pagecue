@@ -1,0 +1,55 @@
+{
+  "name": "pagecue-extension",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Speaker notes for any web page, written with Claude: a private prompter that follows your scroll.",
+  "author": "Daniel Kheyfets <pakothealpaco@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "PAGECUE_E2E=1 wxt build && node e2e/run.mjs",
+    "qa": "PAGECUE_QA=1 wxt build && node e2e/qa.mjs",
+    "postinstall": "wxt prepare",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "icons": "node scripts/make-icons.mjs",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
+    "@fontsource/ibm-plex-sans-devanagari": "^5.3.0",
+    "@fontsource/ibm-plex-sans-hebrew": "^5.3.0",
+    "@fontsource/ibm-plex-sans-thai": "^5.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.10",
+    "@types/react": "^19.3.2",
+    "@types/react-dom": "^19.3.0",
+    "@wxt-dev/module-react": "^1.2.2",
+    "eslint": "^10.15.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "gifenc": "^1.0.3",
+    "globals": "^17.14.0",
+    "jsdom": "^31.0.1",
+    "playwright-core": "^1.65.1",
+    "pngjs": "^7.0.0",
+    "prettier": "^3.10.1",
+    "typescript": "~6.0",
+    "typescript-eslint": "^8.74.0",
+    "vitest": "^5.1.1",
+    "wxt": "^0.21.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

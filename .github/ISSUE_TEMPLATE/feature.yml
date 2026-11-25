@@ -1,0 +1,15 @@
+name: Idea
+description: Suggest something pagecue should do.
+labels: [idea]
+body:
+  - type: textarea
+    id: situation
+    attributes:
+      label: The situation
+      description: What were you presenting, and what got in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help

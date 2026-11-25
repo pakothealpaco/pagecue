@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Single-page app</title>
+    <style>
+      body {
+        font:
+          16px/1.5 system-ui,
+          sans-serif;
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      section {
+        min-height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav><a href="#/overview">Overview</a> <a href="#/details">Details</a></nav>
+    <main id="app"></main>
+    <script>
+      const routes = {
+        '#/overview': ['Traffic', 'Signups'],
+        '#/details': ['Funnel', 'Retention', 'Revenue'],
+      };
+      function render() {
+        const titles = routes[location.hash] ?? routes['#/overview'];
+        document.getElementById('app').innerHTML = titles
+          .map(
+            (title) =>
+              `<section data-pagecue="${title.toLowerCase()}"><h2>${title}</h2><p>${title} details.</p></section>`,
+          )
+          .join('');
+      }
+      addEventListener('hashchange', render);
+      render();
+    </script>
+  </body>
+</html>

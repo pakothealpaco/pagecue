@@ -1,0 +1,29 @@
+name: Bug report
+description: Something doesn't work as it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: The page you presented, if it is public, or the kind of page (a report, a dashboard, a claude.ai artifact).
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and pagecue version
+      placeholder: Chrome 142, pagecue 0.2.0
+    validations:
+      required: true
+  - type: textarea
+    id: cues
+    attributes:
+      label: Cue file
+      description: For cues in the wrong place, the exported cue file helps a lot (prompter ··· → Export cues).
+      render: json

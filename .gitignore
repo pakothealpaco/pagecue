@@ -1,0 +1,20 @@
+node_modules/
+.output/
+.output-e2e/
+.output-qa/
+.wxt/
+*.zip
+.DS_Store
+.env
+.env.*
+
+# Internal research context (Hebrew working notes); kept local until the owner decides to publish it.
+docs/research/
+
+# The global gitignore on the owner machine ignores README.md; this public repo needs them.
+!README.md
+!**/README.md
+dist/
+
+# Personal Claude Code instructions
+CLAUDE.local.md

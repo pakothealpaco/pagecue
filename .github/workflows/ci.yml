@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  extension:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extension
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install --with-deps chromium
+      - run: npm run e2e
+
+  plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Cue checker runs on the example
+        run: node plugins/pagecue/scripts/check-cues.mjs extension/e2e/fixtures/report.cues.json extension/e2e/fixtures
+      - name: Plugin manifests are valid JSON
+        run: |
+          node -e "for (const f of ['.claude-plugin/marketplace.json','plugins/pagecue/.claude-plugin/plugin.json','plugins/pagecue/.mcp.json','plugins/pagecue/schema/pagecue.schema.json']) JSON.parse(require('fs').readFileSync(f,'utf8'))"
+      - name: The bridge starts and answers MCP
+        run: |
+          printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"ci","version":"1"}}}' | PAGECUE_HOME=$RUNNER_TEMP/pagecue PAGECUE_PORT=47699 timeout 10 node plugins/pagecue/server/bridge.mjs mcp | grep -q '"serverInfo"'

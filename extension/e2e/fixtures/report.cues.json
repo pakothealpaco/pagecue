@@ -1,0 +1,14 @@
+{
+  "pagecue": 1,
+  "title": "Q3 business review",
+  "cues": [
+    { "id": "summary", "title": "Revenue up 24% in Q3", "notes": ["Driven by new EU customers", "Key number: 24%"] },
+    { "id": "costs", "title": "Costs rose, then flattened", "notes": ["+11% after the March migration"] },
+    {
+      "id": "churn",
+      "title": "Churn down to 2.1%",
+      "notes": ["Was 3.4%", "Onboarding changes did it", "Q: will it hold? → yes, two cohorts so far"]
+    },
+    { "id": "pipeline", "title": "Pipeline 1.8x quota", "notes": ["Three deals carry most of it"] }
+  ]
+}

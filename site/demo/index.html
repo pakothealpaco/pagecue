@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Q3 partner review · Halcyon Roasters</title>
+    <meta
+      name="description"
+      content="A sample report to try pagecue on: open it, click pagecue, and the cues appear."
+    />
+    <!--
+      A pagecue demo. The cues below ship with the page, so anyone who opens it with the pagecue
+      extension sees them at once. Halcyon Roasters is a fictional company and all numbers are made up.
+    -->
+    <script type="application/vnd.pagecue+json">
+      {
+        "pagecue": 1,
+        "title": "Q3 partner review",
+        "cues": [
+          {
+            "id": "open",
+            "anchor": { "tag": "h1", "text": "Q3 partner review" },
+            "title": "Best quarter yet: $4.2M, up 31%",
+            "notes": [
+              "Thank them for the shelf space",
+              "One ask at the end: the Q4 co-promo"
+            ]
+          },
+          {
+            "id": "numbers",
+            "anchor": { "tag": "h2", "text": "The quarter in four numbers" },
+            "title": "Four numbers, then stop talking",
+            "notes": [
+              "Repeat rate 68% is the one to land",
+              "Margin held despite green coffee prices"
+            ]
+          },
+          {
+            "id": "growth",
+            "anchor": { "tag": "h2", "text": "Revenue by month" },
+            "title": "September doubled March",
+            "notes": [
+              "Spike = cold brew launch, Aug 12",
+              "Not a one-off: Oct tracking +6%"
+            ]
+          },
+          {
+            "id": "partners",
+            "anchor": { "tag": "h2", "text": "Where it sold" },
+            "title": "Your stores: 38% of growth",
+            "notes": [
+              "Thank Dana's team by name",
+              "Northside store is the model"
+            ]
+          },
+          {
+            "id": "risks",
+            "anchor": { "tag": "h2", "text": "Two things to watch" },
+            "title": "Two risks, both handled",
+            "notes": [
+              "Prices: hedged through March",
+              "Cold brew is seasonal: winter blend ready"
+            ]
+          },
+          {
+            "id": "ask",
+            "anchor": { "tag": "h2", "text": "What we propose for Q4" },
+            "title": "The ask: end-cap in 40 stores",
+            "notes": [
+              "Nov 15 to Dec 31",
+              "We fund the displays",
+              "Pause. Let them answer."
+            ]
+          }
+        ]
+      }
+    </script>
+    <style>
+      :root {
+        --ink: #1f1a16;
+        --muted: #6f655c;
+        --line: #e8e1d8;
+        --paper: #fbf8f4;
+        --accent: #b4572e;
+        --accent-soft: #f3e3d8;
+        --good: #2f7d57;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font:
+          17px/1.6 ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 56px 28px 120px;
+      }
+      .kicker {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 14px;
+        margin: 0 0 10px;
+      }
+      h1 {
+        font-size: clamp(34px, 5vw, 48px);
+        line-height: 1.1;
+        margin: 0 0 16px;
+        letter-spacing: -0.02em;
+      }
+      .lead {
+        font-size: 20px;
+        color: var(--muted);
+        max-width: 60ch;
+        margin: 0;
+      }
+      section {
+        padding: 64px 0 24px;
+        border-top: 1px solid var(--line);
+        margin-top: 56px;
+      }
+      h2 {
+        font-size: 28px;
+        margin: 0 0 8px;
+        letter-spacing: -0.01em;
+      }
+      .sub {
+        color: var(--muted);
+        margin: 0 0 28px;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 16px;
+      }
+      .stat {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 20px;
+      }
+      .stat b {
+        display: block;
+        font-size: 34px;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .stat em {
+        color: var(--good);
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      figure {
+        margin: 0;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 24px;
+      }
+      figcaption {
+        color: var(--muted);
+        font-size: 14px;
+        margin-top: 12px;
+      }
+      svg text {
+        font:
+          12px ui-sans-serif,
+          system-ui,
+          sans-serif;
+        fill: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+      th {
+        font-size: 13px;
+        color: var(--muted);
+        font-weight: 600;
+        background: #fdfbf8;
+      }
+      td.num {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      tr:last-child td {
+        border-bottom: 0;
+      }
+      .bar {
+        display: inline-block;
+        height: 8px;
+        border-radius: 4px;
+        background: var(--accent);
+        vertical-align: middle;
+        margin-right: 8px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 22px;
+      }
+      .card h3 {
+        margin: 0 0 6px;
+        font-size: 18px;
+      }
+      .card p {
+        margin: 0;
+        color: var(--muted);
+      }
+      .proposal {
+        background: var(--accent-soft);
+        border-radius: 18px;
+        padding: 32px;
+      }
+      .proposal ul {
+        margin: 12px 0 0;
+        padding-left: 20px;
+      }
+      footer {
+        margin-top: 72px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="kicker">Halcyon Roasters · Partner review · Q3</p>
+      <h1>Q3 partner review</h1>
+      <p class="lead">
+        Our best quarter yet. Revenue reached $4.2M, up 31% on last year, and
+        stores like yours drove most of it. Here is what happened, what we are
+        watching, and one proposal for the holidays.
+      </p>
+
+      <section>
+        <h2>The quarter in four numbers</h2>
+        <p class="sub">
+          July to September, compared with the same quarter last year.
+        </p>
+        <div class="stats">
+          <div class="stat"><b>$4.2M</b><span>Revenue</span> <em>+31%</em></div>
+          <div class="stat">
+            <b>68%</b><span>Repeat buyers</span> <em>+9 pts</em>
+          </div>
+          <div class="stat">
+            <b>41%</b><span>Gross margin</span> <em>held</em>
+          </div>
+          <div class="stat">
+            <b>212</b><span>Stores carrying us</span> <em>+46</em>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Revenue by month</h2>
+        <p class="sub">
+          Thousands of dollars. The cold brew line launched on August 12.
+        </p>
+        <figure>
+          <svg
+            viewBox="0 0 760 260"
+            role="img"
+            aria-label="Monthly revenue from January to September, rising from 820 to 1,610 thousand dollars"
+          >
+            <g>
+              <line x1="40" y1="220" x2="750" y2="220" stroke="#e8e1d8" />
+              <line x1="40" y1="150" x2="750" y2="150" stroke="#f1ece5" />
+              <line x1="40" y1="80" x2="750" y2="80" stroke="#f1ece5" />
+              <text x="0" y="224">0</text>
+              <text x="0" y="154">800</text>
+              <text x="0" y="84">1,600</text>
+            </g>
+            <g fill="#d9a48a">
+              <rect x="60" y="148" width="52" height="72" rx="6" />
+              <rect x="136" y="144" width="52" height="76" rx="6" />
+              <rect x="212" y="139" width="52" height="81" rx="6" />
+              <rect x="288" y="133" width="52" height="87" rx="6" />
+              <rect x="364" y="126" width="52" height="94" rx="6" />
+              <rect x="440" y="118" width="52" height="102" rx="6" />
+            </g>
+            <g fill="#b4572e">
+              <rect x="516" y="109" width="52" height="111" rx="6" />
+              <rect x="592" y="94" width="52" height="126" rx="6" />
+              <rect x="668" y="79" width="52" height="141" rx="6" />
+            </g>
+            <g>
+              <text x="74" y="240">Jan</text>
+              <text x="150" y="240">Feb</text>
+              <text x="226" y="240">Mar</text>
+              <text x="302" y="240">Apr</text>
+              <text x="376" y="240">May</text>
+              <text x="454" y="240">Jun</text>
+              <text x="531" y="240">Jul</text>
+              <text x="606" y="240">Aug</text>
+              <text x="682" y="240">Sep</text>
+            </g>
+          </svg>
+          <figcaption>
+            September ($1.61M) was almost double March ($0.92M).
+          </figcaption>
+        </figure>
+      </section>
+
+      <section>
+        <h2>Where it sold</h2>
+        <p class="sub">Share of this quarter's growth, by channel.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th>Share of growth</th>
+              <th class="num">Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Your stores</td>
+              <td><span class="bar" style="width: 152px"></span>38%</td>
+              <td class="num">$1.39M</td>
+            </tr>
+            <tr>
+              <td>Online subscriptions</td>
+              <td><span class="bar" style="width: 112px"></span>28%</td>
+              <td class="num">$1.12M</td>
+            </tr>
+            <tr>
+              <td>Cafés and offices</td>
+              <td><span class="bar" style="width: 80px"></span>20%</td>
+              <td class="num">$0.98M</td>
+            </tr>
+            <tr>
+              <td>Other retailers</td>
+              <td><span class="bar" style="width: 56px"></span>14%</td>
+              <td class="num">$0.71M</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Two things to watch</h2>
+        <p class="sub">Neither changes the plan; both have an answer.</p>
+        <div class="cards">
+          <div class="card">
+            <h3>Green coffee prices</h3>
+            <p>
+              Up 18% since June. We bought forward through March, so shelf
+              prices stay where they are.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Cold brew is seasonal</h3>
+            <p>
+              Sales will dip in winter. The winter blend ships November 1 to the
+              same shelf.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>What we propose for Q4</h2>
+        <div class="proposal">
+          <p>
+            An end-cap display in 40 of your stores from November 15 to December
+            31, with gift boxes and the winter blend.
+          </p>
+          <ul>
+            <li>We fund and install the displays.</li>
+            <li>
+              Expected lift: 22% on the category, based on the Northside pilot.
+            </li>
+            <li>A joint review in the second week of January.</li>
+          </ul>
+        </div>
+      </section>
+
+      <footer>
+        A demo for
+        <a href="https://github.com/pakothealpaco/pagecue">pagecue</a> by Paco the Alpaca. Halcyon
+        Roasters is fictional and every number on this page is made up.
+      </footer>
+    </main>
+  </body>
+</html>

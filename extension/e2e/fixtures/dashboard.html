@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Ops dashboard</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        font:
+          16px/1.5 system-ui,
+          sans-serif;
+      }
+      .app {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        height: 100%;
+      }
+      nav {
+        background: #223;
+        color: #fff;
+        padding: 16px;
+      }
+      .content {
+        overflow-y: auto;
+        padding: 16px;
+      }
+      .card {
+        height: 320px;
+        margin-bottom: 16px;
+        padding: 16px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+    </style>
+    <script type="application/vnd.pagecue+json">
+      {
+        "pagecue": 1,
+        "cues": [
+          { "id": "metric-3", "title": "Metric 3 is up 21%", "notes": ["Segment C drives it"] },
+          { "id": "metric-8", "title": "Metric 8 needs attention", "notes": ["56% vs last month"] }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <nav>Ops</nav>
+      <div class="content" id="scroller">
+        <div class="card">
+          <h3>Metric 1</h3>
+          <p>Value 7% compared with last month, segment A.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 2</h3>
+          <p>Value 14% compared with last month, segment B.</p>
+        </div>
+        <div class="card" data-pagecue="metric-3">
+          <h3>Metric 3</h3>
+          <p>Value 21% compared with last month, segment C.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 4</h3>
+          <p>Value 28% compared with last month, segment D.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 5</h3>
+          <p>Value 35% compared with last month, segment E.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 6</h3>
+          <p>Value 42% compared with last month, segment F.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 7</h3>
+          <p>Value 49% compared with last month, segment G.</p>
+        </div>
+        <div class="card" data-pagecue="metric-8">
+          <h3>Metric 8</h3>
+          <p>Value 56% compared with last month, segment H.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 9</h3>
+          <p>Value 63% compared with last month, segment I.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 10</h3>
+          <p>Value 70% compared with last month, segment J.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 11</h3>
+          <p>Value 77% compared with last month, segment K.</p>
+        </div>
+        <div class="card">
+          <h3>Metric 12</h3>
+          <p>Value 84% compared with last month, segment L.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

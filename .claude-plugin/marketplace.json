@@ -1,0 +1,17 @@
+{
+  "name": "pagecue",
+  "owner": {
+    "name": "Daniel Kheyfets",
+    "email": "pakothealpaco@gmail.com"
+  },
+  "metadata": {
+    "description": "Speaker notes for any web page, written with Claude: a private prompter that follows your scroll."
+  },
+  "plugins": [
+    {
+      "name": "pagecue",
+      "source": "./plugins/pagecue",
+      "description": "Lets Claude write and change your pagecue speaker cues: plans the breakpoints, writes short cues, and edits them live while you rehearse."
+    }
+  ]
+}

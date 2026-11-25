@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pakothealpaco/pagecue/schema/pagecue.schema.json",
+  "title": "pagecue cue file",
+  "description": "Presenter cues for one web page. Each cue attaches to an element and holds a short headline and speaker notes. Read by the pagecue Chrome extension from <link rel=\"alternate\" type=\"application/vnd.pagecue+json\" href=\"...\">, from an inline <script type=\"application/vnd.pagecue+json\">, or imported by hand.",
+  "type": "object",
+  "required": ["pagecue", "cues"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "pagecue": {
+      "description": "Format version.",
+      "const": 1
+    },
+    "title": {
+      "description": "Title of the page or presentation.",
+      "type": "string"
+    },
+    "cues": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/cue" }
+    }
+  },
+  "$defs": {
+    "cue": {
+      "type": "object",
+      "required": ["id", "title"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "description": "Unique, stable id. Without an anchor, the cue attaches to the element with data-pagecue equal to this id.",
+          "type": "string",
+          "minLength": 1
+        },
+        "anchor": {
+          "description": "Which element the cue attaches to: another data-pagecue value, or a full anchor as exported by the extension.",
+          "oneOf": [{ "type": "string", "minLength": 1 }, { "$ref": "#/$defs/anchor" }]
+        },
+        "title": {
+          "description": "One glanceable line, about eight words.",
+          "type": "string"
+        },
+        "notes": {
+          "description": "Speaker notes: one point per array item (or per line of a string). At most three short points work best.",
+          "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }]
+        },
+        "startAt": {
+          "description": "Moves where the cue starts on the page, as a share of its section's height: 0.5 starts it half a section later, -0.25 a quarter earlier. Usually set by the presenter dragging the cue's line on the page.",
+          "type": "number"
+        }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": ["tag"],
+      "properties": {
+        "tag": { "type": "string", "description": "Lower-case tag name, or * for any." },
+        "cue": { "type": "string", "description": "data-pagecue value." },
+        "id": { "type": "string", "description": "Element id." },
+        "testId": {
+          "type": "object",
+          "required": ["attr", "value"],
+          "properties": { "attr": { "type": "string" }, "value": { "type": "string" } }
+        },
+        "selector": { "type": "string", "description": "Unique CSS selector." },
+        "text": { "type": "string", "description": "Start of the element's text, used to verify and to fuzzy-match." },
+        "heading": { "type": "string", "description": "Nearest heading before the element." }
+      }
+    }
+  },
+  "examples": [
+    {
+      "pagecue": 1,
+      "title": "Q3 business review",
+      "cues": [
+        {
+          "id": "revenue",
+          "title": "Revenue up 24% in Q3",
+          "notes": ["Driven by new EU customers", "Q: will it hold? → two cohorts so far"]
+        },
+        { "id": "costs-chart", "anchor": "costs", "title": "Costs rose, then flattened", "notes": "+11% after the March migration" }
+      ]
+    }
+  ]
+}

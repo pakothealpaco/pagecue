@@ -1,0 +1,1293 @@
+/* pagecue prompter: a confidence monitor. Read in half-second glances while talking.
+   One cue is lit; everything else recedes. See docs/design/prompter.md. */
+
+:root {
+  /* IBM Plex covers Latin, Cyrillic, Greek, Vietnamese, Hebrew, Arabic, Devanagari and Thai (bundled).
+     Chinese, Japanese and Korean use the system's own fonts, per language below. */
+  --font:
+    'IBM Plex Sans', 'IBM Plex Sans Hebrew', 'IBM Plex Sans Arabic', 'IBM Plex Sans Devanagari', 'IBM Plex Sans Thai',
+    ui-sans-serif, system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  /* Side margin; in a wide window everything keeps to one readable column in the middle. (Used only
+     in padding, where 100% is the window width.) */
+  --gutter: max(24px, calc((100% - 760px) / 2));
+}
+
+.theme-dark {
+  color-scheme: dark;
+  --bg: #101318;
+  --raised: #191d24;
+  --ink: #ece8e1;
+  --muted: #8a919c;
+  --line: #252a33;
+  --live: #6fd3a0;
+  --standby: #e8b85c;
+  --fault: #f08072;
+  --dim: 0.34;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.theme-light {
+  color-scheme: light;
+  --bg: #f4f6f9;
+  --raised: #ffffff;
+  --ink: #151a22;
+  --muted: #5e6672;
+  --line: #dde2e9;
+  --live: #1e9e63;
+  --standby: #b07a12;
+  --fault: #c2412f;
+  --dim: 0.4;
+  --shadow: 0 12px 32px rgba(21, 26, 34, 0.14);
+}
+
+@media (prefers-contrast: more) {
+  .theme-dark,
+  .theme-light {
+    --dim: 0.62;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+kbd,
+code {
+  font: 500 0.92em var(--font);
+  padding: 1px 6px;
+  border-radius: 5px;
+  background: var(--raised);
+  border: 1px solid var(--line);
+}
+
+.app {
+  --s: var(--scale, 1);
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  /* Never let content (a long page title) widen the window's single column. */
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--bg);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- chrome that fades when idle */
+
+.chrome {
+  transition: opacity 180ms var(--ease-out);
+}
+
+.is-quiet .chrome {
+  opacity: 0;
+  transition-duration: 240ms;
+}
+
+.top {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding-inline: calc(var(--gutter) - 6px) var(--gutter);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.page-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  margin-inline-start: -6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-name:hover {
+  color: var(--ink);
+}
+
+.page-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  unicode-bidi: isolate;
+}
+
+.page-name .chevron {
+  flex: none;
+  color: var(--muted);
+}
+
+/* The cue light sits in a 28 px button, so it is easy to hit. */
+.light-button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-inline-start: -10px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+}
+
+.light-button:hover {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.resume {
+  flex: none;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--standby) 16%, transparent);
+  color: var(--standby);
+  font: inherit;
+  font-weight: 600;
+}
+
+.position {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* The cue light: green live, amber standby, red fault. */
+.light {
+  display: block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.6;
+  transition:
+    background-color 240ms var(--ease-out),
+    box-shadow 240ms var(--ease-out);
+}
+
+button.light {
+  /* A larger hit area than the dot itself. */
+  outline-offset: 6px;
+  box-shadow: 0 0 0 8px transparent;
+}
+
+.light.is-live {
+  background: var(--live);
+  opacity: 1;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--live) 18%, transparent);
+}
+
+.light.is-standby {
+  background: var(--standby);
+  opacity: 1;
+}
+
+.light.is-fault {
+  background: var(--fault);
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------- the cues */
+
+.stage {
+  position: relative;
+  min-height: 0;
+}
+
+/* Soft edges: text dissolves into the background instead of being cut by the window. */
+.stage::before,
+.stage::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stage::before {
+  top: 0;
+  height: 40px;
+  background: linear-gradient(to top, transparent, var(--bg));
+}
+
+.stage::after {
+  bottom: 0;
+  height: 56px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+}
+
+.cue-list {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.cue-list::-webkit-scrollbar {
+  display: none;
+}
+
+.cues {
+  list-style: none;
+  margin: 0;
+  /* Room above the first cue and below the last, so each can reach the reading line (30%). */
+  padding: 30vh var(--gutter) 70vh;
+  display: flex;
+  flex-direction: column;
+  gap: calc(44px * var(--s));
+}
+
+.cue {
+  position: relative;
+  padding-inline-start: 14px;
+  opacity: var(--dim);
+  cursor: pointer;
+  transition: opacity 220ms var(--ease-out);
+}
+
+/* The live rail: the same green as the cue light, on the cue for the section at the reading line. */
+.cue::before {
+  content: '';
+  position: absolute;
+  inset-block: 0.3em 0.2em;
+  inset-inline-start: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--live);
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+}
+
+.cue.is-lit,
+.cue.is-lit::before {
+  opacity: 1;
+}
+
+.cue.is-editing {
+  opacity: 1;
+  cursor: default;
+}
+
+.cue-title {
+  margin: 0;
+  font-size: calc(24px * var(--s));
+  line-height: 1.22;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.cue-points {
+  margin: calc(12px * var(--s)) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: calc(18px * var(--s));
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: calc(6px * var(--s));
+}
+
+.cue-points li {
+  position: relative;
+  padding-inline-start: 18px;
+  text-wrap: pretty;
+}
+
+.cue-points li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 2px;
+  top: 0.66em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+/*
+ * In-place editing. The cue lifts onto one quiet sheet and its text stays exactly where it was, in
+ * the same type: no boxed form fields, just a caret in the headline and the points. Actions sit on
+ * a hairline at the bottom of the sheet.
+ */
+.cue.is-editing {
+  margin-inline: -16px;
+  padding: 14px 16px 8px;
+  border-radius: 14px;
+  background: var(--raised);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 10px 30px color-mix(in srgb, var(--ink) 9%, transparent);
+  animation: lift 160ms var(--ease-out);
+}
+
+.cue.is-editing::before {
+  opacity: 0;
+}
+
+@keyframes lift {
+  from {
+    background: transparent;
+    box-shadow: 0 0 0 1px transparent;
+  }
+}
+
+.field {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  caret-color: var(--live);
+  resize: none;
+  overflow: hidden;
+}
+
+.field::placeholder {
+  color: color-mix(in srgb, var(--muted) 75%, transparent);
+  opacity: 1;
+}
+
+.field.cue-points {
+  margin-top: calc(12px * var(--s));
+  display: block;
+}
+
+.field:focus {
+  outline: none;
+}
+
+.edit-hint {
+  margin: calc(14px * var(--s)) -8px 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.edit-hint .quiet-button.danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  font-size: 13px;
+}
+
+.edit-keys {
+  margin-inline-start: auto;
+  margin-inline-end: 6px;
+}
+
+.edit-keys kbd {
+  font: inherit;
+  font-weight: 600;
+}
+
+.done-button {
+  padding: 5px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--live) 16%, transparent);
+  color: var(--live);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.done-button:hover {
+  background: color-mix(in srgb, var(--live) 26%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue.is-editing {
+    animation: none;
+  }
+}
+
+.footnote {
+  padding-inline-start: 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------------------------------------------------------------- empty states */
+
+.empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 calc(var(--gutter) + 14px) 15vh;
+  color: var(--muted);
+}
+
+.empty h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.empty p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 34ch;
+}
+
+.retry {
+  display: block;
+  margin-top: 14px;
+}
+
+/* ---------------------------------------------------------------- bottom bar and menu */
+
+.bottom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding-inline: var(--gutter) calc(var(--gutter) - 8px);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* The footer fades by parts: the lines toggle stays while lines are on, since viewers see them. */
+.bottom > .timer,
+.controls > * {
+  transition: opacity 180ms var(--ease-out);
+}
+
+.is-quiet .bottom > .timer,
+.is-quiet .controls > :not(.is-sticky) {
+  opacity: 0;
+  transition-duration: 240ms;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+}
+
+.icon-button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  color: var(--ink);
+}
+
+.icon-button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+:is(.icon-button, .light-button, .resume, .page-name, .timer, .empty-action, .done-button):focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 1px;
+}
+
+.size-buttons {
+  display: flex;
+  gap: 2px;
+}
+
+.size-buttons .icon-button {
+  width: 28px;
+  padding: 0;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.size-smaller {
+  font-size: 12px;
+}
+
+.size-larger {
+  font-size: 17px;
+}
+
+.lines-toggle {
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lines-toggle[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--live) 14%, transparent);
+  color: var(--live);
+}
+
+.lines-toggle[aria-pressed='true']:hover {
+  background: color-mix(in srgb, var(--live) 22%, transparent);
+  color: var(--live);
+}
+
+@media (max-width: 299px) {
+  .lines-toggle .label {
+    display: none;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.timer .reset {
+  margin-inline-start: 6px;
+  opacity: 0;
+  transition: opacity 120ms;
+}
+
+.timer:hover .reset,
+.timer:focus-visible .reset {
+  opacity: 1;
+}
+
+.timer {
+  border: 0;
+  padding: 4px 0;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.menu-button {
+  display: flex;
+  gap: 3px;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+}
+
+.menu-button span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.menu-button:hover span,
+.menu-button[aria-expanded='true'] span {
+  background: var(--ink);
+}
+
+.menu {
+  position: absolute;
+  inset-inline-end: 12px;
+  bottom: calc(100% - 4px);
+  z-index: 10;
+  width: min(300px, calc(100vw - 24px));
+  /* Never taller than the window above the 44px footer: a short prompter scrolls the menu instead
+     of cutting off its top. */
+  max-height: calc(100vh - 44px - 12px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--raised);
+  box-shadow:
+    0 0 0 1px var(--line),
+    var(--shadow);
+  font-size: 13px;
+  transform-origin: bottom right;
+  opacity: 0;
+  transform: scale(0.98);
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 100ms var(--ease-out),
+    transform 100ms var(--ease-out),
+    visibility 0s 100ms;
+}
+
+.menu.is-open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  visibility: visible;
+  transition:
+    opacity 140ms var(--ease-out),
+    transform 140ms var(--ease-out);
+}
+
+.menu > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  text-align: start;
+}
+
+.menu > button:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.menu > button:disabled {
+  color: var(--muted);
+  cursor: default;
+}
+
+.menu hr {
+  margin: 6px 4px;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 4px 6px 10px;
+}
+
+.choice {
+  display: flex;
+  padding: 2px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.choice button {
+  min-width: 34px;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.choice button[aria-pressed='true'] {
+  background: var(--raised);
+  color: var(--ink);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.check {
+  flex: none;
+  width: 28px;
+  height: 16px;
+  border-radius: 8px;
+  background: var(--line);
+  position: relative;
+  transition: background-color 140ms var(--ease-out);
+}
+
+.check::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  inset-inline-start: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--raised);
+  transition: transform 140ms var(--ease-out);
+}
+
+[aria-checked='true'] .check {
+  background: var(--live);
+}
+
+[aria-checked='true'] .check::after {
+  transform: translateX(12px);
+}
+
+[dir='rtl'] [aria-checked='true'] .check::after {
+  transform: translateX(-12px);
+}
+
+.shortcuts {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 12px;
+  margin: 4px 10px 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.shortcuts dd {
+  margin: 0;
+  text-align: end;
+  color: var(--ink);
+  opacity: 0.8;
+}
+
+/* ---------------------------------------------------------------- toast */
+
+.toast {
+  position: absolute;
+  inset-inline: 16px;
+  bottom: 56px;
+  z-index: 20;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--raised);
+  box-shadow:
+    0 0 0 1px var(--line),
+    var(--shadow);
+  font-size: 13px;
+  line-height: 1.45;
+  animation: toast-in 200ms var(--ease-out);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ---------------------------------------------------------------- sites sheet */
+
+.sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  overflow-y: auto;
+  padding: 0 var(--gutter) 24px;
+  background: var(--bg);
+  animation: sheet-in 180ms var(--ease-out);
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.sheet-header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  background: var(--bg);
+}
+
+.sheet h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.sheet h3 {
+  margin: 18px 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.sheet-note {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 2px;
+  padding: 10px 8px;
+  margin-inline-start: -8px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  text-align: start;
+}
+
+.row:hover,
+.row[aria-current='true'] {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.row .light {
+  grid-row: span 2;
+}
+
+.row-title {
+  font-size: 15px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-meta {
+  grid-column: 2;
+  font-size: 12px;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-with-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.row-with-action .row {
+  grid-template-columns: 1fr;
+}
+
+.row-with-action .row-meta {
+  grid-column: 1;
+}
+
+.row-rename {
+  flex: 1;
+  min-width: 0;
+  margin: 4px 0;
+  padding: 8px 10px;
+  border: 1px solid var(--live);
+  border-radius: 8px;
+  background: var(--raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.quiet-button {
+  flex: none;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--live);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.quiet-button:hover {
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.quiet-button.danger {
+  color: var(--muted);
+}
+
+.quiet-button.danger:hover {
+  color: var(--fault);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+.menu > button small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---------------------------------------------------------------- first-use help */
+
+.tip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.empty-or {
+  display: block;
+  margin-top: 14px;
+}
+
+.empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.empty-action {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--live);
+  color: var(--bg);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.empty > p > .empty-action {
+  display: block;
+  margin-top: 10px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.menu > button kbd {
+  flex: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+}
+
+.row-switch {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 2px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  text-align: start;
+}
+
+.row-switch[aria-checked='true'] .check {
+  background: var(--live);
+}
+
+.row-switch[aria-checked='true'] .check::after {
+  transform: translateX(12px);
+}
+
+/* Shown faintly while the pointer is over the list: empty space takes a double-click to add a cue. */
+.add-hint {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 180ms var(--ease-out);
+  user-select: none;
+}
+
+.app:not(.is-quiet) .cue-list:hover .add-hint {
+  opacity: 0.7;
+}
+
+/* Claude in Chrome may edit cues: shown like lit section lines, and it stays while on. */
+.agent-on {
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--standby) 16%, transparent);
+  color: var(--standby);
+}
+
+.agent-on:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--standby) 26%, transparent);
+  color: var(--standby);
+}
+
+@media (max-width: 299px) {
+  .agent-on .label {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- cues in every script */
+
+/* Each cue carries a lang tag for its script (see scriptLanguage): the right CJK glyphs and fonts,
+   room for tall scripts, and no letter-spacing where letters join or are not spaced. */
+.cue:lang(zh) {
+  font-family:
+    'IBM Plex Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', system-ui, sans-serif;
+}
+
+.cue:lang(ja) {
+  font-family:
+    'IBM Plex Sans', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', 'Noto Sans JP', system-ui,
+    sans-serif;
+}
+
+.cue:lang(ko) {
+  font-family: 'IBM Plex Sans', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', system-ui, sans-serif;
+  word-break: keep-all;
+}
+
+.cue:is(:lang(zh), :lang(ja), :lang(ko), :lang(ar), :lang(hi), :lang(th)) .cue-title {
+  letter-spacing: 0;
+}
+
+.cue:is(:lang(zh), :lang(ja)) .cue-title {
+  line-height: 1.35;
+}
+
+.cue:is(:lang(zh), :lang(ja)) {
+  line-break: strict;
+}
+
+.cue:is(:lang(ar), :lang(hi), :lang(th)) .cue-title {
+  line-height: 1.45;
+}
+
+.cue:is(:lang(ar), :lang(hi), :lang(th)) .cue-points {
+  line-height: 1.7;
+}
+
+/* Long words and links never push a cue wider than the window. */
+.cue-title,
+.cue-points li {
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------- sites list, grouped by site */
+
+.site-group h3 {
+  margin: 20px 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.site-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.site-row .row {
+  grid-template-columns: 1fr;
+  padding-inline-end: 72px;
+  margin-inline: -8px;
+  width: calc(100% + 16px);
+}
+
+/* Every title starts at the same edge, whatever its script, so the list reads as one column. */
+.site-row .row-title,
+.site-row .row-meta {
+  grid-column: 1;
+  text-align: left;
+}
+
+.row-badge {
+  margin-inline-end: 6px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--live) 16%, transparent);
+  color: var(--live);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Rename and delete stay out of sight until the row is pointed at or focused. */
+.row-actions {
+  position: absolute;
+  inset-inline-end: 0;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 120ms var(--ease-out);
+}
+
+.site-row:hover .row-actions,
+.site-row:focus-within .row-actions {
+  opacity: 1;
+}
+
+.row-actions .icon-button.danger:hover {
+  color: var(--fault);
+}
+
+.site-row .row-rename {
+  margin-inline: -8px;
+}
+
+/* ---------------------------------------------------------------- empty page: ask Claude or write */
+
+.empty-step {
+  display: block;
+  margin-top: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.empty-step-label {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.prompt-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px 10px 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--raised);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 120ms var(--ease-out);
+}
+
+.prompt-card:hover {
+  border-color: color-mix(in srgb, var(--live) 60%, var(--line));
+}
+
+.prompt-card-text {
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+.prompt-card-action {
+  flex: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--live);
+  color: var(--bg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.prompt-card.is-copied .prompt-card-action {
+  background: color-mix(in srgb, var(--live) 16%, transparent);
+  color: var(--live);
+}
+
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--live);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}
