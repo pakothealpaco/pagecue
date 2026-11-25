@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { LINKS } from '../lib/links';
+import { HelpLinks } from './components/HelpLinks';
 import { browser } from 'wxt/browser';
 import { forgetSite, injectInto, isRemembered, rememberSite } from '../lib/access';
 import { CueFileError, parseCueFile, toCueFile } from '../lib/cueFile';
@@ -139,10 +141,6 @@ export function App() {
       });
     },
   });
-
-  useEffect(() => {
-    if (status === 'connected') send({ type: 'agent-access', on: settings.agentAccess });
-  }, [status, page?.siteKey, settings.agentAccess, send]);
 
   // Section lines follow the setting on every connection (a reloaded page starts without them).
   useEffect(() => {
@@ -554,8 +552,6 @@ export function App() {
           onAddCue={addCue}
           onEditCurrent={() => cues[activeIndex] && setEditingId(cues[activeIndex].id)}
           onTogglePause={() => setPaused((value) => !value)}
-          agentAccess={settings.agentAccess}
-          onToggleAgentAccess={() => updateSettings({ agentAccess: !settings.agentAccess })}
           onClose={() => setMenuOpen(false)}
           onSettings={updateSettings}
           onSites={() => setSitesOpen(true)}
@@ -616,8 +612,8 @@ function hostOf(url: string): string {
   }
 }
 
-/** What the presenter pastes to Claude to get cues for a page. */
-const agentPrompt = (url: string): string => `Add pagecue cues to this page: ${url}\nWhat I want to say: `;
+/** What the presenter pastes to Claude Code: the add-cues skill's command, so the skill always runs. */
+const agentPrompt = (url: string): string => `/pagecue:add-cues ${url}\n\nWhat I want to say: `;
 
 /** The page as people read it: host and path, letters decoded, no scheme. */
 const readableUrl = (url: string): string => {
@@ -646,7 +642,10 @@ function AgentPrompt({ url }: { url: string }) {
       title={agentPrompt(url)}
     >
       <span className="prompt-card-text">
-        Add pagecue cues to <span dir="auto">{readableUrl(url)}</span>
+        <code className="prompt-card-command">/pagecue:add-cues</code>
+        <span className="prompt-card-url" dir="auto">
+          {readableUrl(url)}
+        </span>
       </span>
       <span className="prompt-card-action">{copied ? 'Copied ✓' : 'Copy'}</span>
     </button>
@@ -706,9 +705,16 @@ function Empty({
             <>
               <span className="empty-step">
                 <span className="empty-step-label">Ask Claude</span>
-                Copy this prompt, paste it to Claude and add what you want to say.
+                Paste this into Claude Code and add what you want to say. The pagecue skill plans the cues and writes
+                them with you.
               </span>
               {pageUrl && <AgentPrompt url={pageUrl} />}
+              <span className="empty-hint">
+                No plugin yet?{' '}
+                <a href={LINKS.plugin} target="_blank" rel="noopener noreferrer">
+                  Add it to Claude Code
+                </a>
+              </span>
               {onAddCue && (
                 <span className="empty-step">
                   <span className="empty-step-label">Or write your own</span>
@@ -751,6 +757,7 @@ function Empty({
     <div className="empty">
       <h2>{title}</h2>
       <p>{body}</p>
+      <HelpLinks />
     </div>
   );
 }

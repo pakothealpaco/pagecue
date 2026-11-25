@@ -1,5 +1,5 @@
 /**
- * Makes the README's pictures from the demo page (site/demo), so they can be redone whenever the
+ * Makes the README's pictures from the demo page (site/public/demo), so they can be redone whenever the
  * prompter changes: a still of the shared page beside the prompter, and a short GIF of the prompter
  * following the page as it scrolls.
  *
@@ -9,13 +9,13 @@
  */
 import { existsSync, readFileSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { homedir, tmpdir } from 'node:os';
+import { tmpdir } from 'node:os';
 import { dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readdirSync } from 'node:fs';
 import gifenc from 'gifenc';
 import { PNG } from 'pngjs';
 import { chromium } from 'playwright-core';
+import { findChromium } from './chromium.mjs';
 
 const { GIFEncoder, quantize, applyPalette } = gifenc;
 const here = dirname(fileURLToPath(import.meta.url));
@@ -25,30 +25,6 @@ const images = join(root, 'docs/images');
 
 const SITE = { width: 1040, height: 700 };
 const PROMPTER = { width: 380, height: 700 };
-
-function findChromium() {
-  if (process.env.PAGECUE_CHROMIUM) return process.env.PAGECUE_CHROMIUM;
-  const bundled = chromium.executablePath();
-  if (existsSync(bundled)) return bundled;
-  const cache = join(
-    homedir(),
-    process.platform === 'darwin' ? 'Library/Caches/ms-playwright' : '.cache/ms-playwright',
-  );
-  for (const dir of readdirSync(cache)
-    .filter((d) => /^chromium-\d+$/.test(d))
-    .sort()
-    .reverse()) {
-    const found = [
-      'chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing',
-      'chrome-mac/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing',
-      'chrome-linux64/chrome',
-    ]
-      .map((rel) => join(cache, dir, rel))
-      .find(existsSync);
-    if (found) return found;
-  }
-  throw new Error('No Chromium found.');
-}
 
 /** The two windows side by side, each with a caption, on a quiet background. */
 const COMPOSER = `<!doctype html><html><head><style>
@@ -69,7 +45,7 @@ const COMPOSER = `<!doctype html><html><head><style>
 async function main() {
   if (!existsSync(join(extensionPath, 'manifest.json')))
     throw new Error('Build the test variant first: PAGECUE_E2E=1 npx wxt build');
-  const siteRoot = join(root, 'site');
+  const siteRoot = join(root, 'site/public');
   const server = createServer((req, res) => {
     let path = join(siteRoot, decodeURIComponent(new URL(req.url, 'http://x').pathname));
     if (path.endsWith('/')) path = join(path, 'index.html');

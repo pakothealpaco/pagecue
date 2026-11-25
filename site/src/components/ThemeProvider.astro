@@ -1,0 +1,13 @@
+{/* Starlight's theme provider, but light unless the reader picked a theme: the site is light by
+    default, like most documentation people read during the day. Inlined to avoid a flash. */}
+<script is:inline>
+  (() => {
+    let stored = null;
+    try {
+      stored = localStorage.getItem('starlight-theme');
+      if (stored === null) localStorage.setItem('starlight-theme', (stored = 'light'));
+    } catch {}
+    const theme = stored || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'light';
+  })();
+</script>

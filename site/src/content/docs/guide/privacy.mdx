@@ -1,0 +1,33 @@
+---
+title: Privacy
+description: pagecue collects nothing. What it stores, where, and what it reads on a page.
+---
+
+pagecue collects nothing. It has no servers, no accounts, no analytics and no tracking. Your cues stay on your computer unless you export them.
+
+This is a summary; the full policy is [PRIVACY.md](https://github.com/pakothealpaco/pagecue/blob/main/PRIVACY.md).
+
+## What's stored, and where
+
+| What | Where |
+|---|---|
+| Your cues, where each attaches, the page's address and title, your settings | Your browser (`chrome.storage.local`) |
+| Cues Claude hands over | `~/.pagecue/inbox` on your computer |
+| While the prompter is open and the Claude plugin's server runs: the page's address and title, its cues and the view | `~/.pagecue/live` on your computer, so Claude can see what you see |
+
+## What pagecue reads on a page
+
+Only on pages you open it on: the page's structure and text, to find where each cue belongs and to follow your scrolling. Nothing it reads is sent anywhere.
+
+## Network requests
+
+1. A page's own cue file, when the page links to one, from that page's site only.
+2. The Claude plugin's server on your own computer (`127.0.0.1:47613`), while the prompter is open.
+
+## When you present
+
+Share only the page's tab or window and viewers see the page, not the prompter. pagecue draws nothing on the page except section lines, and only while you turn them on.
+
+## This website
+
+usepagecue.com has no analytics, no cookies and no third-party scripts. Its fonts are served from this site.

@@ -1,0 +1,52 @@
+---
+title: FAQ
+description: Common questions about pagecue.
+---
+
+### Can viewers see my cues?
+
+No, if you share the page's tab or window. The prompter is a separate window that isn't part of what you share. If you share your whole screen, it is. Section lines are drawn on the page, so viewers see those while they're on. See [Share your screen privately](/guide/sharing/).
+
+### Is pagecue free?
+
+Yes. It's open source under the MIT licence, with no account and no paid tier.
+
+### Do I need Claude?
+
+No. The extension works on its own: write cues in the prompter, or use cues a page comes with. With Claude it's faster: it reads the page and keeps each cue short.
+
+### Which Claude?
+
+Claude Code gets everything: the `add-cues` skill and the live tools. The Claude desktop app's chat gets the live tools only, set up by hand ([Install](/guide/install/#the-claude-plugin)). Anywhere else, Claude can still write a cue file you load with **Import cues…**.
+
+### Does it work on pages I didn't make?
+
+Yes. pagecue works on any web page you can open in Chrome, and on local HTML files. Claude attaches cues to a page's headings when it can't mark the page itself.
+
+### Does it work with Google Slides or PowerPoint?
+
+They have their own speaker notes. pagecue is for what isn't slides: reports, dashboards, docs, sites and web apps.
+
+### What languages does it support?
+
+Any. Cues in Hebrew, Arabic and other right-to-left languages read right to left. Ask Claude in your language and it writes the cues in it.
+
+### Where are my cues stored?
+
+In your browser, on your computer. Cues Claude hands over also sit in `~/.pagecue`. Nothing is uploaded. See [Privacy](/guide/privacy/).
+
+### Can I use a presentation clicker?
+
+Yes. Clickers send <kbd>PageDown</kbd> and <kbd>PageUp</kbd>, which move through cues while the prompter has focus. From the page, use <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>↓</kbd> and <kbd>↑</kbd>.
+
+### Does it work in Edge, Brave or Arc?
+
+It's made and tested for Chrome. Other Chromium browsers should work the same way.
+
+### How do I move my cues to another computer?
+
+Export them from the ··· menu and import the file on the other computer. See [Edit cues yourself](/guide/editing/#move-cues-to-another-computer).
+
+### How do I report a bug or ask for a feature?
+
+[Open an issue on GitHub](https://github.com/pakothealpaco/pagecue/issues/new/choose).

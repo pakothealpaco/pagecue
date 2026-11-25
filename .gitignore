@@ -18,3 +18,7 @@ dist/
 
 # Personal Claude Code instructions
 CLAUDE.local.md
+
+# Site build
+site/dist/
+site/.astro/

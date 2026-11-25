@@ -8,7 +8,6 @@ import {
   type MainFrames,
   type Target,
 } from '../lib/session';
-import { installPageApi, PAGE_API_HELP } from '../lib/pageApi';
 import { commitChange, commitRename, type ChangeRequest, type RenameRequest } from '../lib/store';
 
 const PROMPTER_SIZE = { width: 440, height: 820 };
@@ -104,7 +103,6 @@ type BackgroundRequest =
   | RenameRequest
   | { type: 'fetch-cue-file'; url: string }
   | { type: 'fetch-bridge-cues'; key: string }
-  | { type: 'install-page-api' }
   | MainFrameRequest
   | { type: 'inject-frames' };
 
@@ -175,22 +173,6 @@ export default defineBackground(() => {
         () => reply({ ok: true }),
         () => reply({ ok: false }),
       );
-      return true;
-    }
-    if (message.type === 'install-page-api') {
-      const tabId = sender.tab?.id;
-      if (tabId === undefined) return false;
-      void browser.scripting
-        .executeScript({
-          target: { tabId, frameIds: [sender.frameId ?? 0] },
-          world: 'MAIN',
-          func: installPageApi,
-          args: [PAGE_API_HELP],
-        })
-        .then(
-          () => reply({ ok: true }),
-          (error: unknown) => reply({ ok: false, error: String(error) }),
-        );
       return true;
     }
     if (message.type === 'site-rename') {

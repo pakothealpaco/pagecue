@@ -22,4 +22,4 @@ The page is cut into horizontal parts, one per cue, each the full width of the p
 - **Inner scrolling.** Dashboards and apps that scroll an inner container are followed through that container.
 - **Single-page apps.** A route change switches to that route's cues. A page that only rewrites its own address while you scroll (`?p=2`, or a docs site moving from `/api` to `/api/errors`) keeps its cues.
 - **Frames.** A page that is only a shell around one frame (a claude.ai artifact, a Streamlit app) hands the presenting over to the content script inside that frame, which then does everything the page would have done. The handoff is a bare signal; no cue data passes through the page.
-- **Agents.** Claude Code reaches the prompter through a small local server in the plugin (`127.0.0.1` only). Claude in Chrome reaches it through `window.pagecue`, offered only while the prompter is open and only if you allow it.
+- **Agents.** Claude Code and the Claude app reach the prompter through a small local server in the plugin (`127.0.0.1` only). Nothing is added to the page itself.

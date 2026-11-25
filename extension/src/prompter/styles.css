@@ -684,7 +684,8 @@ button.light {
     transform 140ms var(--ease-out);
 }
 
-.menu > button {
+.menu > button,
+.menu > a {
   width: 100%;
   display: flex;
   align-items: center;
@@ -697,7 +698,18 @@ button.light {
   text-align: start;
 }
 
-.menu > button:hover:not(:disabled) {
+.menu > a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu > a svg {
+  flex: none;
+  color: var(--muted);
+}
+
+.menu > button:hover:not(:disabled),
+.menu > a:hover {
   background: color-mix(in srgb, var(--ink) 7%, transparent);
 }
 
@@ -980,7 +992,8 @@ button.light {
   }
 }
 
-.menu > button small {
+.menu > button small,
+.menu > a small {
   display: block;
   margin-top: 2px;
   color: var(--muted);
@@ -1081,26 +1094,6 @@ button.light {
 
 .app:not(.is-quiet) .cue-list:hover .add-hint {
   opacity: 0.7;
-}
-
-/* Claude in Chrome may edit cues: shown like lit section lines, and it stays while on. */
-.agent-on {
-  padding: 0 8px;
-  font-size: 13px;
-  font-weight: 500;
-  background: color-mix(in srgb, var(--standby) 16%, transparent);
-  color: var(--standby);
-}
-
-.agent-on:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--standby) 26%, transparent);
-  color: var(--standby);
-}
-
-@media (max-width: 299px) {
-  .agent-on .label {
-    display: none;
-  }
 }
 
 /* ---------------------------------------------------------------- cues in every script */
@@ -1290,4 +1283,68 @@ button.light {
 
 .link-button:hover {
   text-decoration: underline;
+}
+
+/* The add-cues command in the copy card, and the page it is for. */
+.prompt-card-command {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+  font:
+    500 12px/1.4 ui-monospace,
+    'SF Mono',
+    Menlo,
+    monospace;
+  color: var(--live);
+}
+
+.prompt-card-url {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prompt-card-text {
+  -webkit-line-clamp: unset;
+}
+
+.empty-hint {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.empty a,
+.help-links a {
+  color: var(--live);
+  text-decoration: none;
+}
+
+.empty a:hover,
+.help-links a:hover {
+  text-decoration: underline;
+}
+
+/* Guide and GitHub, quietly at the foot of every empty state. */
+.help-links {
+  position: absolute;
+  inset-inline: calc(var(--gutter) + 14px);
+  bottom: 64px;
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+}
+
+.help-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+}
+
+.help-links a:hover {
+  color: var(--ink);
+  text-decoration: none;
 }

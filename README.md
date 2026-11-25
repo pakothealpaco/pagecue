@@ -28,7 +28,7 @@ pagecue gives any page a presenter view, built around Claude. Tell Claude what y
 
 ## How it works with Claude
 
-1. **Tell Claude what you want to say**, in Claude Code, the Claude app or Claude in Chrome:
+1. **Tell Claude what you want to say**, in Claude Code or the Claude app:
    > Add pagecue cues to this report. On the revenue chart I want to say September doubled March.
 
    Claude plans where each cue starts, asks once what you want to say there, and writes the cues.
@@ -61,7 +61,7 @@ Chrome shows a Developer mode notice for extensions installed this way; that's e
 /plugin install pagecue@pagecue
 ```
 
-(The marketplace and the plugin are both called `pagecue`. Needs Node 20 or later.) Then ask for cues on any page, or run `/pagecue:add-cues`. To use it from the Claude desktop app or Claude in Chrome, see [Working with Claude](docs/working-with-claude.md). The extension also works on its own, with cues you write by hand or that a page ships with.
+(The marketplace and the plugin are both called `pagecue`. Needs Node 20 or later.) Then ask for cues on any page, or run `/pagecue:add-cues`. To use it from the Claude desktop app, see [Working with Claude](docs/working-with-claude.md). The extension also works on its own, with cues you write by hand or that a page ships with.
 
 ## Status and limitations
 
@@ -70,13 +70,11 @@ Early beta (0.x): it works well on the pages we've tested, and we'd love bug rep
 - Chromium browsers only for now.
 - Share the page's tab or window, not your whole screen: a shared screen includes the prompter.
 - Section lines (<kbd>L</kbd>), which show on the page where each cue starts, are visible to viewers. Turn them off before you present.
-- Claude in Chrome can edit cues through `window.pagecue` while the prompter is open; so could the page's own scripts. Turn it off in the prompter's ··· menu if you don't use it. See [PRIVACY.md](PRIVACY.md).
 
 ## Learn more
 
-- [Presenting with pagecue](docs/guide.md): every key, section lines, adding and deleting cues.
-- [Working with Claude](docs/working-with-claude.md): the `add-cues` skill, live changes, the Claude app, Claude in Chrome, the MCP tools.
-- [Ship cues with your page](docs/cue-format.md): for report generators and sites.
+- **[The user guide](https://usepagecue.com/guide/)**: install, writing cues with Claude, every button and key in the prompter, section lines, troubleshooting.
+- [Claude tools](https://usepagecue.com/guide/reference/claude-tools/) and the [cue file format](https://usepagecue.com/guide/reference/cue-file/), for report generators and sites.
 - [How it works](docs/how-it-works.md), [privacy](PRIVACY.md) and [security](SECURITY.md).
 
 ## Contributing

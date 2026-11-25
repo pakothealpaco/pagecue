@@ -1,0 +1,62 @@
+---
+title: Edit cues yourself
+description: Change a cue's words, add a cue, delete one, and move cues between computers.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+Every cue is yours to change, right in the prompter, whoever wrote it.
+
+## Change a cue's words
+
+Double-click a cue, or press <kbd>Enter</kbd> on the current one.
+
+<Shot eager name="editing" markers="editing" alt="A cue open for editing, with the headline, points, Delete and Done." width={420} />
+
+| # | Part | What it does |
+|---|---|---|
+| 1 | **Headline** | The cue's main line. <kbd>Enter</kbd> moves to the points. |
+| 2 | **Points** | One point per line. A leading `-`, `*` or `•` is fine; it's tidied away. |
+| 3 | **Delete** | Removes the cue. **Undo** in the note that follows brings it back. |
+| 4 | **Done** | Saves (<kbd>⌘</kbd> <kbd>Enter</kbd>, or <kbd>Ctrl</kbd> <kbd>Enter</kbd>). |
+
+Clicking anywhere else also saves. <kbd>Esc</kbd> cancels and puts the words back. There's no Undo for your own wording once saved.
+
+Your edits win from then on: if Claude or the page's own cue file later changes that cue, your wording stays.
+
+<Aside type="note">
+Cues in Hebrew, Arabic and other right-to-left languages read right to left automatically, cue by cue.
+</Aside>
+
+## Add a cue
+
+Scroll the page to where the new part should start, so it's at the reading line, then do any of these:
+
+- press <kbd>N</kbd>;
+- double-click empty space in the prompter;
+- choose **Add a cue here** in the ··· menu;
+- with [section lines](/guide/section-lines/) on, click **+ Add cue here** on the page.
+
+The cue opens for you to write. Leave it empty and it goes away.
+
+If there is nothing at the reading line to attach to, the prompter says so: scroll a little and try again.
+
+## Delete a cue
+
+Open it for editing and click **Delete**. A note says **Cue deleted.** with **Undo**, for five seconds.
+
+## Move cues to another computer
+
+Open the ··· menu:
+
+- **Export cues…** saves this page's cues as `<page-title>.cues.json`, including any the page can't place right now.
+- **Import cues…** loads a cue file into the current page. Cues with the same id are replaced, and imported cues count as your own edits.
+
+The file format is described in [Cue file format](/guide/reference/cue-file/).
+
+## When a cue can't find its place
+
+Pages change. A cue whose part of the page is gone isn't moved somewhere else; it's left out, and a note under the list says how many: "2 cues aren't on this page." Ask Claude to update the cues.
+
+If none of a page's cues can be placed, the prompter lists them all anyway, without following the page. Move through them with <kbd>↑</kbd> and <kbd>↓</kbd> while you present, and ask Claude to update them afterwards.

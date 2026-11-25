@@ -1,6 +1,7 @@
 ---
 name: add-cues
-description: Add presenter cues to a report, dashboard or website so it can be presented with the pagecue Chrome extension's private prompter. Marks the breakpoints in the page with data-pagecue attributes and writes short speaker notes (a headline, a key number, up to three points) from what the user wants to say. Use when the user wants speaker notes, talking points, cue cards, a teleprompter or "what to say" for a page, site or report they will present or screen-share, in any language (for example Hebrew שליפים, נקודות דיבור, מה להגיד), or asks to add, change or remove pagecue cues, including from inside their Chrome tab.
+description: Add presenter cues to a report, dashboard or website so it can be presented with the pagecue Chrome extension's private prompter. Marks the breakpoints in the page with data-pagecue attributes and writes short speaker notes (a headline, a key number, up to three points) from what the user wants to say. Use when the user wants speaker notes, talking points, cue cards, a teleprompter or "what to say" for a page, site or report they will present or screen-share, in any language (for example Hebrew שליפים, נקודות דיבור, מה להגיד), or asks to add, change or remove pagecue cues.
+argument-hint: "[page URL or file] [what you want to say]"
 ---
 
 # Add pagecue cues
@@ -20,7 +21,7 @@ Changes show in the prompter at once, each with Undo. Use these for anything the
 
 ## 1. Find the page
 
-Work on the page the user means: usually the report or site you just generated in this conversation. If it is not clear, ask which file or route. Read the page source end to end before planning; you must not invent content.
+When you were started as `/pagecue:add-cues <url or file>` (the prompter's "No cues on this page yet" card copies exactly that), the page is that argument, and any text after it, such as "What I want to say: …", is the user's answer to step 3 for those parts. Otherwise work on the page the user means: usually the report or site you just generated in this conversation. If it is not clear, ask which file or route. Read the page source end to end before planning; you must not invent content.
 
 ## 2. Plan the breakpoints
 
@@ -110,17 +111,6 @@ For a page whose source you cannot edit (a live product page, a vendor dashboard
 3. Save the cue file outside the site and publish it (step 6). The prompter picks it up by itself.
 
 The checker cannot verify text anchors against a live page; if you have a browser tool, open the page and confirm each heading's text exists exactly once.
-
-## In the user's browser (Claude in Chrome)
-
-If you are working inside the user's Chrome tab rather than on files, and the page has `window.pagecue` (check with your JavaScript tool: `typeof window.pagecue`), the pagecue prompter is open on it and you can edit cues directly; they are saved in the extension and appear in the prompter at once, with Undo for the presenter. Skip steps 5 to 7.
-
-1. Run `pagecue.help()` once, then `await pagecue.cues()` to see what is there.
-2. To add a cue, `await pagecue.add({ title, notes, near })`, where `near` is the exact visible text of the heading (or the start of the paragraph) where the cue should start. When the user sends a screenshot and says "here", find that heading's text on the page. Without `near`, the cue starts at the reading line, a third of the way down the window.
-3. `pagecue.edit(number, { title, notes })`, `pagecue.remove(number)` and `pagecue.show(number)` change, delete and jump to a cue.
-4. Write cues by the rules in step 4, then tell the user in one line what you added.
-
-If `window.pagecue` is missing, ask the user to click the pagecue button in Chrome's toolbar on this page, then try again.
 
 ## 7. Check
 

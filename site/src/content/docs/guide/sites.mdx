@@ -1,0 +1,44 @@
+---
+title: Site access, frames and local files
+description: How pagecue works on sites with their own scrolling, single-page apps, pages in a frame and files on your computer.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+pagecue works on most pages as they are. This page covers the cases that need a word.
+
+## Site access
+
+pagecue asks for no access to your sites when you install it. It reaches a page only when you click its button there, and that access lasts until the tab reloads or goes to another page.
+
+To skip the click on a site you present often, allow pagecue there for good. When a page reloads, the prompter says **The page reloaded** and offers **Always reconnect on** *site*. Chrome asks you to confirm. From then on, pagecue reconnects by itself on that site.
+
+To take that access back, use Chrome: right-click the pagecue icon, or open its **Details** in `chrome://extensions`, and change its site access.
+
+## Pages that scroll inside a panel
+
+Dashboards and apps often scroll an inner panel instead of the whole page. pagecue finds the panel that holds the cues and follows that one.
+
+## Single-page apps
+
+When an app changes its address without reloading (a new tab in a dashboard, a route in a web app), pagecue loads the cues for the new address. If the address changes as you scroll the same page, pagecue keeps the same cues.
+
+Addresses are compared without tracking tags (`utm_…`, `fbclid`, `gclid` and similar), so a link from an email finds the same cues.
+
+## Pages in a frame
+
+Some pages show their content inside a frame that fills the window: Claude artifacts, Streamlit apps, embedded reports. pagecue follows the frame.
+
+If the frame comes from another site, pagecue needs your permission to read it. The prompter says **This page shows its content in a frame** and offers **Allow on** *site*, for example `claudeusercontent.com` for Claude artifacts. Chrome asks you once.
+
+## Local files
+
+Pages you open from your computer (`file://…`) work once you allow it: open `chrome://extensions`, click **Details** under pagecue, and turn on **Allow access to file URLs**.
+
+<Aside type="note">
+Chrome doesn't let extensions read a cue file linked from a local page. Put the cues inside the page, or import them with **Import cues…**. Claude does this for you.
+</Aside>
+
+## Where pagecue can't run
+
+Chrome keeps extensions off its own pages (`chrome://…`), the Chrome Web Store and its PDF viewer. The prompter says **pagecue can't run here**.

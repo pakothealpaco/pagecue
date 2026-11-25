@@ -1,0 +1,110 @@
+---
+title: Prompter controls
+description: Every button, menu item and message in the pagecue prompter.
+---
+
+import Shot from '../../../../components/Shot.astro';
+
+<Shot eager name="prompter" markers="prompter" alt="The prompter with its eight parts numbered." width={420} />
+
+## Top bar
+
+| Control | What it does | Key |
+|---|---|---|
+| **Cue light** (1) | Shows the state: green **Following**; amber **Paused** or **Connecting**; grey **No page**; red **Not connected**. Click to pause or resume, when connected. | <kbd>P</kbd> |
+| **Page title** (2) | The page's name: the name you gave it in Sites, or the shortest useful part of its title. Opens Sites. | <kbd>S</kbd> |
+| **Position** (3) | "3 of 6": the current cue and how many there are. | |
+| **Resume** | Replaces the position while paused. Follows the page again. | <kbd>P</kbd> |
+
+## Cue list
+
+| Action | What it does | Key |
+|---|---|---|
+| **Click a cue** | Makes it current and scrolls the page to it | |
+| **Double-click a cue** | Edits it | <kbd>Enter</kbd> on the current cue |
+| **Scroll the list** | Scrolls the page to match (not while paused) | |
+| **Double-click empty space** | Adds a cue at the reading line | <kbd>N</kbd> |
+| **Got it** | Dismisses the first-time tip under the list | |
+
+## Editing a cue
+
+| Control | What it does | Key |
+|---|---|---|
+| **Headline** field | The cue's main line | <kbd>Enter</kbd> goes to the points |
+| **Points, one per line** field | Your points, one per line. Three read best. | |
+| **Delete** | Removes the cue, with **Undo** | |
+| **Done** | Saves | <kbd>⌘</kbd> <kbd>Enter</kbd> |
+| Click elsewhere | Saves | |
+| | Cancels | <kbd>Esc</kbd> |
+
+## Bottom bar
+
+| Control | What it does | Key |
+|---|---|---|
+| **Timer** (5) | Minutes and seconds since this page connected. Click to restart. | |
+| **Lines** (6) | Section lines on the page, on or off. Lit green while on. | <kbd>L</kbd> |
+| **Smaller text**, **Larger text** (7) | Four sizes: S, M, L, XL | <kbd>⌘</kbd> <kbd>−</kbd> <kbd>⌘</kbd> <kbd>+</kbd> |
+| **More** ··· (8) | Opens the menu | <kbd>?</kbd> |
+
+The title, timer and bottom buttons fade two seconds after the pointer stops, and come back when it moves.
+
+## More menu
+
+| Item | What it does | Key |
+|---|---|---|
+| **Add a cue here** | A new cue at the reading line on the page | <kbd>N</kbd> |
+| **Edit this cue** | Edits the current cue | <kbd>Enter</kbd> |
+| **Pause following** / **Resume following** | | <kbd>P</kbd> |
+| **Theme**: **Auto**, **Dark**, **Light** | Auto follows your system | |
+| **Sites…** | Switch, rename or delete | <kbd>S</kbd> |
+| **Import cues…** | Load a `.json` cue file into this page | |
+| **Export cues…** | Save this page's cues to a file | |
+| **Guide** | Opens this guide | |
+| **pagecue on GitHub** | Source, releases and issues | |
+
+## Sites
+
+| Control | What it does |
+|---|---|
+| A page | Switches to it: its tab, or a new one. Chrome may ask for access to the site. |
+| **Presenting** | Marks the page the prompter follows now |
+| **Rename** (pencil, or double-click) | A shorter name for the prompter. Empty goes back to the page title. |
+| **Delete cues** (trash) | Deletes every cue stored for that page, after you confirm. Can't be undone. |
+| **Done** | Closes Sites (<kbd>Esc</kbd>) |
+
+## On the page, with section lines on
+
+| Control | What it does |
+|---|---|
+| A cue's tag | Drag to change where the cue starts; double-click to put it back |
+| **+ Add cue here** | A new cue at the reading line |
+
+## Empty and waiting states
+
+| Control | Where | What it does |
+|---|---|---|
+| **Copy** | No cues on this page yet | Copies `/pagecue:add-cues` with the page's address, to paste into Claude Code. Shows "Copied ✓". |
+| **Add it to Claude Code** | No cues on this page yet | Opens the plugin's install steps |
+| **Guide**, **GitHub** | Every empty state | Open this guide, or pagecue's source |
+| **add a cue here** | No cues on this page yet | A new cue at the reading line |
+| **Try again** | The page reloaded | Reconnects to the page |
+| **Always reconnect on** *site* | The page reloaded | Lets pagecue reconnect on that site by itself. Chrome asks you to confirm. |
+| **Allow on** *site* | This page shows its content in a frame | Lets pagecue read the frame's site. Chrome asks you to confirm. |
+
+## Messages
+
+Notes appear at the bottom of the prompter for five seconds.
+
+| Message | Meaning |
+|---|---|
+| **Added by Claude**, **Changed by Claude**, **Deleted by Claude** | Claude changed a cue. **Undo** reverses it. |
+| **Cue deleted.** | You deleted a cue. **Undo** brings it back. |
+| **Imported 6 cues.** | An import worked. |
+| **Nothing at the reading line to attach a cue to.** | Scroll a little and add the cue again. |
+| **Section lines are on the page, so viewers see them.** | Shown the first time you turn lines on. |
+| **Could not load** *file*: *reason* | The page links a cue file pagecue couldn't read. See [Troubleshooting](/guide/troubleshooting/). |
+| **Couldn't save that change.**, **Couldn't delete that cue.** | Try again; if it keeps happening, reload the page. |
+| **Couldn't change site access:** *reason* | Chrome refused the access request. Try again. |
+| **Couldn't import that file.**, or the file's problem | The file isn't a pagecue cue file. |
+
+The prompter's full-window messages, such as **The page reloaded**, are explained in [The prompter](/guide/prompter/#when-it-isnt-connected).

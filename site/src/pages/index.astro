@@ -1,0 +1,1112 @@
+---
+/**
+ * usepagecue.com: the product page. Its one bold element is the stage, a small working copy of
+ * pagecue: scroll the report and the prompter follows; click a cue and the report scrolls to it.
+ * Everything else stays quiet. Colours and type are the prompter's own (src/styles/theme.css).
+ */
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/500.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import Mark from '../assets/mark.svg?raw';
+
+const repo = 'https://github.com/pakothealpaco/pagecue';
+const title = 'pagecue: speaker notes for any web page, written with Claude';
+const description =
+  'Tell Claude what you want to say. Your cues sit in a private window that follows the page as you scroll. Free and open source, for Chrome.';
+
+// The demo report's cues (site/public/demo), shortened to five parts for the stage.
+const parts = [
+  {
+    heading: 'Q3 partner review',
+    body: 'Halcyon Roasters × Northside Market. Our best quarter yet, and what we propose for Q4.',
+    kind: 'title',
+    cue: 'Best quarter yet: $4.2M, up 31%',
+    notes: ['Thank them for the shelf space', 'One ask at the end: the Q4 co-promo'],
+  },
+  {
+    heading: 'The quarter in four numbers',
+    kind: 'stats',
+    cue: 'Four numbers, then stop talking',
+    notes: ['Repeat rate 68% is the one to land', 'Margin held despite green coffee prices'],
+  },
+  {
+    heading: 'Revenue by month',
+    body: 'Thousands of dollars. The cold brew line launched on August 12.',
+    kind: 'chart',
+    cue: 'September doubled March',
+    notes: ['Spike = cold brew launch, Aug 12', 'Not a one-off: Oct tracking +6%'],
+  },
+  {
+    heading: 'Where it sold',
+    body: 'Northside stores brought 38% of the growth, led by the flagship.',
+    kind: 'bars',
+    cue: 'Your stores: 38% of growth',
+    notes: ["Thank Dana's team by name", 'Northside store is the model'],
+  },
+  {
+    heading: 'What we propose for Q4',
+    body: 'An end-cap in 40 stores from November 15 to December 31. We fund the displays.',
+    kind: 'ask',
+    cue: 'The ask: end-cap in 40 stores',
+    notes: ['Nov 15 to Dec 31', 'We fund the displays', 'Pause. Let them answer.'],
+  },
+];
+const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href="https://usepagecue.com/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://usepagecue.com/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://usepagecue.com/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="color-scheme" content="light" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="nav wrap">
+      <a class="brand" href="/" aria-label="pagecue home"><span class="mark" set:html={Mark} />pagecue</a>
+      <nav aria-label="Main">
+        <a href="/guide/">Guide</a>
+        <a class="nav-github" href={repo}>GitHub</a>
+        <a class="nav-cta" href="#install">Install</a>
+      </nav>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <section class="hero wrap">
+        <h1>Speaker notes for any web page, written with&nbsp;Claude.</h1>
+        <p class="lede">
+          You made the report with Claude. Now you're presenting it. Tell Claude what you want to say: it writes a short
+          cue for each part, in a window you don't share that follows the page as you scroll.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#install">Install for Chrome</a>
+          <a class="button" href="/guide/quick-start/">Your first presentation</a>
+        </div>
+      </section>
+
+      <section class="stage-wrap wrap" aria-labelledby="stage-title">
+        <h2 id="stage-title" class="visually-hidden">Try it here</h2>
+        <p class="stage-hint" id="stage-hint">Scroll the report, or click a cue.</p>
+        <div class="stage" data-stage>
+          <div class="pane page-pane">
+            <p class="pane-label"><span class="dot share"></span>What they see: the tab you share</p>
+            <div class="page" tabindex="0" role="region" aria-label="Sample report, scrollable" aria-describedby="stage-hint" data-page>
+              {
+                parts.map((p, i) => (
+                  <section class:list={['part', `part-${p.kind}`]} data-part={i}>
+                    {i === 0 ? <h3 class="report-title">{p.heading}</h3> : <h3>{p.heading}</h3>}
+                    {p.body && <p>{p.body}</p>}
+                    {p.kind === 'stats' && (
+                      <div class="stats">
+                        <div><b>$4.2M</b><span>Revenue +31%</span></div>
+                        <div><b>68%</b><span>Repeat buyers</span></div>
+                        <div><b>41%</b><span>Gross margin</span></div>
+                        <div><b>212</b><span>Stores</span></div>
+                      </div>
+                    )}
+                    {p.kind === 'chart' && (
+                      <div class="chart" aria-hidden="true">
+                        {months.map((m, j) => (
+                          <span style={`height: ${(m / 1700) * 100}%`} class:list={{ hot: j >= 6 }} />
+                        ))}
+                      </div>
+                    )}
+                    {p.kind === 'bars' && (
+                      <div class="hbars" aria-hidden="true">
+                        <span style="width: 92%">Northside</span>
+                        <span style="width: 61%">Riverside</span>
+                        <span style="width: 44%">Others</span>
+                      </div>
+                    )}
+                  </section>
+                ))
+              }
+              <p class="page-end">Halcyon Roasters is a made-up company. Try the full report with pagecue at <a href="/demo/">usepagecue.com/demo</a>.</p>
+            </div>
+          </div>
+
+          <div class="pane prompter-pane">
+            <p class="pane-label"><span class="dot private"></span>What you see: the prompter</p>
+            <div class="prompter">
+              <div class="p-top">
+                <span class="light" aria-hidden="true"></span>
+                <span class="p-title">Q3 partner review</span>
+                <span class="p-pos" aria-live="polite"><span data-pos>1</span> of {parts.length}</span>
+              </div>
+              <div class="p-list" data-list>
+                <ol data-track>
+                  {
+                    parts.map((p, i) => (
+                      <li>
+                        <button type="button" class="cue" data-cue={i}>
+                          <strong>{p.cue}</strong>
+                          <ul>
+                            {p.notes.map((n) => (
+                              <li>{n}</li>
+                            ))}
+                          </ul>
+                        </button>
+                      </li>
+                    ))
+                  }
+                </ol>
+              </div>
+              <div class="p-bottom" aria-hidden="true">
+                <span>0:42</span>
+                <span class="p-tools"><span>Lines</span><span>A</span><span class="big">A</span><span>···</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block wrap" aria-labelledby="claude-title">
+        <div class="block-text">
+          <h2 id="claude-title">Written with Claude</h2>
+          <p>
+            The pagecue plugin gives Claude an add-cues skill. Claude reads the page, so it knows the numbers and where
+            each part starts. You bring what only you know: who's in the room, and what they should remember.
+          </p>
+          <ol class="steps">
+            <li><b>Ask in your own words.</b> "Add presenter cues to this report", in any language.</li>
+            <li><b>Claude asks once what you want to say</b> at each part. Type it, dictate it, or say "you write it".</li>
+            <li><b>It writes each cue</b>: a headline of about eight words and up to three points, only from your words and the page's facts.</li>
+            <li><b>While you rehearse, it changes them on the spot.</b> "Make cue 3 shorter." Every change shows with Undo.</li>
+          </ol>
+          <p><a href="/guide/claude/add-cues/">How Claude writes cues</a></p>
+        </div>
+        <div class="chat" aria-label="An example conversation with Claude">
+          <p class="msg you">
+            Add presenter cues to this report. On the revenue chart: September doubled March, because of the cold brew launch.
+          </p>
+          <p class="msg claude">
+            I've planned six cues, one per part. What do you want to say on the numbers, the stores and the ask? Or I can
+            write those from the page.
+          </p>
+          <p class="msg you">You write them. Thank Dana's team on the stores.</p>
+          <p class="msg claude">Done: six cues for "Q3 partner review". Open the page and click pagecue.</p>
+        </div>
+      </section>
+
+      <section class="block wrap" aria-labelledby="private-title">
+        <div class="block-text">
+          <h2 id="private-title">Private by how you share</h2>
+          <p>
+            The prompter is a window of its own. In Zoom, Meet or Teams, share the page's tab or window: viewers see the
+            page, and your cues stay with you. pagecue draws nothing on the page you share, except section lines while you turn them on.
+          </p>
+          <p><a href="/guide/sharing/">Share your screen privately</a></p>
+        </div>
+        <div class="windows" aria-hidden="true">
+          <figure class="win shared">
+            <figcaption><span class="dot share"></span>Viewers see this tab</figcaption>
+            <div class="chrome"><i></i><i></i><i></i><span>Q3 partner review</span></div>
+            <div class="win-body">
+              <b>Revenue by month</b>
+              <div class="mini-chart">
+                <span style="height: 40%"></span><span style="height: 46%"></span><span style="height: 52%"></span><span style="height: 60%"></span><span style="height: 70%"></span><span style="height: 82%"></span><span style="height: 100%"></span>
+              </div>
+            </div>
+          </figure>
+          <figure class="win mine">
+            <figcaption><span class="dot private"></span>Only you see this</figcaption>
+            <div class="win-body">
+              <p class="dim">Four numbers, then stop talking</p>
+              <p class="lit"><b>September doubled March</b>Spike = cold brew launch</p>
+              <p class="dim">Your stores: 38% of growth</p>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <section class="wrap features" aria-labelledby="features-title">
+        <h2 id="features-title">Made for talking, not reading</h2>
+        <dl>
+          <div>
+            <dt>Cues you can read mid-sentence</dt>
+            <dd>One cue lit at a time, level with your eye. The rest fades back.</dd>
+          </div>
+          <div>
+            <dt>Both ways</dt>
+            <dd>Scroll the page and the prompter follows. Click a cue, press <kbd>↓</kbd>, or use your clicker, and the page follows.</dd>
+          </div>
+          <div>
+            <dt>Your words, too</dt>
+            <dd>Double-click a cue to change it. Press <kbd>N</kbd> to add one. Your edits always win.</dd>
+          </div>
+          <div>
+            <dt>Placed where you want them</dt>
+            <dd>Press <kbd>L</kbd> to see where each cue starts, and drag to adjust. Then hide the lines.</dd>
+          </div>
+          <div>
+            <dt>Any page</dt>
+            <dd>Reports, dashboards, docs, apps, Claude artifacts and local files. Any language.</dd>
+          </div>
+          <div>
+            <dt>No account, no cloud</dt>
+            <dd>Cues stay on your computer. Free and open source under MIT.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="wrap install" id="install" aria-labelledby="install-title">
+        <h2 id="install-title">Install</h2>
+        <div class="install-grid">
+          <div>
+            <h3>1. The Chrome extension</h3>
+            <p>
+              Coming soon to the Chrome Web Store. Until then, download it from GitHub and load it in Chrome: it takes a
+              minute.
+            </p>
+            <a class="button primary" href={`${repo}/releases/latest`}>Download pagecue</a>
+            <p class="small"><a href="/guide/install/">Step-by-step install</a></p>
+          </div>
+          <div>
+            <h3>2. The Claude plugin</h3>
+            <p>In Claude Code:</p>
+            <pre><code>/plugin marketplace add pakothealpaco/pagecue
+/plugin install pagecue@pagecue</code></pre>
+            <p class="small">Needs Node.js 20 or later. <a href="/guide/install/#the-claude-plugin">Claude desktop app</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot wrap">
+      <nav aria-label="Footer">
+        <a href="/guide/">Guide</a>
+        <a href={repo}>GitHub</a>
+        <a href="/guide/privacy/">Privacy</a>
+        <a href={`${repo}/blob/main/CHANGELOG.md`}>Changelog</a>
+        <a href={`${repo}/issues/new/choose`}>Report an issue</a>
+      </nav>
+      <p>Free and open source under the MIT licence. Made by Paco the Alpaca.</p>
+    </footer>
+
+    <script>
+      // The stage: the report's parts and the prompter's cues, kept in step both ways, as in pagecue.
+      const stage = document.querySelector<HTMLElement>('[data-stage]');
+      if (stage) {
+        const page = stage.querySelector<HTMLElement>('[data-page]')!;
+        const list = stage.querySelector<HTMLElement>('[data-list]')!;
+        const track = stage.querySelector<HTMLElement>('[data-track]')!;
+        const parts = [...stage.querySelectorAll<HTMLElement>('[data-part]')];
+        const cues = [...stage.querySelectorAll<HTMLButtonElement>('[data-cue]')];
+        const pos = stage.querySelector<HTMLElement>('[data-pos]')!;
+        const smooth = matchMedia('(prefers-reduced-motion: no-preference)').matches;
+        const READING = 0.3;
+        let current = -1;
+        // While a click scrolls the report, its scroll events must not light the cues it passes.
+        let steering = 0;
+
+        const show = (i: number) => {
+          if (i === current) return;
+          current = i;
+          cues.forEach((c, j) => c.classList.toggle('is-lit', j === i));
+          pos.textContent = String(i + 1);
+          const cue = cues[i].parentElement!;
+          const y = cue.offsetTop - list.clientHeight * READING + 8;
+          track.style.transform = `translateY(${-Math.max(0, y)}px)`;
+        };
+
+        const follow = () => {
+          const line = page.scrollTop + page.clientHeight * READING;
+          let i = 0;
+          parts.forEach((p, j) => {
+            if (p.offsetTop <= line + 1) i = j;
+          });
+          if (page.scrollTop + page.clientHeight >= page.scrollHeight - 2) i = parts.length - 1;
+          show(i);
+        };
+
+        page.addEventListener(
+          'scroll',
+          () => {
+            if (Date.now() > steering) follow();
+          },
+          { passive: true },
+        );
+        page.addEventListener('scrollend', () => {
+          steering = 0;
+          follow();
+        });
+        cues.forEach((c, i) =>
+          c.addEventListener('click', () => {
+            const top = parts[i].offsetTop - page.clientHeight * READING + 4;
+            steering = Date.now() + 900;
+            page.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
+            show(i);
+          }),
+        );
+        addEventListener('resize', () => {
+          const i = current;
+          current = -1;
+          show(Math.max(0, i));
+        });
+        follow();
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #f5f7f9;
+    --raised: #ffffff;
+    --ink: #151a22;
+    --soft: #3d4550;
+    --muted: #5e6672;
+    --line: #dde2e9;
+    --link: #137347;
+    --live: #3ccf7f;
+    --font: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  /* The prompter in its light theme, as in the product (extension/src/prompter/styles.css). */
+  .prompter,
+  .win.mine {
+    --bg: #ffffff;
+    --line: #dde2e9;
+    --ink: #151a22;
+    --muted: #5e6672;
+    --live: #1e9e63;
+    /* Dimmer cues than the product's 0.4 would fail contrast on a web page. */
+    --dim: 0.62;
+    color: var(--ink);
+  }
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    background: var(--bg);
+  }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+  a {
+    color: var(--link);
+    text-underline-offset: 3px;
+  }
+  a:hover {
+    color: #0b5132;
+  }
+  :focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  kbd {
+    font: 500 0.82em/1 var(--mono);
+    padding: 0.16em 0.42em;
+    border: 1px solid #cdd3db;
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    background: var(--raised);
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    padding: 0.5rem 0.8rem;
+    background: var(--ink);
+    color: #fff;
+    border-radius: 6px;
+    z-index: 10;
+  }
+  .skip:focus {
+    top: 1rem;
+  }
+  .wrap {
+    width: min(100% - 2.5rem, 1120px);
+    margin-inline: auto;
+  }
+</style>
+
+<style>
+  /* Navigation */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 0;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  .brand {
+    line-height: 1;
+  }
+  .mark {
+    display: flex;
+  }
+  .mark :global(svg) {
+    display: block;
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  .nav nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .nav nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav nav a:hover {
+    color: var(--ink);
+  }
+  .nav nav .nav-cta {
+    color: var(--ink);
+    border: 1px solid #cdd3db;
+    background: var(--raised);
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+  }
+
+  /* Hero */
+  .hero {
+    padding: clamp(2rem, 5vw, 3.75rem) 0 1.5rem;
+  }
+  h1 {
+    margin: 0;
+    max-width: 21ch;
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    line-height: 1.04;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .lede {
+    max-width: 38rem;
+    margin: 1.5rem 0 0;
+    color: var(--soft);
+    font-size: clamp(1.1rem, 1.6vw, 1.25rem);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  .button {
+    display: inline-block;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid #cdd3db;
+    background: var(--raised);
+    color: var(--ink);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .button:hover {
+    color: var(--ink);
+    border-color: #a9b2bd;
+  }
+  .button.primary {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+    font-weight: 600;
+  }
+  .button.primary:hover {
+    background: #2b323d;
+    color: #fff;
+  }
+
+  /* The stage */
+  .stage-wrap {
+    padding: 1.5rem 0 5rem;
+  }
+  .stage-hint {
+    margin: 0 0 0.9rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: 1.25rem;
+    align-items: start;
+  }
+  .pane-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.6rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+  }
+  .dot.share {
+    background: #d9573f;
+    box-shadow: 0 0 0 3px rgba(217, 87, 63, 0.2);
+  }
+  .dot.private {
+    background: #3ccf7f;
+    box-shadow: 0 0 0 3px rgba(111, 211, 160, 0.18);
+  }
+  .page {
+    position: relative;
+    height: 440px;
+    overflow-y: auto;
+    border-radius: 14px;
+    background: #fffdfa;
+    color: #241f1b;
+    padding: 0 2rem;
+    border: 1px solid #e6dfd6;
+    box-shadow:
+      0 0 0 3px #d9573f40,
+      0 18px 44px rgba(21, 26, 34, 0.1);
+    scrollbar-width: thin;
+  }
+  .part {
+    padding: 2.25rem 0 2.75rem;
+    border-bottom: 1px solid #ece5dc;
+  }
+  .part h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+  }
+  .part .report-title {
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+  }
+  .part p {
+    margin: 0;
+    color: #6b625a;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .stats div {
+    background: #fff;
+    border: 1px solid #ece5dc;
+    border-radius: 10px;
+    padding: 0.8rem;
+  }
+  .stats b {
+    display: block;
+    font-size: 1.5rem;
+  }
+  .stats span {
+    color: #6b625a;
+    font-size: 0.85rem;
+  }
+  .chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 150px;
+    margin-top: 1.25rem;
+  }
+  .chart span {
+    flex: 1;
+    background: #d4a589;
+    border-radius: 4px 4px 0 0;
+  }
+  .chart span.hot {
+    background: #a85a35;
+  }
+  .hbars {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+  }
+  .hbars span {
+    background: #e7d6c8;
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.85rem;
+  }
+  .part-ask {
+    min-height: 300px;
+  }
+  .page-end {
+    padding: 1.5rem 0 2rem;
+    font-size: 0.85rem;
+    color: #6f665d;
+  }
+  .page-end a {
+    color: #1e7a4f;
+  }
+
+  .prompter {
+    height: 440px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    box-shadow:
+      0 0 0 3px rgba(30, 158, 99, 0.22),
+      0 18px 44px rgba(21, 26, 34, 0.1);
+    overflow: hidden;
+  }
+  .p-top,
+  .p-bottom {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    position: relative;
+    z-index: 1;
+    background: var(--bg);
+  }
+  .light {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: var(--live);
+    box-shadow: 0 0 0 4px rgba(30, 158, 99, 0.16);
+  }
+  .p-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .p-bottom {
+    justify-content: space-between;
+  }
+  .p-tools {
+    display: flex;
+    gap: 0.9rem;
+    align-items: baseline;
+  }
+  .p-tools .big {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .p-list {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .p-list ol {
+    list-style: none;
+    margin: 0;
+    padding: 0 0.5rem 60%;
+    transition: transform 260ms cubic-bezier(0.2, 0, 0, 1);
+  }
+  .cue {
+    display: block;
+    width: 100%;
+    text-align: start;
+    background: none;
+    border: 0;
+    border-inline-start: 3px solid transparent;
+    padding: 0.8rem 0.9rem;
+    margin: 0.2rem 0;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+    opacity: var(--dim);
+    transition: opacity 200ms;
+  }
+  .cue:hover {
+    opacity: 0.7;
+  }
+  .cue.is-lit {
+    opacity: 1;
+    border-inline-start-color: var(--live);
+  }
+  .cue strong {
+    display: block;
+    font-size: 1.12rem;
+    line-height: 1.25;
+    font-weight: 600;
+  }
+  .cue ul {
+    list-style: disc;
+    margin: 0.45rem 0 0;
+    padding-inline-start: 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .cue li::marker {
+    color: var(--muted);
+  }
+
+  /* Blocks */
+  .block {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    align-items: center;
+    padding: 4.5rem 0;
+    border-top: 1px solid var(--line);
+  }
+  h2 {
+    margin: 0 0 1rem;
+    font-size: clamp(1.75rem, 3vw, 2.35rem);
+    line-height: 1.12;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .block-text p {
+    color: var(--soft);
+    margin: 0 0 1rem;
+    max-width: 34rem;
+  }
+  .steps {
+    margin: 1.5rem 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+    display: grid;
+    gap: 0.9rem;
+    max-width: 34rem;
+  }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-inline-start: 2.4rem;
+    color: var(--soft);
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0.05rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    border: 1px solid #cdd3db;
+    background: var(--raised);
+    color: var(--ink);
+    font: 500 0.85rem/1.55rem var(--mono);
+    text-align: center;
+  }
+  .steps b {
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .chat {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .msg {
+    margin: 0;
+    padding: 0.85rem 1.05rem;
+    border-radius: 14px;
+    max-width: 30rem;
+    font-size: 0.98rem;
+  }
+  .msg.you {
+    justify-self: end;
+    background: #e6ebf0;
+    border-end-end-radius: 4px;
+  }
+  .msg.claude {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    color: var(--soft);
+    border-end-start-radius: 4px;
+  }
+
+  .windows {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: stretch;
+  }
+  .win {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+  .win figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .win.shared .chrome,
+  .win.shared .win-body,
+  .win.mine .win-body {
+    background: #faf7f2;
+  }
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #ece5dc;
+  }
+  .chrome i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #ddd3c8;
+  }
+  .chrome span {
+    margin-inline-start: 0.6rem;
+    padding: 0.15rem 0.6rem;
+    border-radius: 6px;
+    background: #fff;
+    color: #6b625a;
+    font-size: 0.72rem;
+  }
+  .win.shared {
+    border-radius: 12px;
+  }
+  .win.shared .win-body {
+    padding: 1rem 1.1rem 1.2rem;
+    border-radius: 0 0 10px 10px;
+    color: #241f1b;
+  }
+  .win.shared .chrome,
+  .win.shared .win-body {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  .win.shared > div {
+    outline: 0;
+  }
+  .win.shared {
+    --ring: #d9573f;
+  }
+  .win.shared .chrome {
+    box-shadow:
+      -3px -3px 0 0 var(--ring),
+      3px -3px 0 0 var(--ring);
+  }
+  .win.shared .win-body {
+    box-shadow:
+      -3px 3px 0 0 var(--ring),
+      3px 3px 0 0 var(--ring);
+  }
+  .win.shared b {
+    font-size: 0.85rem;
+  }
+  .mini-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 5px;
+    height: 92px;
+    margin-top: 0.75rem;
+  }
+  .mini-chart span {
+    flex: 1;
+    border-radius: 3px 3px 0 0;
+    background: #d4a589;
+  }
+  .mini-chart span:nth-last-child(-n + 2) {
+    background: #a85a35;
+  }
+  .win.mine .win-body {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.9rem 0.85rem;
+    box-shadow: 0 0 0 3px rgba(30, 158, 99, 0.18);
+    flex: 1;
+    display: grid;
+    align-content: center;
+    gap: 0.7rem;
+  }
+  .win.mine p {
+    margin: 0;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+  .win.mine .dim {
+    opacity: var(--dim);
+    font-weight: 600;
+  }
+  .win.mine .lit {
+    border-inline-start: 2px solid var(--live);
+    padding-inline-start: 0.55rem;
+    color: #3d4550;
+  }
+  .win.mine .lit b {
+    display: block;
+    color: var(--ink);
+    font-size: 0.86rem;
+    margin-bottom: 0.15rem;
+  }
+
+  /* Features */
+  .features {
+    padding: 4.5rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .features dl {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.25rem 2.5rem;
+    margin: 2rem 0 0;
+  }
+  .features dl > div {
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line);
+  }
+  .features dt {
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+  .features dd {
+    margin: 0;
+    color: var(--soft);
+  }
+
+  /* Install */
+  .install {
+    padding: 4.5rem 0 5rem;
+    border-top: 1px solid var(--line);
+  }
+  .install-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .install-grid > div {
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.6rem;
+  }
+  .install h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+  }
+  .install p {
+    color: var(--soft);
+    margin: 0 0 1rem;
+  }
+  .install .small {
+    margin: 1rem 0 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  pre {
+    margin: 0;
+    padding: 0.9rem 1rem;
+    border-radius: 10px;
+    background: #f5f7f9;
+    border: 1px solid var(--line);
+    overflow-x: auto;
+    font: 400 0.9rem/1.6 var(--mono);
+  }
+
+  /* Footer */
+  .foot {
+    padding: 2rem 0 3rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .foot nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .foot a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .foot a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+  .foot p {
+    margin: 0;
+  }
+
+  @media (max-width: 860px) {
+    .stage {
+      grid-template-columns: 1fr;
+    }
+    .page,
+    .prompter {
+      height: 360px;
+    }
+    .block {
+      grid-template-columns: 1fr;
+    }
+    .features dl {
+      grid-template-columns: 1fr 1fr;
+    }
+    .install-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .nav nav {
+      gap: 1rem;
+    }
+    .features dl {
+      grid-template-columns: 1fr;
+    }
+    .page {
+      padding: 0 1.25rem;
+    }
+    .windows {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 400px) {
+    .nav-github {
+      display: none;
+    }
+    .nav nav .nav-cta {
+      padding: 0.3rem 0.75rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .p-list ol,
+    .cue {
+      transition: none;
+    }
+  }
+</style>

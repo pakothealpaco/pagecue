@@ -1,0 +1,96 @@
+---
+/**
+ * A screenshot of the real prompter (made by extension/scripts/site-shots.mjs). With `markers`, the
+ * controls recorded for that shot get numbered badges, matching a numbered table under it.
+ */
+import { Image } from 'astro:assets';
+import shots from '../data/shots.json';
+
+interface Props {
+  name: string;
+  alt: string;
+  markers?: keyof typeof shots;
+  /** Width on the page in CSS pixels. */
+  width?: number;
+  /** Load at once: for the first shot on a page, which is often its largest content. */
+  eager?: boolean;
+}
+
+const { name, alt, markers, width = 360, eager = false } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
+const images = import.meta.glob<{ default: ImageMetadata }>('../assets/shots/*.png', { eager: true });
+// Each shot exists in both themes; the guide shows the one matching the reader's theme.
+const dark = images[`../assets/shots/${name}-dark.png`]?.default;
+const light = images[`../assets/shots/${name}-light.png`]?.default;
+if (!dark || !light) throw new Error(`No screenshot named ${name}`);
+const boxes = markers ? shots[markers] : [];
+---
+
+<figure class="shot not-content" style={`--w: ${width}px`}>
+  <div class="frame">
+    <Image class="for-dark" src={dark} alt={alt} width={width} densities={[1, 2, 3]} loading={loading} />
+    <Image class="for-light" src={light} alt={alt} width={width} densities={[1, 2, 3]} loading={loading} />
+    {
+      boxes.map((b, i) => (
+        <span
+          class="box"
+          aria-hidden="true"
+          style={`left: ${b.x * 100}%; top: ${b.y * 100}%; width: ${b.w * 100}%; height: ${b.h * 100}%`}
+        >
+          <span class="marker">{i + 1}</span>
+        </span>
+      ))
+    }
+  </div>
+  <slot />
+</figure>
+
+<style>
+  .shot {
+    margin: 1.5rem 0;
+  }
+  .frame {
+    position: relative;
+    width: min(100%, var(--w));
+    border-radius: 12px;
+    box-shadow:
+      0 0 0 1px var(--sl-color-hairline-light),
+      0 14px 36px rgba(0, 0, 0, 0.28);
+  }
+  .frame :global(img) {
+    display: block;
+    border-radius: 12px;
+    width: 100%;
+    height: auto;
+  }
+  .box {
+    position: absolute;
+    border: 1.5px solid #e8b85c;
+    border-radius: 6px;
+    pointer-events: none;
+  }
+:global([data-theme='light']) .for-dark,
+  :global([data-theme='dark']) .for-light {
+    display: none !important;
+  }
+  .marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    translate: -78% -78%;
+    min-width: 1.3rem;
+    height: 1.3rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: #e8b85c;
+    color: #101318;
+    font: 600 0.74rem/1.3rem var(--pc-font);
+    text-align: center;
+    box-shadow: 0 0 0 2px #101318;
+  }
+  figure :global(figcaption) {
+    margin-top: 0.6rem;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+  }
+</style>

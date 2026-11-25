@@ -1,0 +1,68 @@
+---
+title: Claude tools
+description: The add-cues skill and every tool the pagecue plugin gives Claude, with what to ask for each.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The [Claude plugin](/guide/install/#the-claude-plugin) gives Claude one skill and nine tools. You don't call them by name: ask in your own words and Claude picks the right one.
+
+## The `add-cues` skill
+
+Writes a whole set of cues for a page: plans the breakpoints, asks what you want to say, writes the cues, marks the page if it's yours, hands the cues to pagecue and checks them. Claude uses it when you ask for speaker notes, talking points, cue cards, a teleprompter or "what to say" for a page, in any language, or when you type `/pagecue:add-cues`.
+
+See [Add cues to a page](/guide/claude/add-cues/) for each step.
+
+## Tools for the open prompter
+
+These work while the prompter is open and connected to a page. Claude checks `pagecue_status` first, so it knows the page and the current cue.
+
+| Tool | What it does | Ask |
+|---|---|---|
+| `pagecue_status` | Reads the page, every cue in order with your edits, which is current, and the view (lines, paused, text size, theme). | "What cue am I on?" |
+| `add_cue` | Adds a cue with a headline and points, at a heading's text or at the reading line. | "Add a cue here about the price." |
+| `edit_cue` | Changes a cue's headline or replaces its points. A cue is named by number or id. | "Shorten cue 3." |
+| `remove_cue` | Deletes a cue. **Undo** in the prompter brings it back. | "Delete the churn cue." |
+| `show_cue` | Scrolls the page and the prompter to a cue. | "Go to cue 5." |
+| `set_view` | Section lines on or off, pause, text size (S, M, L, XL), theme (system, dark, light). | "Turn off the lines and make the text bigger." |
+| `open_page` | Switches to the tab with that page, or opens it; the prompter follows. | "Open the pricing page." |
+
+Every change shows in the prompter with **Undo**.
+
+## Tools for handing over cues
+
+| Tool | What it does | Ask |
+|---|---|---|
+| `publish_cues` | Hands pagecue a whole cue file for a page. The prompter picks it up within seconds, even before you open the page. | Used by the `add-cues` skill. |
+| `list_published_cues` | Lists the pages Claude has handed cues for, and how many each has. | "Which pages have cues?" |
+
+## How Claude reaches the prompter
+
+The plugin runs a small server on your own computer, at `127.0.0.1:47613`. The prompter checks in with it while it's open. Nothing goes to any other machine, and the server has no dependencies.
+
+The server keeps its files in `~/.pagecue`:
+
+| Folder | What's in it |
+|---|---|
+| `inbox/` | Cue files Claude handed over, one per page |
+| `live/` | The prompter's latest state (page, cues, view) and Claude's pending changes |
+
+<Aside type="note" title="Without Claude Code">
+The same server works from a terminal, in a copy of the repository:
+
+```sh
+node plugins/pagecue/server/bridge.mjs publish https://example.com/report report.cues.json
+```
+
+It also takes `list`, `status`, `serve` and `mcp`.
+</Aside>
+
+## The checker
+
+The skill checks its work with a script you can run yourself. It confirms that every cue in a cue file has its element in the page's source:
+
+```sh
+node plugins/pagecue/scripts/check-cues.mjs report.cues.json src/
+```
+
+It reports errors (a cue without its element, a duplicate id) and warnings (a headline over ten words, more than four points), and ends with "✓ 6 cues, all attached" when all is well.

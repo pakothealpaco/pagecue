@@ -1,0 +1,57 @@
+---
+title: Share your screen privately
+description: Share only the page in Zoom, Google Meet or Microsoft Teams, so viewers see the page and you see your cues.
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+The prompter is a separate window. When you share **only the page's tab or window**, viewers see the page and nothing else. The prompter is never part of what you share.
+
+<Aside type="caution" title="Don't share your whole screen">
+If you share your entire screen, the prompter is on it, like any other window.
+</Aside>
+
+## In your meeting app
+
+<Tabs syncKey="meeting">
+<TabItem label="Google Meet">
+
+Start presenting, and in Chrome's picker choose the **Chrome tab** with your page. A shared tab is the cleanest choice: viewers see only that tab, even if other windows cover it.
+
+</TabItem>
+<TabItem label="Zoom">
+
+Click **Share Screen** and pick the Chrome window that holds your page, not the whole screen. Keep the page in a Chrome window of its own, apart from the prompter.
+
+</TabItem>
+<TabItem label="Microsoft Teams">
+
+Click **Share** and pick the Chrome window that holds your page, not the whole screen.
+
+</TabItem>
+</Tabs>
+
+Menu names change from version to version; what matters is choosing a tab or a window, never a screen.
+
+## Set up your screens
+
+- **One screen:** put the page on the left and the prompter, narrow, on the right, close to your camera so your eyes don't wander far.
+- **Two screens:** share the page on one, keep the prompter on the other, at eye level.
+
+## What viewers see
+
+| On the page | Viewers see it? |
+|---|---|
+| The page itself | Yes |
+| The prompter window | No, it isn't shared |
+| Section lines (<kbd>L</kbd>) | **Yes**: they're drawn on the page. Turn them off before you present. |
+| Scrolling when you click a cue or press a key | Yes, the page scrolls as if you scrolled it |
+
+pagecue draws nothing on the page except section lines, and only while you turn them on.
+
+## Before you start
+
+1. Open the page and the prompter. Check the cue light is green.
+2. Press <kbd>L</kbd> if the section lines are on, so they're off.
+3. Share the tab or window, not the screen.
+4. Click the timer to start it from zero.

@@ -14,7 +14,6 @@ import {
   type Layout,
   type Start,
 } from '../lib/position';
-import { EXTENSION_SOURCE, PAGE_API_SOURCE, type PageApiReply, type PageApiRequest } from '../lib/pageApi';
 import type {
   MainFrameReply,
   MainFrameRequest,
@@ -130,9 +129,6 @@ export class PageController {
   private siteImportDone = false;
   private unwatch: (() => void) | undefined;
   private stopped = false;
-  /** Prompters that let agents in the page edit cues through `window.pagecue`. */
-  private readonly agentsAllowed = new Set<Browser.runtime.Port>();
-  private pageApiInstalled = false;
   /** Prompters that asked for section lines on the page. */
   private readonly linesWanted = new Set<Browser.runtime.Port>();
   private readonly overlay = new SectionOverlay({
@@ -168,7 +164,6 @@ export class PageController {
       window.addEventListener(type, this.handleUserInput, { capture: true, passive: true });
     }
     window.addEventListener('resize', this.scheduleResolve, { passive: true });
-    window.addEventListener('message', this.handlePageApi);
 
     const nav = (window as Window & { navigation?: EventTarget }).navigation;
     nav?.addEventListener('navigate', this.noteNavigation);
@@ -268,7 +263,6 @@ export class PageController {
     for (const port of [...this.ports]) port.disconnect();
     this.ports.clear();
     this.linesWanted.clear();
-    this.agentsAllowed.clear();
     this.setTracking(false);
     // Keep watching the address: a move to another page starts over (see `checkNavigation`).
     this.pollTimer = window.setInterval(this.checkNavigation, URL_POLL_MS);
@@ -290,7 +284,6 @@ export class PageController {
     document.removeEventListener('scrollend', this.handleScrollEnd, { capture: true });
     for (const type of USER_INPUT_EVENTS) window.removeEventListener(type, this.handleUserInput, { capture: true });
     window.removeEventListener('resize', this.scheduleResolve);
-    window.removeEventListener('message', this.handlePageApi);
     const nav = (window as Window & { navigation?: EventTarget }).navigation;
     nav?.removeEventListener('navigate', this.noteNavigation);
     nav?.removeEventListener('navigatesuccess', this.checkNavigation);
@@ -838,39 +831,15 @@ export class PageController {
     return { tag: 'body', selector: 'body' };
   }
 
-  // ---------------------------------------------------------------- window.pagecue (agents in the page)
+  // ---------------------------------------------------------------- cue commands from Claude (bridge)
 
-  private readonly handlePageApi = (event: MessageEvent): void => {
-    const request = event.data as PageApiRequest | undefined;
-    if (event.source !== window || request?.source !== PAGE_API_SOURCE || typeof request.id !== 'string') return;
-    const reply = (answer: Omit<PageApiReply, 'source' | 'id'>): void =>
-      window.postMessage({ source: EXTENSION_SOURCE, id: request.id, ...answer } satisfies PageApiReply, '*');
-    if (!this.alive()) return;
-    if (this.agentsAllowed.size === 0) {
-      reply({
-        ok: false,
-        error:
-          'pagecue is not letting agents edit cues on this page: the presenter turned off "Let Claude in Chrome edit cues" in the prompter’s ··· menu.',
-      });
-      return;
-    }
-    try {
-      reply({
-        ok: true,
-        result: this.runPageApi(request.method, Array.isArray(request.args) ? request.args : [], 'in the browser'),
-      });
-    } catch (error) {
-      reply({ ok: false, error: error instanceof Error ? error.message : String(error) });
-    }
-  };
-
-  /** Cue commands from an agent: `window.pagecue` in the page, or Claude through the bridge. `from` says who, in the prompter's note ("by Claude"). */
-  private runPageApi(method: string, args: unknown[], from: string): unknown {
+  /** Cue commands from Claude through the bridge (see `PrompterMessage` `api`). The prompter shows each change with Undo. */
+  private runAgentCommand(method: string, args: unknown[]): unknown {
     const found = this.found();
     const pick = (ref: unknown): FoundCue => {
       const entry =
         typeof ref === 'number' ? found[ref - 1] : found.find((candidate) => candidate.cue.id === String(ref));
-      if (!entry) throw new Error(`No cue ${JSON.stringify(ref)}. Call pagecue.cues() to see them.`);
+      if (!entry) throw new Error(`No cue ${JSON.stringify(ref)}. Call pagecue_status to see them.`);
       return entry;
     };
     const words = (value: unknown): { title?: string; notes?: string } => {
@@ -883,13 +852,6 @@ export class PageController {
       return result;
     };
     switch (method) {
-      case 'cues':
-        return found.map(({ cue }, index) => ({
-          number: index + 1,
-          id: cue.id,
-          title: cue.title,
-          notes: cue.notes.split('\n').filter((line) => line.trim()),
-        }));
       case 'add': {
         const input = (args[0] ?? {}) as { near?: unknown };
         const { title = '', notes = '' } = words(args[0]);
@@ -906,7 +868,7 @@ export class PageController {
         const number = this.found().findIndex((entry) => entry.cue.id === cue.id) + 1;
         this.broadcast({
           type: 'agent-change',
-          text: `Added ${from}: “${title || 'a cue'}”`,
+          text: `Added by Claude: “${title || 'a cue'}”`,
           undo: { kind: 'delete', id: cue.id },
         });
         return { number, id: cue.id };
@@ -918,7 +880,7 @@ export class PageController {
         void this.change(this.key, { kind: 'patch', id: entry.cue.id, patch, at: Date.now() });
         this.broadcast({
           type: 'agent-change',
-          text: `Changed ${from}: “${patch.title ?? entry.cue.title}”`,
+          text: `Changed by Claude: “${patch.title ?? entry.cue.title}”`,
           undo: { kind: 'patch', id: entry.cue.id, patch: before, at: Date.now() + 1 },
         });
         return { id: entry.cue.id };
@@ -928,7 +890,7 @@ export class PageController {
         void this.change(this.key, { kind: 'delete', id: entry.cue.id });
         this.broadcast({
           type: 'agent-change',
-          text: `Deleted ${from}: “${entry.cue.title}”`,
+          text: `Deleted by Claude: “${entry.cue.title}”`,
           undo: { kind: 'import', cues: [entry.cue] },
         });
         return { id: entry.cue.id };
@@ -943,7 +905,7 @@ export class PageController {
         return { id: entry.cue.id };
       }
       default:
-        throw new Error(`Unknown method ${method}. Call pagecue.help().`);
+        throw new Error(`Unknown method ${method}.`);
     }
   }
 
@@ -983,7 +945,6 @@ export class PageController {
     port.onDisconnect.addListener(() => {
       this.ports.delete(port);
       this.linesWanted.delete(port);
-      this.agentsAllowed.delete(port);
       if (!this.connected) this.setTracking(false);
       else this.updateOverlay();
     });
@@ -1007,7 +968,7 @@ export class PageController {
         break;
       case 'api':
         try {
-          const result = this.runPageApi(message.method, Array.isArray(message.args) ? message.args : [], 'by Claude');
+          const result = this.runAgentCommand(message.method, Array.isArray(message.args) ? message.args : []);
           port.postMessage({ type: 'api-result', id: message.id, ok: true, result } satisfies PageMessage);
         } catch (error) {
           port.postMessage({
@@ -1016,14 +977,6 @@ export class PageController {
             ok: false,
             error: error instanceof Error ? error.message : String(error),
           } satisfies PageMessage);
-        }
-        break;
-      case 'agent-access':
-        if (message.on) this.agentsAllowed.add(port);
-        else this.agentsAllowed.delete(port);
-        if (message.on && !this.pageApiInstalled) {
-          this.pageApiInstalled = true;
-          void browser.runtime.sendMessage({ type: 'install-page-api' }).catch(() => (this.pageApiInstalled = false));
         }
         break;
       case 'section-lines':

@@ -23,11 +23,6 @@ With the prompter open, Claude Code (through the plugin) works on the prompter d
 
 Every change shows in the prompter at once, with **Undo**.
 
-## Claude in Chrome
-
-Claude in Chrome can also write cues while you are on the page, from what you say and from screenshots you send it: while the prompter is open on a page, the page offers it a small `window.pagecue` interface (the `add-cues` skill explains it; the skill can also be uploaded to your Claude account from the release's `add-cues-skill.zip`). Its changes are saved like any other cue and appear in the prompter at once, each with **Undo**. To stop it, turn off **Let Claude in Chrome edit cues** in the prompter's ··· menu.
-
-
 ## The Claude app
 
 The plugin's MCP server also works in the Claude desktop app. Add it to the app's `claude_desktop_config.json` (Settings → Developer → Edit config):

@@ -1,0 +1,82 @@
+---
+title: Install
+description: Install the pagecue Chrome extension and the Claude plugin.
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+## The Chrome extension
+
+<Aside type="note" title="Chrome Web Store: coming soon">
+Until pagecue is in the Chrome Web Store, you install it from its release on GitHub. It takes a minute, and Chrome keeps it after a restart.
+</Aside>
+
+<Steps>
+
+1. Download **`pagecue-extension.zip`** from the [latest release](https://github.com/pakothealpaco/pagecue/releases/latest) and unzip it.
+
+2. Open `chrome://extensions` in Chrome and turn on **Developer mode** (top right).
+
+3. Click **Load unpacked** and choose the unzipped folder.
+
+   Chrome shows a notice about developer-mode extensions. That's expected for extensions installed this way.
+
+4. Pin pagecue so it's always in the toolbar: click the puzzle-piece icon next to the address bar, then the pin next to **pagecue**.
+
+</Steps>
+
+pagecue is made and tested for Chrome. Other Chromium browsers (Edge, Brave, Arc) should work the same way.
+
+pagecue asks for no access to your sites when you install it. It reaches a page only when you click its button there; see [Permissions](/guide/reference/permissions/).
+
+### Local files
+
+To present pages you open from disk (`file://…`), allow pagecue to read local files: see [Local files](/guide/sites/#local-files).
+
+## The Claude plugin
+
+The plugin gives Claude the `add-cues` skill and a set of tools to work the prompter. It needs [Node.js](https://nodejs.org/) 20 or later.
+
+<Tabs syncKey="claude">
+<TabItem label="Claude Code">
+
+In Claude Code, run:
+
+```text
+/plugin marketplace add pakothealpaco/pagecue
+/plugin install pagecue@pagecue
+```
+
+Then ask Claude for cues in your own words, or type `/pagecue:add-cues`.
+
+</TabItem>
+<TabItem label="Claude desktop app">
+
+In the Claude desktop app's chat you can add the plugin's live tools (not the `add-cues` skill), so Claude can change cues while the prompter is open. Download or clone [the repository](https://github.com/pakothealpaco/pagecue), then open **Settings → Developer → Edit config** and add the server to `claude_desktop_config.json`, with the full path to your copy:
+
+```json
+{
+  "mcpServers": {
+    "pagecue": {
+      "command": "node",
+      "args": ["/path/to/pagecue/plugins/pagecue/server/bridge.mjs", "mcp"]
+    }
+  }
+}
+```
+
+Restart the app.
+
+</TabItem>
+</Tabs>
+
+## Build from source
+
+```sh
+git clone https://github.com/pakothealpaco/pagecue
+cd pagecue/extension
+npm ci
+npm run build
+```
+
+Load `extension/.output/chrome-mv3` with **Load unpacked**.

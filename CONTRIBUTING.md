@@ -37,7 +37,7 @@ npm run e2e     # end-to-end test in real Chromium
 
 ## Releasing
 
-Pushing a tag `vX.Y.Z` builds the extension and the skill and attaches both zips to a GitHub release. The Chrome Web Store upload is done by hand by the maintainer.
+Pushing a tag `vX.Y.Z` builds the extension and attaches its zip to a GitHub release. The Chrome Web Store upload is done by hand by the maintainer.
 
 ## Reporting a bug
 

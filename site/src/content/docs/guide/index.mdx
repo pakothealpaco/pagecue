@@ -1,0 +1,44 @@
+---
+title: What is pagecue
+description: Speaker notes for any web page, written with Claude, in a private prompter window that follows the page as you scroll.
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+pagecue gives you speaker notes for any web page: the report, dashboard or site you made with Claude and now have to present. Your notes, called **cues**, sit in a small window of their own, the **prompter**. As you scroll the page, the prompter shows the cue for the part on screen.
+
+You share only the page. The prompter stays on your side.
+
+<Shot eager name="prompter" alt="The pagecue prompter: the current cue, September doubled March, is lit, with the cues before and after it dimmed." width={320} />
+
+## How the pieces fit
+
+pagecue has two parts. You need the first; the second lets Claude write your cues.
+
+- **The Chrome extension** opens the prompter for the tab you're on and keeps it in step with the page, in both directions: scroll the page and the prompter follows; click a cue and the page scrolls to it.
+- **The Claude plugin** lets Claude write the cues. Tell Claude what you want to say; it reads the page, plans where each cue goes, and writes a headline and up to three points for each. While you rehearse, it can change them on the spot.
+
+You can also write and edit every cue yourself, right in the prompter.
+
+## The short version
+
+1. Ask Claude: "Add presenter cues to this page."
+2. Open the page and click pagecue.
+3. In your meeting, share the page's tab, not your screen.
+
+## What a cue is
+
+A cue covers one horizontal part of the page, from where it starts down to where the next cue starts. Each has:
+
+- a **headline** of about eight words, the point you're making;
+- up to **three short points**: a number to say, why it matters, an answer to a likely question.
+
+One cue is current at a time: the one whose part has reached the **reading line**, about a third of the way down the window.
+
+## Next
+
+<CardGrid>
+  <LinkCard title="Install" href="/guide/install/" description="The extension, and the Claude plugin." />
+  <LinkCard title="Your first presentation" href="/guide/quick-start/" description="Five minutes with the demo report." />
+</CardGrid>

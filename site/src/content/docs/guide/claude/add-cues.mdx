@@ -1,0 +1,54 @@
+---
+title: Add cues to a page
+description: Ask Claude for speaker notes and the add-cues skill writes them, from your words and the page's facts.
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+Writing cues is a conversation with Claude. You say what you want to get across; Claude knows the page, so it puts each point where it belongs and keeps it short enough to read mid-sentence.
+
+This uses the `add-cues` skill from the [Claude plugin](/guide/install/#the-claude-plugin). It needs Claude Code.
+
+## Ask
+
+In Claude Code, in any language:
+
+> Add presenter cues to this report. On the revenue chart I want to say the Q3 jump came from the EU launch.
+
+Anything that asks for speaker notes, talking points, cue cards or "what to say" for a page works. To start the skill directly, type `/pagecue:add-cues` and the page's address or file.
+
+The page can be one Claude just made, a file on your computer, or any site you present, yours or not.
+
+<Aside type="tip" title="From the prompter">
+Open pagecue on a page with no cues and click **Copy**: you get `/pagecue:add-cues` with the page's address. Paste it into Claude Code and add what you want to say.
+</Aside>
+
+## What Claude does
+
+<Steps>
+
+1. **Reads the page** from start to end.
+
+2. **Plans the breakpoints**, about one per screenful: usually 5 to 15 cues.
+
+3. **Asks you once what to say**, as a numbered list of the parts. Answer as much or as little as you like: type it, dictate it with `/voice`, say "you write it" for the rest, or "skip" for a part.
+
+4. **Writes the cues** in your language. Each gets a headline of about eight words that makes a point (not a label), and up to three points of about twelve words: a number or fact to say, why it matters, maybe a likely question and your answer. It uses only facts from the page and from you, and keeps your own wording.
+
+5. **Marks the page**, if the page is yours: it adds a `data-pagecue` attribute to each part in the source, so the cue stays attached even as the text changes. Nothing visible changes. For pages that aren't yours, it attaches cues by their heading text instead.
+
+6. **Hands the cues to pagecue.** They appear in the prompter within seconds. For your own pages, Claude can also ship the cues with the page, so anyone who opens it with pagecue gets them (see [Cue file format](/guide/reference/cue-file/#how-a-page-carries-its-cues)).
+
+7. **Checks its work** with a checker that confirms every cue finds its place.
+
+8. **Tells you how to present** it.
+
+</Steps>
+
+Then open the page, click pagecue, and the cues are there.
+
+## Change them later
+
+Ask again: "make cue 4 about pricing", "add a cue before the summary", "drop the cue on churn". Claude keeps each cue's identity, so a cue you've edited by hand in the prompter keeps your wording. A cue Claude removes disappears, unless you've edited it.
+
+With the prompter open, Claude can also change cues live, one at a time. See [Change cues while you rehearse](/guide/claude/live/).

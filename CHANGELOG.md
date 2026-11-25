@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- The prompter's "No cues on this page yet" card now copies `/pagecue:add-cues <page>`, which starts the skill in Claude Code directly, and links to the plugin's install steps when you don't have it yet.
+- Links to the user guide and to GitHub in the ··· menu and under every empty state.
+- A website with a full user guide: [usepagecue.com](https://usepagecue.com).
+- Removed: `window.pagecue` and the **Let Claude in Chrome edit cues** setting. Claude in Chrome doesn't use skills, so it never learned the interface. Claude Code and the Claude app still change cues live through the plugin's MCP tools, each change with Undo. pagecue now adds nothing to the page's own scripts, and a saved setting from an older version is ignored.
+
 ## 0.2.0 (2026-11-25)
 
 The first public release.

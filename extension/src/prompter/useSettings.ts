@@ -14,8 +14,6 @@ export interface Settings {
   tipSeen: boolean;
   /** The "viewers see section lines" note was shown once. */
   linesExplained: boolean;
-  /** Agents in the page (Claude in Chrome) may edit cues through `window.pagecue`. */
-  agentAccess: boolean;
 }
 
 const KEY = 'prompter-settings';
@@ -25,7 +23,6 @@ const DEFAULTS: Settings = {
   sectionLines: false,
   tipSeen: false,
   linesExplained: false,
-  agentAccess: true,
 };
 export const TEXT_SIZE_ORDER = Object.keys(TEXT_SIZES) as TextSize[];
 const ORDER = TEXT_SIZE_ORDER;
@@ -49,7 +46,6 @@ export function useSettings(): [Settings, (patch: Partial<Settings>) => void] {
         sectionLines: stored?.sectionLines === true,
         tipSeen: stored?.tipSeen === true,
         linesExplained: stored?.linesExplained === true,
-        agentAccess: stored?.agentAccess !== false,
       });
     });
   }, []);

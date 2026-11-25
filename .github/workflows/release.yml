@@ -1,7 +1,7 @@
 name: Release
 
-# Pushing a tag such as v0.2.0 builds the extension and the add-cues skill and attaches both zips
-# to a GitHub release. The Chrome Web Store upload stays a manual step.
+# Pushing a tag such as v0.2.0 builds the extension and attaches its zip to a GitHub release.
+# The Chrome Web Store upload stays a manual step.
 on:
   push:
     tags: ['v*']
@@ -29,7 +29,6 @@ jobs:
         run: |
           mkdir -p release
           (cd extension/.output/chrome-mv3 && zip -qr ../../../release/pagecue-extension.zip .)
-          (cd plugins/pagecue/skills && zip -qr ../../../release/add-cues-skill.zip add-cues)
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}

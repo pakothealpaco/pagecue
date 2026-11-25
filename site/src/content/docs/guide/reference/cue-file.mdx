@@ -1,0 +1,98 @@
+---
+title: Cue file format
+description: The pagecue cue file, field by field, and the ways a page can carry its cues.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+A cue file is a small JSON file that describes a page's cues. Claude writes them for you; this page is for when you want to write one, ship cues with a page, or build a tool that does.
+
+The JSON Schema is [`pagecue.schema.json`](https://github.com/pakothealpaco/pagecue/blob/main/plugins/pagecue/schema/pagecue.schema.json).
+
+## Example
+
+```json
+{
+  "pagecue": 1,
+  "title": "Q3 business review",
+  "cues": [
+    {
+      "id": "revenue",
+      "title": "Revenue up 24% in Q3",
+      "notes": ["Driven by new EU customers", "Key number: 24%"]
+    },
+    {
+      "id": "churn",
+      "anchor": { "tag": "h2", "text": "Churn" },
+      "title": "Churn down to 2.1%",
+      "notes": ["Was 3.4%", "Q: will it hold? → two cohorts so far"]
+    }
+  ]
+}
+```
+
+## Fields
+
+### The file
+
+| Field | Required | Description |
+|---|---|---|
+| `pagecue` | Yes | Always `1`, the format version. |
+| `title` | | The presentation's name. |
+| `cues` | Yes | The cues, in page order. |
+
+### Each cue
+
+| Field | Required | Description |
+|---|---|---|
+| `id` | Yes | Unique within the file. Keep it stable: it's how your own edits stay attached when the file changes. |
+| `title` | Yes | The headline. About eight words reads best. |
+| `notes` | | The points: an array of strings, or one string with a point per line. Three or fewer read best. |
+| `anchor` | | Where the cue starts. Without it, the cue attaches to the element with `data-pagecue="<id>"`. |
+| `startAt` | | Fine-tunes where the cue starts, as a share of its part of the page. Set when you drag a section line. |
+
+### Anchors
+
+An anchor is either a `data-pagecue` value as a string, or an object describing the element:
+
+| Field | Description |
+|---|---|
+| `tag` | Required. The element's tag, such as `h2` or `section`. |
+| `cue` | Its `data-pagecue` value. |
+| `id` | Its `id`. |
+| `testId` | A test id, as `{ "attr": "data-testid", "value": "…" }`. |
+| `selector` | A CSS selector. |
+| `text` | Its text, matched loosely. |
+| `heading` | The text of the heading it sits under. |
+
+pagecue tries the `data-pagecue` value first, then the id, the test id, the selector, and finally the text. If none matches, the cue is left out and the prompter says so; it's never moved to the wrong place.
+
+## Mark the page
+
+On pages you control, mark where each cue starts with `data-pagecue`. It's the sturdiest anchor: it survives text changes and redesigns.
+
+```html
+<section data-pagecue="revenue">…</section>
+<figure data-pagecue="churn">…</figure>
+```
+
+An element with `data-pagecue` but no matching cue still becomes a cue, titled after the element.
+
+## How a page carries its cues
+
+| Way | How | Use it for |
+|---|---|---|
+| **Linked** | `<link rel="alternate" type="application/vnd.pagecue+json" href="report.cues.json">` in `<head>` | Pages on the web. The file must be on the same site, up to 1 MB. |
+| **Inline** | `<script type="application/vnd.pagecue+json">{ … }</script>` | Files opened from disk, which can't use a linked file. |
+| **Import** | ··· menu → **Import cues…** | Private notes for a public page. |
+| **Handed over by Claude** | The `publish_cues` tool | Any page, yours or not. |
+
+<Aside type="caution" title="Linked and inline cues are public">
+Anyone who can open the page can read its cue file. For private notes on a public page, keep only the `data-pagecue` attributes in the page, and import the cue file in the prompter.
+</Aside>
+
+## Whose words win
+
+- Cues you wrote or edited in the prompter are never overwritten.
+- Otherwise a newer cue file replaces the cue with the same id.
+- When a page's cue file drops a cue, the prompter drops it too, unless you've edited it.

@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Q3 partner review · Halcyon Roasters</title>
+    <link rel="canonical" href="https://usepagecue.com/demo/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta
       name="description"
       content="A sample report to try pagecue on: open it, click pagecue, and the cues appear."
@@ -84,6 +86,31 @@
         --accent: #b4572e;
         --accent-soft: #f3e3d8;
         --good: #2f7d57;
+        --surface: #fff;
+        --surface-2: #fdfbf8;
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #efe9e2;
+          --muted: #a89d92;
+          --line: #352f2a;
+          --paper: #171411;
+          --accent: #e08a5f;
+          --accent-soft: #3a261b;
+          --good: #6fcf9b;
+          --surface: #201c18;
+          --surface-2: #1c1915;
+        }
+        svg line {
+          stroke: #3a332d;
+        }
+        svg g[fill="#d9a48a"] {
+          fill: #8a5a43;
+        }
+        svg g[fill="#b4572e"] {
+          fill: #e08a5f;
+        }
       }
       * {
         box-sizing: border-box;
@@ -142,7 +169,7 @@
         gap: 16px;
       }
       .stat {
-        background: #fff;
+        background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 14px;
         padding: 20px;
@@ -165,7 +192,7 @@
       }
       figure {
         margin: 0;
-        background: #fff;
+        background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 14px;
         padding: 24px;
@@ -182,10 +209,14 @@
           sans-serif;
         fill: var(--muted);
       }
+      .table-wrap {
+        overflow-x: auto;
+        border-radius: 14px;
+      }
       table {
         width: 100%;
         border-collapse: collapse;
-        background: #fff;
+        background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 14px;
         overflow: hidden;
@@ -200,7 +231,7 @@
         font-size: 13px;
         color: var(--muted);
         font-weight: 600;
-        background: #fdfbf8;
+        background: var(--surface-2);
       }
       td.num {
         text-align: right;
@@ -223,7 +254,7 @@
         gap: 16px;
       }
       .card {
-        background: #fff;
+        background: var(--surface);
         border: 1px solid var(--line);
         border-radius: 14px;
         padding: 22px;
@@ -334,6 +365,7 @@
       <section>
         <h2>Where it sold</h2>
         <p class="sub">Share of this quarter's growth, by channel.</p>
+        <div class="table-wrap">
         <table>
           <thead>
             <tr>
@@ -365,6 +397,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
       </section>
 
       <section>

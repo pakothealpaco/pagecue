@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { Settings, Theme } from '../useSettings';
+import { LINKS } from '../../lib/links';
+import { BookIcon, GitHubIcon } from './HelpLinks';
 
 interface Props {
   open: boolean;
@@ -13,8 +15,6 @@ interface Props {
   onAddCue?: () => void;
   onEditCurrent: () => void;
   onTogglePause: () => void;
-  agentAccess: boolean;
-  onToggleAgentAccess: () => void;
   onClose: () => void;
   onSettings: (patch: Partial<Settings>) => void;
   onSites: () => void;
@@ -40,7 +40,7 @@ export function Menu(props: Props) {
   useEffect(() => {
     if (!props.open) return;
     if (props.showShortcuts) ref.current?.querySelector('.shortcuts')?.scrollIntoView({ block: 'nearest' });
-    ref.current?.querySelector<HTMLElement>('button:not(:disabled)')?.focus();
+    ref.current?.querySelector<HTMLElement>('button:not(:disabled), a')?.focus();
     const onKey = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
         event.stopPropagation();
@@ -82,19 +82,6 @@ export function Menu(props: Props) {
         <span>{props.paused ? 'Resume following' : 'Pause following'}</span>
         <kbd>P</kbd>
       </button>
-      <button
-        type="button"
-        role="menuitemcheckbox"
-        aria-checked={props.agentAccess}
-        disabled={!props.onAddCue}
-        onClick={props.onToggleAgentAccess}
-      >
-        <span>
-          Let Claude in Chrome edit cues
-          <small>The page’s own scripts could too.</small>
-        </span>
-        <span className="check" aria-hidden="true" />
-      </button>
       <hr />
       <div className="menu-row">
         <span>Theme</span>
@@ -125,6 +112,21 @@ export function Menu(props: Props) {
       <button type="button" role="menuitem" disabled={!props.canExport} onClick={run(props.onExport)}>
         Export cues…
       </button>
+      <hr />
+      <a role="menuitem" href={LINKS.guide} target="_blank" rel="noopener noreferrer" onClick={props.onClose}>
+        <span>
+          Guide
+          <small>Every button and key, and how to work with Claude</small>
+        </span>
+        <BookIcon />
+      </a>
+      <a role="menuitem" href={LINKS.github} target="_blank" rel="noopener noreferrer" onClick={props.onClose}>
+        <span>
+          pagecue on GitHub
+          <small>Source, releases and issues</small>
+        </span>
+        <GitHubIcon />
+      </a>
       <hr />
       {/* Only the keys shown nowhere else: the menu items above carry their own (N, Enter, P), and
           the footer buttons name theirs (L, ⌘ + ⌘ −) in their tooltips. */}

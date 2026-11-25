@@ -1,0 +1,61 @@
+---
+title: Troubleshooting
+description: What to do when the prompter doesn't connect, cues are missing, or Claude can't reach pagecue.
+---
+
+## The prompter doesn't connect
+
+**The prompter says "Open the page you're presenting".**
+It hasn't been opened from a page yet. Go to the page and click pagecue in the toolbar, or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>P</kbd>.
+
+**It says "The page reloaded" every time.**
+pagecue's access to a page ends when the page reloads, unless you allow it on that site for good. Click **Always reconnect on** *site* once.
+
+**It says "pagecue can't run here".**
+Chrome keeps extensions off its own pages, the Chrome Web Store and its PDF viewer. Present a regular web page or a local HTML file.
+
+**Nothing happens on a local file.**
+pagecue needs your permission for local files: see [Local files](/guide/sites/#local-files).
+
+**The cue light stays amber.**
+Amber means paused or still connecting. Click the light, or **Resume**, to follow again. If it says **Connecting** for long, reload the page.
+
+## Cues are missing or in the wrong place
+
+**"2 cues aren't on this page."**
+Those cues' parts of the page have changed or gone. Ask Claude to update the cues; it reads the page again.
+
+**The prompter lists the cues but doesn't follow the page.**
+None of the cues could find its place, so pagecue lists them all and lets you move with <kbd>↑</kbd> and <kbd>↓</kbd>. This happens when a page changed a lot since the cues were written. Ask Claude to update them.
+
+**A cue comes up too early or too late.**
+Press <kbd>L</kbd>, drag that cue's tag on the page, and press <kbd>L</kbd> again. See [Section lines](/guide/section-lines/).
+
+**The page shows its content in a frame.**
+Click **Allow on** *site* in the prompter once. See [Pages in a frame](/guide/sites/#pages-in-a-frame).
+
+**"Could not load report.cues.json".**
+The page links a cue file pagecue couldn't read. The reason follows in the message:
+
+| Reason | Fix |
+|---|---|
+| the cue file must be on the same site as the page | Host the file next to the page. |
+| HTTP 404 | The link points to a file that isn't there. |
+| the cue file is larger than 1 MB | Split the page, or shorten the cues. |
+| Chrome does not let extensions read linked files on pages opened from disk | Put the cues inline in the page, or import them. |
+| a network error, or a parse error | Check that the file opens in the browser and is valid JSON. |
+
+## Claude can't reach pagecue
+
+**Claude says the prompter isn't open.**
+Open the page and click pagecue. Claude's live changes need the prompter open and connected.
+
+**Claude says the prompter didn't answer in time.**
+Check that the prompter is still open and its cue light is green, then ask again.
+
+**Cues Claude wrote don't appear.**
+Make sure the page you opened has the same address Claude used, and that the prompter's cue light is green. Ask Claude "What cue am I on?": it reads the prompter and tells you which page it sees.
+
+## Still stuck
+
+[Open an issue](https://github.com/pakothealpaco/pagecue/issues/new/choose) with your Chrome version, what the prompter says, and the page if you can share it.

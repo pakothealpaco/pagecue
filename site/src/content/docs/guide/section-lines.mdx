@@ -1,0 +1,37 @@
+---
+title: Section lines
+description: See on the page where each cue starts, and drag to change when it comes up.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+Section lines show you, on the page itself, where each cue begins. Use them while you rehearse to fine-tune when each cue comes up.
+
+Click **Lines** at the bottom of the prompter, or press <kbd>L</kbd>.
+
+<Aside type="caution" title="Viewers see section lines">
+They're drawn on the page, so anyone watching your shared tab sees them. Press <kbd>L</kbd> again to hide them before you present. While they're on, **Lines** stays lit green in the prompter as a reminder.
+</Aside>
+
+<Shot eager name="lines-page" alt="The demo report with a green section line and a tag reading 3, September doubled March, and a dashed reading line with an Add cue here button." width={720} />
+
+## What you see
+
+- **A line where each cue starts**, across the page, with a tag holding the cue's number and headline.
+- **The current part** tinted lightly, and its tag filled green.
+- **The reading line**, dashed, 30% of the way down the window, with **+ Add cue here**.
+
+## Change when a cue comes up
+
+**Drag a tag** up or down. The prompter follows as you drag, and the line can't pass its neighbours. Let go to save.
+
+**Double-click a tag** to put the line back where it started.
+
+The position is saved as a share of that part of the page, so it holds when the window is resized or zoomed, and it's kept when you export the cues.
+
+## Add a cue at the reading line
+
+Scroll until the reading line is where the new part should start, and click **+ Add cue here**. The new cue opens in the prompter for you to write.
+
+Lines stay on until you turn them off, even after the page reloads.

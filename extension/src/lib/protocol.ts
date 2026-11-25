@@ -15,9 +15,7 @@ export type PrompterMessage =
   | { type: 'scroll-to'; position: CuePosition; smooth: boolean }
   /** Show or hide section lines on the page (see `content/overlay.ts`). */
   | { type: 'section-lines'; on: boolean }
-  /** Let agents in the page (Claude in Chrome) use `window.pagecue` (see `pageApi.ts`). */
-  | { type: 'agent-access'; on: boolean }
-  /** A cue command from an agent outside the browser (through the bridge): see `PageApiMethod`. */
+  /** A cue command from Claude through the bridge: add, edit, remove or show a cue. */
   | { type: 'api'; id: string; method: string; args: unknown[] }
   /** Add a cue (a new part of the page) starting at the reading line. */
   | { type: 'add-cue' };
@@ -41,7 +39,7 @@ export type PageMessage =
   | { type: 'position'; position: CuePosition }
   /** A cue was added at the reading line (from the prompter or the page); the prompter opens it for editing. */
   | { type: 'cue-added'; cue: Cue }
-  /** An agent in the page changed a cue through `window.pagecue`; the prompter says so, with undo. */
+  /** Claude changed a cue through the bridge; the prompter says so, with undo. */
   | { type: 'agent-change'; text: string; undo: CueChange }
   /** The answer to an `api` command. */
   | { type: 'api-result'; id: string; ok: boolean; result?: unknown; error?: string }

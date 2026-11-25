@@ -1,0 +1,34 @@
+---
+title: Change cues while you rehearse
+description: With the prompter open, Claude sees your page and cues and changes them on the spot.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Rehearsing is when you find out a cue is too long, or a point is missing. With the prompter open, just tell Claude. It knows which page you're on, sees every cue with your own edits, and knows which one is current.
+
+> Add a cue here: we match any quote for the first year.
+>
+> Make cue 3 shorter, and turn off the section lines.
+
+"Here" and "this part" mean the cue you're on, at the reading line. You can also name a heading, or send a screenshot.
+
+Each change shows in the prompter at once, with a note such as **Changed by Claude: "Pricing holds through March"** and an **Undo** button.
+
+## What Claude can do
+
+| Ask | What happens |
+|---|---|
+| "What cue am I on?", "Show me my cues" | Claude reads the page, every cue in order and the current one. |
+| "Add a cue here about the price" | A new cue at the reading line, or at a heading you name. |
+| "Shorten cue 3", "Reword the pricing cue" | Changes a cue's headline or points. |
+| "Delete the churn cue" | Removes it. **Undo** in the prompter brings it back. |
+| "Go to cue 5" | Scrolls the page and the prompter there. |
+| "Turn off the section lines", "Bigger text", "Dark mode", "Pause" | Changes the view. |
+| "Open the pricing page" | Opens that page, or switches to its tab, and the prompter follows. |
+
+The full list, with each tool's name, is in [Claude tools](/guide/reference/claude-tools/).
+
+<Aside type="note">
+Live changes need the prompter to be open and connected to the page. If it isn't, Claude says so and asks you to click pagecue on the page.
+</Aside>

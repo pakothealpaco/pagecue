@@ -1,0 +1,114 @@
+/* usepagecue.com: the prompter's palette (extension/src/prompter/styles.css), so the site and the
+   product look like one thing. Green is the cue light: it means "live" and is used for little else. */
+
+:root {
+  --pc-font: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --pc-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --sl-font: var(--pc-font);
+  --sl-font-mono: var(--pc-mono);
+  --sl-text-h1: 2.125rem;
+}
+
+/* Dark: the prompter's own colours. */
+:root,
+::backdrop {
+  --pc-bg: #101318;
+  --pc-raised: #191d24;
+  --pc-ink: #ece8e1;
+  --pc-muted: #8a919c;
+  --pc-line: #252a33;
+  --pc-live: #6fd3a0;
+  --pc-standby: #e8b85c;
+
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #ece8e1;
+  --sl-color-gray-2: #c9c6c0;
+  --sl-color-gray-3: #8a919c;
+  --sl-color-gray-4: #5b626d;
+  --sl-color-gray-5: #2c313a;
+  --sl-color-gray-6: #191d24;
+  --sl-color-black: #101318;
+  --sl-color-accent-low: #163527;
+  --sl-color-accent: #3fae78;
+  --sl-color-accent-high: #8ee0b6;
+  --sl-color-text: #d9d6d0;
+  --sl-color-bg-nav: #101318;
+  --sl-color-bg-sidebar: #101318;
+  --sl-color-hairline: #252a33;
+  --sl-color-hairline-light: #2c313a;
+}
+
+:root[data-theme='light'],
+[data-theme='light'] ::backdrop {
+  --pc-bg: #f4f6f9;
+  --pc-raised: #ffffff;
+  --pc-ink: #151a22;
+  --pc-muted: #5e6672;
+  --pc-line: #dde2e9;
+  --pc-live: #1e9e63;
+  --pc-standby: #b07a12;
+
+  --sl-color-white: #151a22;
+  --sl-color-gray-1: #1d232c;
+  --sl-color-gray-2: #353c47;
+  --sl-color-gray-3: #5e6672;
+  --sl-color-gray-4: #8a919c;
+  --sl-color-gray-5: #cdd3db;
+  --sl-color-gray-6: #eef1f5;
+  --sl-color-gray-7: #f6f8fa;
+  --sl-color-black: #ffffff;
+  --sl-color-accent-low: #d6f2e4;
+  --sl-color-accent: #17804f;
+  --sl-color-accent-high: #0e5a37;
+  --sl-color-text: #2a313b;
+  --sl-color-bg-nav: #ffffff;
+  --sl-color-bg-sidebar: #f6f8fa;
+  --sl-color-hairline: #e3e7ec;
+  --sl-color-hairline-light: #d6dbe2;
+}
+
+/* Keys, as the prompter draws them. */
+kbd {
+  font: 500 0.82em/1 var(--pc-mono);
+  padding: 0.18em 0.42em;
+  border: 1px solid var(--sl-color-gray-5);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--sl-color-gray-6);
+  color: var(--sl-color-white);
+  white-space: nowrap;
+}
+
+/* The site title next to the mark reads as the product name, lowercase like the extension. */
+.site-title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+:root[data-theme='light'] .sl-markdown-content a code {
+  color: #146c43;
+}
+
+.sl-markdown-content table {
+  font-size: var(--sl-text-sm);
+}
+.sl-markdown-content table td:first-child {
+  white-space: nowrap;
+}
+
+.site-title {
+  color: var(--sl-color-white);
+  font-size: 1.2rem;
+}
+.site-title img {
+  height: 1.6rem;
+  width: auto;
+}
+.site-title {
+  gap: 0.6rem;
+}
+/* The logo's dark tile needs an edge on the dark theme. */
+:root[data-theme='dark'] .site-title img {
+  border-radius: 22%;
+  box-shadow: 0 0 0 1px #343a44;
+}

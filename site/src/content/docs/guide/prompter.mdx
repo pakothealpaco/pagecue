@@ -1,0 +1,96 @@
+---
+title: The prompter
+description: The prompter window, how it follows the page, and what each part of it does.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+The prompter is pagecue's own window. It lists the page's cues in order, lights the current one, and keeps it level with your eye as the page moves.
+
+## Open it
+
+Open the page you're presenting and click **pagecue** in Chrome's toolbar, or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>P</kbd>. There is only ever one prompter window; clicking again brings it forward and reconnects it to the current tab.
+
+You can move and resize it like any window. In a wide window the cues keep to one readable column.
+
+## Its parts
+
+<Shot eager name="prompter" markers="prompter" alt="The prompter with eight numbered parts: the cue light, page title, position, current cue, timer, Lines, text size and the More menu." width={420} />
+
+| # | Part | What it does |
+|---|---|---|
+| 1 | **Cue light** | Green while the prompter follows the page; amber when paused or connecting; grey before any page is open; red when it isn't connected. Click it to pause or resume (<kbd>P</kbd>). |
+| 2 | **Page title** | The page you're presenting. Click it to open [Sites](#sites) (<kbd>S</kbd>). |
+| 3 | **Position** | Which cue is current, such as "3 of 6". While paused, it becomes a **Resume** button. |
+| 4 | **Current cue** | Lit, with a green bar. The cues around it are dimmed. Click any cue to go there; double-click to [edit it](/guide/editing/). |
+| 5 | **Timer** | Time since the prompter connected to this page. Click it to start again. |
+| 6 | **Lines** | Shows [section lines](/guide/section-lines/) on the page (<kbd>L</kbd>). Green while they're on. |
+| 7 | **Text size** | Smaller and larger text, in four sizes (S, M, L, XL) (<kbd>⌘</kbd> <kbd>−</kbd> and <kbd>⌘</kbd> <kbd>+</kbd>; <kbd>Ctrl</kbd> on Windows). |
+| 8 | **More (···)** | The [menu](#the--menu) (<kbd>?</kbd>). |
+
+Every control is listed in [Prompter controls](/guide/reference/controls/).
+
+## Following the page
+
+The page is cut into horizontal parts, one per cue, each the full width of the page. A cue starts at its line and runs down to the next cue's line. The current cue is the one whose part has reached the **reading line**, 30% of the way down the window.
+
+It works both ways:
+
+- **Scroll the page** and the prompter follows.
+- **Scroll the prompter, or click a cue,** and the page follows.
+- **Press** <kbd>↓</kbd> **or** <kbd>Space</kbd> for the next cue and <kbd>↑</kbd> for the previous one. A presentation clicker sends the same keys.
+
+The page and the prompter are matched by cue, not by pixels, so it works at any window size and zoom.
+
+<Aside type="tip" title="Keys that work from the page">
+<kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>↓</kbd> and <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>↑</kbd> move to the next and previous cue from anywhere in Chrome, including while the page you're sharing has focus.
+</Aside>
+
+### Pause
+
+Pause to look ahead without the page moving: click the cue light, press <kbd>P</kbd>, or choose **Pause following** in the menu. While paused, scrolling either side no longer moves the other; clicking a cue still takes the page there. Click **Resume** to follow again.
+
+### Controls fade while you talk
+
+Two seconds after you stop moving the pointer, the title, timer and buttons fade, leaving the cues, the cue light, the position and, while on, **Lines**. Move the pointer and they come back. They don't fade while you're paused, editing, in the menu, not connected, or on a page with no cues.
+
+## The ··· menu
+
+<Shot name="menu" alt="The prompter's More menu, open." width={340} />
+
+The menu holds **Add a cue here**, **Edit this cue**, **Pause following**, **Theme** (Auto, Dark, Light), **Sites…**, **Import cues…**, **Export cues…**, and links to this **Guide** and to **pagecue on GitHub**. Each is described in [Prompter controls](/guide/reference/controls/#more-menu).
+
+At the bottom, a reminder of the keys for next and previous. Press <kbd>?</kbd> to open the menu there.
+
+## Sites
+
+<Shot name="sites" alt="The Sites sheet listing the demo report, marked Presenting, with 6 cues." width={340} />
+
+Click the page title (or press <kbd>S</kbd>) to see every page you have cues for, grouped by site. Pages opened from your computer are under **Files on this computer**.
+
+- **Click a page** to switch to it. pagecue switches to its tab, or opens it, and the prompter follows. Chrome may ask you to allow pagecue on that site.
+- **Rename** a page (pencil, or double-click) to give it a shorter name in the prompter. Clear the name to go back to the page's title.
+- **Delete cues** (trash) removes all the cues stored for that page, after you confirm.
+
+## A page with no cues
+
+<Shot name="empty" alt="The prompter on a page with no cues: the /pagecue:add-cues command to copy into Claude Code, a link to add a cue here, and links to the guide and GitHub." width={340} />
+
+The prompter says **No cues on this page yet** and offers two ways in:
+
+- **Ask Claude.** Click **Copy** to copy `/pagecue:add-cues` with the page's address, paste it into Claude Code, and add what you want to say. The command starts the [add-cues skill](/guide/claude/add-cues/). No plugin yet? The link under the card shows you how to add it.
+- **Write your own.** Scroll to where a part starts and click **add a cue here**.
+
+At the bottom, **Guide** and **GitHub** open this guide and pagecue's source.
+
+## When it isn't connected
+
+| The prompter says | What to do |
+|---|---|
+| **Open the page you're presenting** | Go to the page and click pagecue in the toolbar, or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>P</kbd>. |
+| **Connecting** | The page is still loading. Wait a moment. |
+| **The page reloaded** | Click pagecue in the toolbar, or **Try again**. To skip this on that site from now on, click **Always reconnect on** *site*. |
+| **This page shows its content in a frame** | Click **Allow on** *site* once. See [Pages in a frame](/guide/sites/#pages-in-a-frame). |
+| **pagecue can't run here** | Chrome doesn't let extensions run on its own pages, the Web Store or the PDF viewer. |
+| **The page was closed** | Open it again, or click the page title to switch to another. |

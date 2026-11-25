@@ -569,70 +569,6 @@ async function main() {
       await larger.click();
     });
 
-    console.log('\nAgents in the page (Claude in Chrome)');
-
-    await step(
-      'window.pagecue is ready with the prompter; changes show with Undo; the menu can turn it off',
-      async () => {
-        await follow(`${origin}/report.html`);
-        await until(async () => (await cardTitles()).length >= 4, 'report cues');
-        await until(
-          async () => (await site.evaluate(() => typeof window.pagecue)) === 'object',
-          'API there by default',
-        );
-
-        const before = await site.evaluate(() => window.pagecue.cues());
-        assert.ok(before.length >= 4 && before[0].number === 1, 'cues listed in order');
-        assert.match(await site.evaluate(() => window.pagecue.help()), /pagecue\.add/);
-
-        const added = await site.evaluate(() =>
-          window.pagecue.add({ near: 'Hiring', title: 'Hiring plan on track', notes: ['Six of eight roles filled'] }),
-        );
-        await until(async () => (await cardTitles()).includes('Hiring plan on track'), 'cue added by the page API');
-        await prompter.locator('.toast', { hasText: 'Added in the browser' }).waitFor();
-        await site.evaluate((n) => window.pagecue.edit(n, { title: 'Hiring: six of eight' }), added.number);
-        await until(async () => (await cardTitles()).includes('Hiring: six of eight'), 'cue edited');
-        await site.evaluate((n) => window.pagecue.show(n), added.number);
-        await until(
-          async () => (await activeTitle()) === 'Hiring: six of eight',
-          'show moves the page and the prompter',
-        );
-        await site.evaluate((id) => window.pagecue.remove(id), added.id);
-        await until(async () => !(await cardTitles()).includes('Hiring: six of eight'), 'cue removed');
-        await prompter.locator('.toast').getByRole('button', { name: 'Undo' }).click();
-        await until(async () => (await cardTitles()).includes('Hiring: six of eight'), 'undo brings it back');
-        await site.evaluate((id) => window.pagecue.remove(id), added.id);
-        const missing = await site.evaluate(() =>
-          window.pagecue.add({ near: 'no such words anywhere', title: 'x' }).then(
-            () => 'ok',
-            (e) => e.message,
-          ),
-        );
-        assert.match(missing, /No visible text/);
-
-        // Turned off in the menu: calls are refused.
-        await prompter.bringToFront();
-        await prompter.mouse.move(100, 300);
-        await prompter.locator('.menu-button').click();
-        await prompter.getByRole('menuitemcheckbox', { name: /Let Claude in Chrome edit cues/ }).click();
-        await prompter.keyboard.press('Escape');
-        await until(
-          async () =>
-            (await site.evaluate(() =>
-              window.pagecue.cues().then(
-                () => 'ok',
-                (e) => e.message,
-              ),
-            )) !== 'ok',
-          'refused when off',
-        );
-        await prompter.mouse.move(100, 300);
-        await prompter.locator('.menu-button').click();
-        await prompter.getByRole('menuitemcheckbox', { name: /Let Claude in Chrome edit cues/ }).click();
-        await prompter.keyboard.press('Escape');
-      },
-    );
-
     console.log('\nClaude Code (MCP) operating the prompter');
 
     await step('Claude sees the page and its cues, and adds, edits, shows and removes cues', async () => {
@@ -677,6 +613,17 @@ async function main() {
         );
         await mcp.tool('remove_cue', { cue: number });
         await until(async () => !(await cardTitles()).includes('Risks: supplier and FX'), 'removed by Claude');
+        await prompter
+          .locator('.toast', { hasText: 'Deleted by Claude' })
+          .getByRole('button', { name: 'Undo' })
+          .click();
+        await until(async () => (await cardTitles()).includes('Risks: supplier and FX'), 'undo brings it back');
+        await mcp.tool('remove_cue', { cue: number });
+        await until(async () => !(await cardTitles()).includes('Risks: supplier and FX'), 'removed again');
+        const missing = await mcp.tool('add_cue', { title: 'x', near: 'no such words anywhere' });
+        assert.equal(missing.error, true);
+        assert.match(missing.text, /No visible text/);
+        assert.equal(await site.evaluate(() => typeof window.pagecue), 'undefined', 'nothing added to the page');
 
         await mcp.tool('set_view', { section_lines: true, text_size: 'L' });
         await until(

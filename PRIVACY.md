@@ -22,8 +22,6 @@ pagecue makes only these:
 
 When you open pagecue on a page, it reads that page's structure and text to find where each cue belongs and to follow your scrolling. It does this only on pages you open it on, and nothing it reads is sent anywhere.
 
-While the prompter is open on a page and **Let Claude in Chrome edit cues** is on (the default), the page offers a small `window.pagecue` interface so Claude in Chrome can read and change that page's cues. Anything running in the page, the site's own scripts included, could use it too. Every change made that way shows in the prompter with Undo, and you can turn the option off in the prompter's ··· menu.
-
 ## Permissions
 
 | Permission | Why |

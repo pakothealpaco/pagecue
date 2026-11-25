@@ -1,0 +1,29 @@
+---
+title: Permissions
+description: Every permission the pagecue extension asks for, and why.
+---
+
+pagecue asks for as little as it can, and for site access only when you ask it to do something.
+
+| Permission | Why | When |
+|---|---|---|
+| `activeTab` | Connect to the tab you click pagecue on, until that tab reloads or navigates. | Each click |
+| `scripting` | Run pagecue's own script in that tab, to find the cues and follow your scrolling. | With `activeTab` |
+| `storage`, `unlimitedStorage` | Keep your cues and settings in your browser, however many pages you have. | Always |
+| Access to a site (optional) | Reconnect on a site by itself after a reload (**Always reconnect on** *site*), or read a page's content from a frame on another site (**Allow on** *site*). | Only when you click those, and Chrome asks you to confirm |
+| Access to file URLs (optional) | Present pages opened from your computer. | Only if you turn it on in Chrome |
+
+pagecue runs no code from the internet: everything it runs comes inside the extension.
+
+## Take access back
+
+Open `chrome://extensions`, click **Details** under pagecue, and change **Site access**, or remove a site from the list. You can also right-click the pagecue icon in the toolbar.
+
+## Network
+
+The extension makes only two kinds of request:
+
+1. **A page's own cue file**, when the page links to one: from that page's site only, up to 1 MB.
+2. **The Claude plugin's server on your own computer** (`127.0.0.1:47613`), while the prompter is open. If the plugin isn't installed, nothing answers and nothing happens.
+
+See [Privacy](/guide/privacy/) for what is stored and where.
