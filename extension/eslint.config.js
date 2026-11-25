@@ -19,12 +19,12 @@ export default tseslint.config(
   },
   {
     files: ['scripts/**/*.mjs', '*.config.{js,ts}'],
-    ignores: ['scripts/readme-media.mjs', 'scripts/site-shots.mjs'],
+    ignores: ['scripts/readme-media.mjs', 'scripts/site-shots.mjs', 'scripts/store-media.mjs'],
     languageOptions: { globals: globals.node },
   },
   {
     // End-to-end tests run in Node but pass functions to the browser with page.evaluate().
-    files: ['e2e/**/*.mjs', 'scripts/readme-media.mjs', 'scripts/site-shots.mjs'],
+    files: ['e2e/**/*.mjs', 'scripts/readme-media.mjs', 'scripts/site-shots.mjs', 'scripts/store-media.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser, chrome: 'readonly' } },
   },
 );

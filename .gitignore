@@ -22,3 +22,4 @@ CLAUDE.local.md
 # Site build
 site/dist/
 site/.astro/
+docs/store/*.zip
