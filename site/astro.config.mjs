@@ -27,6 +27,15 @@ export default defineConfig({
       head: [
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://usepagecue.com/og.png' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
+        // Visit counts without cookies or personal data (see the Privacy page).
+        {
+          tag: 'script',
+          attrs: {
+            'data-goatcounter': 'https://pakothealpaco.goatcounter.com/count',
+            async: true,
+            src: 'https://gc.zgo.at/count.js',
+          },
+        },
       ],
       components: {
         Footer: './src/components/DocsFooter.astro',

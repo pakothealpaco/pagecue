@@ -36,6 +36,10 @@ pagecue runs no remote code: everything it runs ships inside the extension.
 
 The prompter is a separate window. When you present, share only the page's tab or window: anyone watching sees the page, not the prompter. If you share your whole screen, the prompter is in it. pagecue draws nothing on the page, except section lines while you turn them on, which viewers do see.
 
+## The website
+
+usepagecue.com counts visits with [GoatCounter](https://www.goatcounter.com): no cookies, and nothing that identifies you (the page, the referring site, the browser and screen size, and the country worked out from the IP address, which isn't stored). The extension and the plugin never send anything to it.
+
 ## Contact
 
 Questions about this policy: open an issue at https://github.com/pakothealpaco/pagecue/issues or write to pakothealpaco@gmail.com.
