@@ -23,3 +23,6 @@ CLAUDE.local.md
 site/dist/
 site/.astro/
 docs/store/*.zip
+
+# Raw takes and intermediate files for the video
+docs/video/build/

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Q3 product review · Fernway</title>
+<!-- A sample page to try pagecue on, with no cues of its own: ask Claude to add them. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --card: #ffffff;
+    --ink: #0e1422;
+    --soft: #4b5567;
+    --muted: #7a8494;
+    --line: #e4e8ef;
+    --blue: #3557f5;
+    --blue-soft: #e8edff;
+    --mint: #0f9f7a;
+    --mint-soft: #e2f6ef;
+    --amber: #d98a0b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 Inter, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased; }
+  main { max-width: 760px; margin: 0 auto; padding: 56px 28px 96px; }
+  h1, h2 { font-family: "Inter Tight", Inter, sans-serif; letter-spacing: -0.025em; margin: 0; }
+  h1 { font-size: 44px; line-height: 1.05; font-weight: 700; }
+  h2 { font-size: 26px; line-height: 1.15; font-weight: 600; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--soft); margin-bottom: 28px; }
+  .brand i { width: 26px; height: 26px; border-radius: 8px; background: linear-gradient(135deg, var(--blue), #6f8bff); }
+  .lede { margin: 14px 0 0; font-size: 19px; color: var(--soft); max-width: 36em; }
+  section { margin-top: 64px; }
+  .sub { margin: 8px 0 20px; color: var(--muted); font-size: 15px; }
+  .kpis { margin-top: 36px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
+  .kpi b { display: block; font: 700 36px/1 "Inter Tight", sans-serif; letter-spacing: -0.03em; }
+  .kpi span { display: block; margin-top: 8px; color: var(--soft); font-size: 15px; }
+  .kpi .up { display: inline; margin: 0 0 0 6px; color: var(--mint); font-weight: 600; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 24px; }
+  svg text { font: 500 13px Inter, sans-serif; fill: var(--muted); }
+  .bars { display: grid; gap: 14px; }
+  .bar { display: grid; grid-template-columns: 9em minmax(0, 1fr) 3.5em; gap: 14px; align-items: center; font-size: 15px; }
+  .track { height: 14px; border-radius: 7px; background: var(--blue-soft); overflow: hidden; }
+  .track i { display: block; height: 100%; border-radius: 7px; background: var(--blue); }
+  .bar b { text-align: right; font-weight: 600; }
+  .asks { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .asks li { display: grid; grid-template-columns: 2.2em minmax(0, 1fr) auto; gap: 14px; align-items: center;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  .asks .n { font: 600 15px "Inter Tight", sans-serif; color: var(--blue); }
+  .asks .c { font-size: 14px; color: var(--muted); }
+  .plan { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .plan div { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .plan b { display: block; font: 600 17px "Inter Tight", sans-serif; margin-bottom: 6px; }
+  .plan p { margin: 0; color: var(--soft); font-size: 15px; }
+  .tag { display: inline-block; margin-bottom: 12px; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; }
+  footer { margin-top: 72px; color: var(--muted); font-size: 14px; }
+  @media (max-width: 640px) { .plan { grid-template-columns: 1fr; } h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><i></i>Fernway</div>
+  <h1>Q3 product review</h1>
+  <p class="lede">A strong quarter: more teams, faster activation after the new onboarding, and fewer cancellations. Here is what changed and what we plan next.</p>
+  <div class="kpis">
+    <div class="kpi"><b>2,418</b><span>Active teams <span class="up">+22%</span></span></div>
+    <div class="kpi"><b>61%</b><span>Activated in week one <span class="up">+9 pts</span></span></div>
+    <div class="kpi"><b>118%</b><span>Net revenue retention</span></div>
+    <div class="kpi"><b>1.9%</b><span>Monthly churn <span class="up">−0.6 pts</span></span></div>
+  </div>
+
+  <section>
+    <h2>Activation jumped after the new onboarding</h2>
+    <p class="sub">Share of new teams active in their first week, by week. The guided setup shipped in week 6.</p>
+    <div class="card">
+      <svg viewBox="0 0 680 240" width="100%" role="img" aria-label="Week-one activation rose from about 50% to 61% after week 6">
+        <g stroke="#e4e8ef"><line x1="40" x2="670" y1="30" y2="30"/><line x1="40" x2="670" y1="100" y2="100"/><line x1="40" x2="670" y1="170" y2="170"/></g>
+        <text x="0" y="34">65%</text><text x="0" y="104">55%</text><text x="0" y="174">45%</text>
+        <line x1="303" x2="303" y1="20" y2="200" stroke="#3557f5" stroke-dasharray="4 5" opacity=".5"/>
+        <text x="312" y="26" style="fill:#3557f5">Guided setup</text>
+        <path d="M40,135 L92,128 L145,140 L197,131 L250,126 L303,124 L355,98 L408,80 L460,72 L513,66 L565,60 L618,58 L670,51"
+          fill="none" stroke="#3557f5" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="670" cy="51" r="6" fill="#3557f5"/>
+        <text x="40" y="228">Week 1</text><text x="290" y="228">Week 6</text><text x="620" y="228">Week 13</text>
+      </svg>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where new teams came from</h2>
+    <p class="sub">Share of the 512 teams that signed up this quarter.</p>
+    <div class="card bars">
+      <div class="bar"><span>Word of mouth</span><div class="track"><i style="width:100%"></i></div><b>38%</b></div>
+      <div class="bar"><span>Templates gallery</span><div class="track"><i style="width:68%"></i></div><b>26%</b></div>
+      <div class="bar"><span>Search</span><div class="track"><i style="width:47%"></i></div><b>18%</b></div>
+      <div class="bar"><span>Partners</span><div class="track"><i style="width:34%"></i></div><b>13%</b></div>
+      <div class="bar"><span>Other</span><div class="track"><i style="width:13%"></i></div><b>5%</b></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What customers asked for</h2>
+    <p class="sub">The three most requested features, from 640 feedback notes.</p>
+    <ol class="asks">
+      <li><span class="n">01</span><span>Shared dashboards for clients</span><span class="c">212 requests</span></li>
+      <li><span class="n">02</span><span>Calendar sync</span><span class="c">148 requests</span></li>
+      <li><span class="n">03</span><span>A mobile app for approvals</span><span class="c">97 requests</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Plan for Q4</h2>
+    <p class="sub">Three bets, in order.</p>
+    <div class="plan">
+      <div><span class="tag" style="background:var(--blue-soft);color:var(--blue)">October</span><b>Client dashboards</b><p>The top request; beta with 40 teams.</p></div>
+      <div><span class="tag" style="background:var(--mint-soft);color:var(--mint)">November</span><b>Calendar sync</b><p>Google and Outlook, two-way.</p></div>
+      <div><span class="tag" style="background:#fdf2e0;color:var(--amber)">December</span><b>Pricing review</b><p>Seats versus usage, decided by year end.</p></div>
+    </div>
+  </section>
+
+  <footer>Fernway is a made-up company. This is a sample page for trying <a href="https://usepagecue.com">pagecue</a>.</footer>
+</main>
+</body>
+</html>
