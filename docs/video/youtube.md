@@ -4,7 +4,7 @@
 
 **Title** (under 70 characters):
 
-> pagecue: speaker notes for any web page, written with Claude
+> Speaker notes for any web page, written with Claude – pagecue
 
 **Description:**
 
