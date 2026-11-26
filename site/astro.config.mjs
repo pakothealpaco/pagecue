@@ -25,7 +25,13 @@ export default defineConfig({
         './src/styles/theme.css',
       ],
       head: [
+        { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '48x48' } },
+        { tag: 'link', attrs: { rel: 'icon', href: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' } },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
+        { tag: 'link', attrs: { rel: 'manifest', href: '/site.webmanifest' } },
         { tag: 'meta', attrs: { property: 'og:image', content: 'https://usepagecue.com/og.png' } },
+        { tag: 'meta', attrs: { property: 'og:image:width', content: '1280' } },
+        { tag: 'meta', attrs: { property: 'og:image:height', content: '640' } },
         { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
         // Visit counts without cookies or personal data (see the Privacy page).
         {

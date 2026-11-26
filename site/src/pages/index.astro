@@ -13,7 +13,38 @@ import Mark from '../assets/mark.svg?raw';
 const repo = 'https://github.com/pakothealpaco/pagecue';
 const title = 'pagecue: speaker notes for any web page, written with Claude';
 const description =
-  'Write speaker notes for any report, dashboard or site with Claude, and read them in a private window that follows the page as you scroll. Free and open source, for Chrome.';
+  'Speaker notes for any report, dashboard or site, written with Claude, in a private window that follows the page as you scroll. Free for Chrome.';
+// Structured data: the site's name in search results, the maker's logo, and the extension itself.
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'pagecue',
+    alternateName: 'usepagecue.com',
+    url: 'https://usepagecue.com/',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'pagecue',
+    url: 'https://usepagecue.com/',
+    logo: 'https://usepagecue.com/icon-512.png',
+    sameAs: [repo, 'https://www.youtube.com/@pakothealpaco'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'pagecue',
+    description,
+    url: 'https://usepagecue.com/',
+    image: 'https://usepagecue.com/og.png',
+    applicationCategory: 'BrowserApplication',
+    operatingSystem: 'Chrome',
+    license: 'https://opensource.org/licenses/MIT',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    sameAs: [repo],
+  },
+];
 
 // The demo report's cues (site/public/demo), shortened to five parts for the stage.
 const parts = [
@@ -63,15 +94,25 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href="https://usepagecue.com/" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#14171c" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://usepagecue.com/" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="pagecue" />
     <meta property="og:image" content="https://usepagecue.com/og.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="pagecue: the page you share beside your private prompter" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="color-scheme" content="light" />
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
     <!-- Visit counts without cookies or personal data (see /guide/privacy/). -->
     <script is:inline data-goatcounter="https://pakothealpaco.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
   </head>
