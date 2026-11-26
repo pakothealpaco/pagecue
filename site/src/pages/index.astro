@@ -89,7 +89,6 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
 
     <main id="main" tabindex="-1">
       <section class="hero wrap">
-        <div class="hero-text">
         <h1>Speaker notes for any web page, written with Claude.</h1>
         <p class="lede">
           You made the report with Claude. Now you have to present it. Tell Claude what you want to say, and it shapes
@@ -99,29 +98,10 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
         <div class="actions">
           <a class="button primary" href="#install">Install for Chrome</a>
           <a class="button" href="/guide/quick-start/">Try it in five minutes</a>
+          <a class="button watch" href="https://youtu.be/gCTruNZXxYg">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6L12.6 8z" /></svg>Watch the video
+          </a>
         </div>
-        </div>
-        <figure class="hero-media">
-          <div class="hero-frame">
-            <video
-              class="hero-video"
-              autoplay
-              muted
-              loop
-              playsinline
-              preload="metadata"
-              poster="/video/pagecue-hero-poster.jpg"
-              aria-label="pagecue in 35 seconds: Claude writes the cues, the prompter follows the page, viewers see only the page."
-              data-hero-video
-            >
-              <source src="/video/pagecue-hero.mp4" type="video/mp4" />
-            </video>
-            <button class="hero-toggle" type="button" aria-label="Pause the video" data-hero-toggle>
-              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 3h3v10H4zM9 3h3v10H9z" /></svg>
-            </button>
-          </div>
-          <figcaption><a href="https://youtu.be/gCTruNZXxYg">Watch it with sound on YouTube</a> · 35 seconds</figcaption>
-        </figure>
       </section>
 
       <section class="stage-wrap wrap" aria-labelledby="stage-title">
@@ -130,6 +110,12 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
         <div class="stage" data-stage>
           <div class="pane page-pane">
             <p class="pane-label"><span class="dot share"></span>What they see: the tab you share</p>
+            <div class="window share-window">
+              <div class="wchrome" aria-hidden="true">
+                <span class="wlights"><i></i><i></i><i></i></span>
+                <span class="waddress">northside-q3-review.app</span>
+                <span class="wsharing">Sharing this tab</span>
+              </div>
             <div class="page" tabindex="0" role="region" aria-label="Sample report, scrollable" aria-describedby="stage-hint" data-page>
               {
                 parts.map((p, i) => (
@@ -163,10 +149,16 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
               }
               <p class="page-end">Halcyon Roasters is a made-up company. Try the full report with pagecue at <a href="/demo/">usepagecue.com/demo</a>.</p>
             </div>
+            </div>
           </div>
 
           <div class="pane prompter-pane">
             <p class="pane-label"><span class="dot private"></span>What you see: the prompter</p>
+            <div class="window prompter-window">
+              <div class="wchrome" aria-hidden="true">
+                <span class="wlights"><i></i><i></i><i></i></span>
+                <span class="waddress">pagecue prompter</span>
+              </div>
             <div class="prompter">
               <div class="p-top">
                 <span class="light" aria-hidden="true"></span>
@@ -195,6 +187,7 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
                 <span>0:42</span>
                 <span class="p-tools"><span>Lines</span><span>A</span><span class="big">A</span><span>···</span></span>
               </div>
+            </div>
             </div>
           </div>
         </div>
@@ -330,23 +323,6 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
     </footer>
 
     <script>
-      // The hero video: silent and looping, with a pause button; still for people who ask for less motion.
-      const heroVideo = document.querySelector<HTMLVideoElement>('[data-hero-video]');
-      const heroToggle = document.querySelector<HTMLButtonElement>('[data-hero-toggle]');
-      if (heroVideo && heroToggle) {
-        const play = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" /></svg>';
-        const pause = heroToggle.innerHTML;
-        const show = (): void => {
-          heroToggle.innerHTML = heroVideo.paused ? play : pause;
-          heroToggle.setAttribute('aria-label', heroVideo.paused ? 'Play the video' : 'Pause the video');
-        };
-        if (matchMedia('(prefers-reduced-motion: reduce)').matches) heroVideo.pause();
-        heroVideo.addEventListener('play', show);
-        heroVideo.addEventListener('pause', show);
-        heroToggle.addEventListener('click', () => void (heroVideo.paused ? heroVideo.play() : heroVideo.pause()));
-        show();
-      }
-
       // The stage: the report's parts and the prompter's cues, kept in step both ways, as in pagecue.
       const stage = document.querySelector<HTMLElement>('[data-stage]');
       if (stage) {
@@ -407,6 +383,31 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
           show(Math.max(0, i));
         });
         follow();
+
+        // Until the visitor touches the demo, it presents itself: the next cue every few seconds,
+        // only while it is on screen, and never for people who ask for less motion.
+        if (smooth) {
+          let timer = 0;
+          let touched = false;
+          const next = () => cues[(current + 1) % cues.length].click();
+          new IntersectionObserver(
+            ([entry]) => {
+              clearInterval(timer);
+              if (!touched && entry.isIntersecting) timer = window.setInterval(next, 3000);
+            },
+            { threshold: 0.5 },
+          ).observe(stage);
+          for (const type of ['pointerdown', 'wheel', 'touchstart', 'keydown']) {
+            stage.addEventListener(
+              type,
+              () => {
+                touched = true;
+                clearInterval(timer);
+              },
+              { passive: true },
+            );
+          }
+        }
       }
     </script>
   </body>
@@ -549,84 +550,47 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
 
   /* Hero */
   .hero {
-    display: grid;
-    gap: 2.5rem;
-    align-items: center;
-    padding: clamp(2rem, 5vw, 3.75rem) 0 1.5rem;
-  }
-  @media (min-width: 960px) {
-    .hero {
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
-      gap: 3rem;
-    }
-  }
-  .hero-media {
-    margin: 0;
-  }
-  .hero-frame {
-    position: relative;
-    border-radius: 16px;
-    overflow: hidden;
-    background: #eef1f5;
-    border: 1px solid #dde2e8;
-    box-shadow: 0 24px 60px rgba(21, 26, 34, 0.14);
-    aspect-ratio: 16 / 9;
-  }
-  .hero-video {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .hero-toggle {
-    position: absolute;
-    right: 0.75rem;
-    bottom: 0.75rem;
-    display: grid;
-    place-items: center;
-    width: 2.25rem;
-    height: 2.25rem;
-    border: 0;
-    border-radius: 999px;
-    background: rgba(21, 26, 34, 0.55);
-    color: #fff;
-    cursor: pointer;
-    opacity: 0.75;
-  }
-  .hero-toggle:hover,
-  .hero-toggle:focus-visible {
-    opacity: 1;
-  }
-  .hero-toggle svg {
-    width: 0.9rem;
-    height: 0.9rem;
-    fill: currentColor;
-  }
-  .hero-media figcaption {
-    margin-top: 0.75rem;
-    color: var(--muted);
-    font-size: 0.92rem;
+    padding: clamp(2rem, 5vw, 4rem) 0 clamp(2rem, 3.5vw, 2.75rem);
+    text-align: center;
   }
   h1 {
-    margin: 0;
-    max-width: 21ch;
-    font-size: clamp(2.3rem, 3.9vw, 3.3rem);
-    text-wrap: balance;
-    line-height: 1.04;
+    margin: 0 auto;
+    max-width: 17ch;
+    font-size: clamp(2.4rem, 5.6vw, 4.25rem);
+    line-height: 1.02;
     font-weight: 600;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
   .lede {
-    max-width: 38rem;
-    margin: 1.5rem 0 0;
+    max-width: 40rem;
+    margin: 1.5rem auto 0;
+    text-wrap: pretty;
     color: var(--soft);
     font-size: clamp(1.1rem, 1.6vw, 1.25rem);
   }
   .actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
-    margin-top: 2rem;
+    margin-top: 2.25rem;
+  }
+  .button.watch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-color: transparent;
+    background: transparent;
+  }
+  .button.watch:hover {
+    border-color: #cdd3db;
+    background: var(--raised);
+  }
+  .button.watch svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    fill: currentColor;
   }
   .button {
     display: inline-block;
@@ -655,8 +619,85 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
 
   /* The stage */
   .stage-wrap {
-    padding: 1.5rem 0 5rem;
+    margin-bottom: 5rem;
+    padding: clamp(1.25rem, 3.5vw, 2.75rem);
+    border-radius: 28px;
+    background:
+      radial-gradient(60% 80% at 12% 0%, rgba(217, 87, 63, 0.13), transparent 70%),
+      radial-gradient(55% 75% at 92% 100%, rgba(60, 207, 127, 0.16), transparent 70%),
+      linear-gradient(180deg, #e9edf3, #eef0ec);
+    border: 1px solid #dfe3e9;
   }
+  .stage > .pane {
+    min-width: 0;
+  }
+  .window {
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #d9dee5;
+    box-shadow:
+      0 30px 70px -20px rgba(21, 26, 34, 0.28),
+      0 10px 24px -12px rgba(21, 26, 34, 0.18);
+  }
+  .share-window {
+    border-color: #d9573f;
+    box-shadow:
+      0 0 0 2px #d9573f,
+      0 30px 70px -20px rgba(21, 26, 34, 0.28),
+      0 10px 24px -12px rgba(21, 26, 34, 0.18);
+  }
+  .wchrome {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 2.4rem;
+    padding: 0 0.85rem;
+    background: #f3f4f6;
+    border-bottom: 1px solid #e3e6ea;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .wlights {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .wlights i {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+  .wlights i:nth-child(1) {
+    background: #ff5f57;
+  }
+  .wlights i:nth-child(2) {
+    background: #febc2e;
+  }
+  .wlights i:nth-child(3) {
+    background: #28c840;
+  }
+  .waddress {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .share-window .waddress {
+    padding: 0.2rem 0.7rem;
+    border-radius: 6px;
+    background: #fff;
+    border: 1px solid #e3e6ea;
+  }
+  .wsharing {
+    margin-left: auto;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    background: #d9573f;
+    color: #fff;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
   .stage-hint {
     margin: 0 0 0.9rem;
     color: var(--muted);
@@ -693,14 +734,9 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
     position: relative;
     height: 440px;
     overflow-y: auto;
-    border-radius: 14px;
     background: #fffdfa;
     color: #241f1b;
     padding: 0 2rem;
-    border: 1px solid #e6dfd6;
-    box-shadow:
-      0 0 0 3px #d9573f40,
-      0 18px 44px rgba(21, 26, 34, 0.1);
     scrollbar-width: thin;
   }
   .part {
@@ -782,12 +818,7 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
     height: 440px;
     display: flex;
     flex-direction: column;
-    border-radius: 14px;
     background: var(--bg);
-    border: 1px solid var(--line);
-    box-shadow:
-      0 0 0 3px rgba(30, 158, 99, 0.22),
-      0 18px 44px rgba(21, 26, 34, 0.1);
     overflow: hidden;
   }
   .p-top,
@@ -1190,6 +1221,9 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
   @media (max-width: 560px) {
     .nav nav {
       gap: 1rem;
+    }
+    .share-window .waddress {
+      display: none;
     }
     .features dl {
       grid-template-columns: 1fr;
