@@ -45,7 +45,19 @@ The page links a cue file pagecue couldn't read. The reason follows in the messa
 | Chrome does not let extensions read linked files on pages opened from disk | Put the cues inline in the page, or import them. |
 | a network error, or a parse error | Check that the file opens in the browser and is valid JSON. |
 
+**Pasted cues: "No cues found".**
+Paste Claude's whole code block as it is. Each cue starts with a line like `## Heading on the page`.
+
+**Pasted cues are added, but some "aren't on this page".**
+Their `##` line doesn't match a heading on the page closely enough. Copy the heading's text exactly and paste again.
+
 ## Claude can't reach pagecue
+
+**The prompter says "First time? Set up Claude" instead of "Connected to Claude".**
+No Claude Code session with the pagecue plugin is running. Start Claude Code (the plugin starts with it), or in the Claude app install pagecue's [desktop extension](/guide/claude/apps/#live-changes-in-the-claude-app). In claude.ai in a browser this is expected: Claude there writes the cues into the artifact it builds, and can't reach the prompter live.
+
+**It says "Update the pagecue plugin".**
+The pagecue plugin (or desktop extension) is from an older version than the Chrome extension. In Claude Code, run `/plugin`, update the pagecue marketplace and plugin, and start a new session. In the Claude app, install the new `pagecue.mcpb` from the [latest release](https://github.com/pakothealpaco/pagecue/releases/latest).
 
 **Claude says the prompter isn't open.**
 Open the page and click pagecue. Claude's live changes need the prompter open and connected.

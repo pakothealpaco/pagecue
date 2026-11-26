@@ -372,6 +372,26 @@ async function main() {
       );
     });
 
+    await step('a Claude-style artifact with its cues inside, rendered after load', async () => {
+      await follow(`${origin}/artifact.html`);
+      await until(
+        async () => (await cardTitles()).join() === 'Sales grew 18%,Margin held at 31%,One decision today',
+        'the artifact’s own cues',
+        10000,
+      );
+      const frame = site.frames().find((f) => f.url().startsWith(`${frameOrigin}/artifact-content`));
+      assert.ok(frame, 'artifact frame');
+      await prompter.locator('.cue-list .cue').nth(2).click();
+      await until(
+        async () =>
+          frame.evaluate(() => {
+            const section = document.querySelector('[data-pagecue="ask"]');
+            return Math.abs(section.getBoundingClientRect().top - innerHeight * 0.3) < 60;
+          }),
+        'clicking a cue scrolls the artifact',
+      );
+    });
+
     await step('a frame pagecue may not read yet: the prompter asks for access', async () => {
       await follow(`${origin}/framed-blocked.html`);
       await prompter.getByText('This page shows its content in a frame').waitFor({ timeout: 8000 });
@@ -571,6 +591,18 @@ async function main() {
 
     console.log('\nClaude Code (MCP) operating the prompter');
 
+    await step('the empty prompter says whether Claude Code is connected', async () => {
+      await follow(`${origin}/blank.html`);
+      await prompter.getByRole('link', { name: 'Set up Claude' }).waitFor();
+      const mcp = startMcp(mkdtempSync(join(tmpdir(), 'pagecue-mcp-')));
+      try {
+        await mcp.request('initialize', { protocolVersion: '2025-06-18' });
+        await prompter.getByText('Connected to Claude').waitFor({ timeout: 8000 });
+      } finally {
+        mcp.stop();
+      }
+    });
+
     await step('Claude sees the page and its cues, and adds, edits, shows and removes cues', async () => {
       const mcp = startMcp(mkdtempSync(join(tmpdir(), 'pagecue-mcp-')));
       try {
@@ -645,6 +677,53 @@ async function main() {
       } finally {
         mcp.stop();
       }
+    });
+
+    console.log('\nAdd cues from Claude (the menu)');
+
+    await follow(`${origin}/framed-content.html`);
+    await step('Paste cues adds what Claude wrote, matched to the page’s headings', async () => {
+      await prompter.locator('.menu-button').click();
+      await prompter.getByRole('menuitem', { name: /Add cues from Claude/ }).click();
+      await prompter
+        .getByLabel('Cues to add')
+        .fill(
+          [
+            'Sure! Here are your cues:',
+            '```text',
+            '## The plan',
+            'One plan, two tracks',
+            '- Launch first, then scale',
+            '',
+            '## Risks',
+            '**Two risks to watch**',
+            '- Hiring',
+            '```',
+          ].join('\n'),
+        );
+      await prompter.getByRole('button', { name: 'Add cues' }).click();
+      await until(
+        async () => (await cardTitles()).join() === 'One plan, two tracks,Two risks to watch',
+        'pasted cues in page order',
+      );
+      await prompter.locator('.cue-list .cue').nth(1).click();
+      await until(
+        async () =>
+          site.evaluate(() => {
+            const heading = [...document.querySelectorAll('h2')].find((h) => h.textContent === 'Risks');
+            return Math.abs(heading.getBoundingClientRect().top - innerHeight * 0.3) < 60;
+          }),
+        'a pasted cue scrolls the page to its heading',
+      );
+    });
+
+    await step('pasting something that is not cues says what to do', async () => {
+      await prompter.locator('.menu-button').click();
+      await prompter.getByRole('menuitem', { name: /Add cues from Claude/ }).click();
+      await prompter.getByLabel('Cues to add').fill('Thanks, looks great');
+      await prompter.getByRole('button', { name: 'Add cues' }).click();
+      await prompter.getByRole('alert').filter({ hasText: '## Heading' }).waitFor();
+      await prompter.getByRole('button', { name: 'Cancel' }).click();
     });
 
     if (process.env.PAGECUE_SCREENSHOTS) {

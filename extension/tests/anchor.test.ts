@@ -22,6 +22,12 @@ describe('resolveAnchor', () => {
     expect(resolveAnchor({ cue: 'revenue-chart', tag: '*' })?.element).toBe($('figure'));
   });
 
+  it('finds text given without a tag (a cue file’s near), headings first', () => {
+    expect(resolveAnchor({ tag: '*', text: 'Churn', heading: 'Churn' })?.element).toBe($('[data-testid="churn"] h2'));
+    expect(resolveAnchor({ tag: '*', text: 'Revenue by month' })?.element).toBe($('figcaption'));
+    expect(resolveAnchor({ tag: '*', text: 'Nothing like this here' })).toBeNull();
+  });
+
   it('does not guess when a data-pagecue value is used twice', () => {
     expect(resolveAnchor({ cue: 'twice', tag: '*' })).toBeNull();
   });

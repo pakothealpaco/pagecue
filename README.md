@@ -22,27 +22,27 @@
 
 More of what we present is now made with Claude: reports, research, dashboards, whole sites. They aren't slides, so they have no speaker notes. You memorise the numbers, or lose your place when someone interrupts.
 
-pagecue gives any page a presenter view, built around Claude. Tell Claude what you want to say; it finds where each part of the page starts and writes a short cue for it. While you rehearse, ask for changes and watch them appear. Then share only the page, and your cues follow along in a window no one else sees.
+pagecue gives any page a presenter view, built around Claude. Tell Claude what you want to say; it finds where each part of the page starts and shapes your words into a short cue for it. While you rehearse, ask for changes and watch them appear. Then share only the page, and your cues follow along in a window no one else sees.
 
 **Try it in two minutes:** [install the extension](#install), open the [demo report](https://usepagecue.com/demo/) and click the pagecue icon. The cues are already there.
 
 ## How it works with Claude
 
-1. **Tell Claude what you want to say**, in Claude Code or the Claude app:
-   > Add pagecue cues to this report. On the revenue chart I want to say September doubled March.
+1. **Tell Claude what you want to say**, in claude.ai, the Claude app or Claude Code:
+   > Add presenter cues to this report. On the revenue chart I want to say September doubled March.
 
-   Claude plans where each cue starts, asks once what you want to say there, and writes the cues.
+   Claude plans where each cue starts, asks once what you want to say there, and turns your answers into cues. When Claude builds the report, the cues come inside it.
 2. **Open the page and click the pagecue icon.** The prompter opens in its own window with your cues.
-3. **Rehearse, and keep asking.** *"Shorten cue 3." "Add a cue here about the price." "Write them in Hebrew."* Claude sees the page you're on and the cue that's lit, and every change shows up at once, with Undo.
+3. **Rehearse, and keep asking.** *"Shorten cue 3." "Add a cue here about the price." "Write them in Hebrew."* In Claude Code or the Claude app, Claude sees the page you're on and the cue that's lit, and every change shows up at once, with Undo.
 4. **Present.** Share only the page's tab in Zoom, Meet or Teams. Scroll, and the right cue lights up; click a cue, and the page scrolls to it.
 
 ## What you get
 
 - **Cues you can read mid-sentence.** The `add-cues` skill writes each cue as a headline of about eight words and up to three short points, in your language, using only facts from the page or from you.
-- **Claude at the controls.** While the prompter is open, Claude can add, reword, delete or jump to a cue, and turn section lines on or off, every change with Undo.
+- **Changes while you rehearse.** Ask Claude to add, reword, delete or jump to a cue, or to turn section lines on or off. Every change comes with Undo.
 - **Private.** The prompter is a separate window, so sharing the page's tab or window leaves it out.
-- **Yours to edit, too.** Double-click a cue to reword it, press <kbd>N</kbd> to add one where you are, use <kbd>↓</kbd> <kbd>↑</kbd> or a clicker to move.
-- **Works on the pages you present.** Long reports, dashboards, web apps and claude.ai artifacts. Cues can be in any language.
+- **Edit any cue yourself.** Double-click a cue to reword it, press <kbd>N</kbd> to add one where you are, use <kbd>↓</kbd> <kbd>↑</kbd> or a clicker to move.
+- **Works on the pages you present.** Long reports, dashboards, web apps, Claude artifacts and local files. Cues can be in any language.
 - **No account, no cloud.** Cues stay in your browser; Claude reaches them only on your own computer.
 
 ## Install
@@ -54,14 +54,19 @@ pagecue gives any page a presenter view, built around Claude. Tell Claude what y
 
 Chrome shows a Developer mode notice for extensions installed this way; that's expected until the store listing is live. pagecue is built and tested for Chrome; other Chromium browsers such as Edge, Brave and Arc should work too. It asks for no site access until you click it on a page.
 
-**The Claude plugin.** In Claude Code:
+**pagecue for Claude.**
 
-```
-/plugin marketplace add pakothealpaco/pagecue
-/plugin install pagecue@pagecue
-```
+- **claude.ai and the Claude app:** in **Plugins → Add → Add marketplace**, add `pakothealpaco/pagecue` and the **pagecue** plugin, or upload `pagecue-skill.zip` from the [latest release](https://github.com/pakothealpaco/pagecue/releases/latest) with **Plugins → Add → Upload plugin**. For live changes in the Claude app, also install `pagecue.mcpb` from the release (double-click, then **Install**). See [claude.ai and the Claude app](https://usepagecue.com/guide/claude/apps/).
+- **Claude Code:**
 
-(The marketplace and the plugin are both called `pagecue`. Needs Node 20 or later.) Then ask for cues on any page, or run `/pagecue:add-cues`. To use it from the Claude desktop app, see [Working with Claude](docs/working-with-claude.md). The extension also works on its own, with cues you write by hand or that a page ships with.
+  ```
+  /plugin marketplace add pakothealpaco/pagecue
+  /plugin install pagecue@pagecue
+  ```
+
+  (The marketplace and the plugin are both called `pagecue`. The live tools need Node 20 or later.) Then ask for cues on any page, or run `/pagecue:add-cues`.
+
+The extension also works on its own, with cues you write by hand or that a page ships with.
 
 ## Status and limitations
 

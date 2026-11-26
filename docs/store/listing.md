@@ -8,32 +8,32 @@ Everything the Chrome Web Store developer dashboard asks for, ready to paste. Th
 
 **Summary** (132 characters at most; this is the manifest description):
 
-> Speaker notes for any web page, written with Claude: a private prompter that follows your scroll.
+> Speaker notes for any web page, written with Claude, in a private window that follows the page as you scroll.
 
 **Description:**
 
 ```text
 Speaker notes for any web page, written with Claude.
 
-You made a report, a dashboard or a site with Claude. Now you have to present it to partners, clients or your team. pagecue gives you speaker notes for it, the way presenter view does for slides.
+You made a report, a dashboard or a site with Claude. Now you have to present it to partners, clients or your team. pagecue gives it speaker notes, the way presenter view does for slides.
 
 Your notes, called cues, sit in a small window of their own: the prompter. As you scroll the page, the prompter shows the cue for the part on screen. Click a cue, or press the arrow keys or your clicker, and the page scrolls there.
 
-WRITTEN WITH CLAUDE
-Install the free pagecue plugin for Claude Code and ask for cues in your own words: "Add presenter cues to this report." Claude reads the page, asks once what you want to say, and writes a short headline and up to three points for each part, using only your words and the page's facts. While you rehearse, it changes them on the spot: "Make cue 3 shorter." Every change shows in the prompter with Undo.
+WRITE YOUR CUES WITH CLAUDE
+Add the free pagecue plugin to Claude (claude.ai, the Claude app or Claude Code) and ask in your own words: "Add presenter cues to this report." Claude reads the page and asks what you want to say. Then it turns your words and the page's facts into a short headline and up to three points for each part. When Claude builds the report, the cues come inside it. While you rehearse in Claude Code or the Claude app, ask for changes: "Make cue 3 shorter." Each one shows in the prompter at once, with Undo.
 
-PRIVATE BY HOW YOU SHARE
-The prompter is a separate window. In Zoom, Google Meet or Microsoft Teams, share the page's tab or window: viewers see the page, and your cues stay with you. pagecue draws nothing on the page you share, except section lines while you turn them on.
+VIEWERS SEE THE PAGE, YOU SEE YOUR CUES
+The prompter is a separate window. In Zoom, Google Meet or Microsoft Teams, share the page's tab or window, and the prompter stays with you. pagecue draws nothing on the page you share, except section lines, and only while you have them on.
 
 MADE FOR TALKING
 • One cue lit at a time, level with your eye.
-• Works both ways: scroll the page or the prompter.
+• Scroll the page or the prompter: the other follows.
 • Double-click a cue to change its words; press N to add one.
 • Press L to see on the page where each cue starts, and drag to adjust.
 • Works on reports, dashboards, docs, web apps, Claude artifacts and local files, in any language.
 
-YOURS
-No account and no cloud. Your cues stay on your computer. pagecue asks for no access to your sites when you install it: it reaches a page only when you click its button there. Free and open source under the MIT licence.
+NO ACCOUNT, NO CLOUD
+Your cues stay on your computer. pagecue asks for no access to your sites when you install it: it reaches a page only when you click its button there. Free and open source under the MIT licence.
 
 Guide: https://usepagecue.com/guide/
 Source: https://github.com/pakothealpaco/pagecue
@@ -92,5 +92,5 @@ pagecue needs no account. To test it:
 1. Open https://usepagecue.com/demo/ (a sample report that ships with six cues).
 2. Click the pagecue icon in the toolbar (or press Alt+Shift+P). The prompter window opens with the cues.
 3. Scroll the report: the lit cue in the prompter follows. Click a cue: the report scrolls to it. Press L to show section lines on the page, L again to hide them.
-The Claude plugin is optional and runs separately in Claude Code; the extension works fully without it.
+On first install a welcome page (bundled in the extension) opens once. The Claude plugin is optional and runs separately; the extension works fully without it. When a user runs it, the prompter talks to it on the user's own computer only (http://127.0.0.1:47613); nothing is sent elsewhere.
 ```

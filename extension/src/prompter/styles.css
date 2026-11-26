@@ -23,7 +23,7 @@
   --live: #6fd3a0;
   --standby: #e8b85c;
   --fault: #f08072;
-  --dim: 0.34;
+  --dim: 0.3;
   --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
@@ -37,7 +37,7 @@
   --live: #1e9e63;
   --standby: #b07a12;
   --fault: #c2412f;
-  --dim: 0.4;
+  --dim: 0.36;
   --shadow: 0 12px 32px rgba(21, 26, 34, 0.14);
 }
 
@@ -251,13 +251,13 @@ button.light {
 
 .stage::before {
   top: 0;
-  height: 40px;
+  height: 72px;
   background: linear-gradient(to top, transparent, var(--bg));
 }
 
 .stage::after {
   bottom: 0;
-  height: 56px;
+  height: 64px;
   background: linear-gradient(to bottom, transparent, var(--bg));
 }
 
@@ -438,15 +438,15 @@ button.light {
   padding: 5px 14px;
   border: 0;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--live) 16%, transparent);
-  color: var(--live);
+  background: var(--live);
+  color: var(--bg);
   font: inherit;
   font-size: 13px;
   font-weight: 600;
 }
 
 .done-button:hover {
-  background: color-mix(in srgb, var(--live) 26%, transparent);
+  filter: brightness(1.08);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -468,8 +468,11 @@ button.light {
   inset: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 0 calc(var(--gutter) + 14px) 15vh;
+  /* Centred while it fits; when it doesn't (a short window), it starts at the top and scrolls. */
+  justify-content: safe center;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 36px calc(var(--gutter) + 14px) 8vh;
   color: var(--muted);
 }
 
@@ -1173,13 +1176,21 @@ button.light {
 }
 
 .row-badge {
-  margin-inline-end: 6px;
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--live) 16%, transparent);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-inline-end: 8px;
   color: var(--live);
-  font-size: 11px;
   font-weight: 600;
+}
+
+/* The same light as the prompter's header: this is the page on screen now. */
+.row-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--live);
 }
 
 /* Rename and delete stay out of sight until the row is pointed at or focused. */
@@ -1329,9 +1340,8 @@ button.light {
 
 /* Guide and GitHub, quietly at the foot of every empty state. */
 .help-links {
-  position: absolute;
-  inset-inline: calc(var(--gutter) + 14px);
-  bottom: 64px;
+  flex: none;
+  margin-top: 32px;
   display: flex;
   gap: 18px;
   font-size: 12px;
@@ -1347,4 +1357,281 @@ button.light {
 .help-links a:hover {
   color: var(--ink);
   text-decoration: none;
+}
+
+/* ---------------------------------------------------------------- adding cues from Claude */
+
+.quiet-button.is-outlined {
+  border: 1px solid var(--line);
+  background: var(--raised);
+  font-weight: 600;
+}
+
+.quiet-button.is-outlined:hover {
+  border-color: color-mix(in srgb, var(--live) 60%, var(--line));
+  background: var(--raised);
+}
+
+.empty-step > .empty-actions {
+  margin-top: 10px;
+}
+
+.paste-field {
+  display: block;
+  width: 100%;
+  min-height: 260px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--raised);
+  color: var(--ink);
+  font:
+    13px/1.5 ui-monospace,
+    'SF Mono',
+    Menlo,
+    monospace;
+  resize: vertical;
+}
+
+.paste-field:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 1px;
+}
+
+.paste-field::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.paste-sheet code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  color: var(--ink);
+}
+
+.paste-error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--fault);
+}
+
+.empty-action:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* A cue file or text file dragged over the prompter. */
+.app.is-dropping::after {
+  content: 'Drop to add these cues';
+  position: absolute;
+  inset: 10px;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  border: 2px dashed var(--live);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  color: var(--live);
+  font-size: 15px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- the live link with Claude Code */
+
+.claude-status {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.claude-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--muted) 55%, transparent);
+  transform: translateY(-1px);
+}
+
+.claude-status.is-online {
+  color: var(--live);
+}
+
+.claude-status.is-online .claude-dot {
+  background: var(--live);
+}
+
+.claude-status.is-outdated {
+  color: var(--standby);
+}
+
+.claude-status.is-outdated .claude-dot {
+  background: var(--standby);
+}
+
+.claude-status code {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+/* ---------------------------------------------------------------- the empty page, one main way in */
+
+.empty-lead {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.empty-group {
+  display: block;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.empty-group-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.empty-group > .empty-actions {
+  margin-top: 10px;
+}
+
+.empty-own {
+  display: block;
+  margin-top: 28px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.claude-status.is-setup {
+  display: inline-block;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------- review pass: calmer empty state, menu, paste */
+
+/* The block sits a little above the middle instead of floating in it. */
+.empty {
+  justify-content: flex-start;
+  padding-top: 16vh;
+}
+
+.empty p {
+  max-width: 40ch;
+}
+
+/* Copy is secondary to the command it copies. */
+.prompt-card-action {
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--live);
+}
+
+.prompt-card:hover .prompt-card-action {
+  border-color: color-mix(in srgb, var(--live) 60%, var(--line));
+}
+
+.prompt-card.is-copied .prompt-card-action {
+  border-color: transparent;
+}
+
+.prompt-card-url {
+  color: var(--muted);
+}
+
+/* A quiet aside, not a second call to action. */
+.empty-own {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 22px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.empty-own:hover {
+  color: var(--ink);
+}
+
+.empty-own kbd {
+  padding: 0 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+/* Guide and GitHub share one row in the menu. */
+.menu-links {
+  display: flex;
+  gap: 4px;
+}
+
+.menu-links a {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu-links a svg {
+  color: var(--muted);
+}
+
+.menu-links a:hover {
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.menu > button kbd {
+  min-width: 28px;
+  text-align: center;
+}
+
+/* Paste: one border, actions in a footer row. */
+.paste-field {
+  min-height: 300px;
+}
+
+.paste-field:focus-visible {
+  outline: none;
+  border-color: var(--live);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--live) 20%, transparent);
+}
+
+.paste-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.paste-file {
+  font-size: 13px;
+  font-weight: 500;
 }

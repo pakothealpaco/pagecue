@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Artifact page</title>
+    <!-- Like claude.ai/artifact/…: a shell with no cues around one sandboxed frame from another origin. -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        font:
+          14px system-ui,
+          sans-serif;
+      }
+      header {
+        height: 44px;
+        border-bottom: 1px solid #ddd;
+      }
+      iframe {
+        display: block;
+        width: 100%;
+        height: calc(100% - 45px);
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header></header>
+    <iframe
+      src="__FRAME_ORIGIN__/artifact-content.html"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"
+    ></iframe>
+    <iframe src="about:blank" style="width: 1px; height: 1px"></iframe>
+  </body>
+</html>

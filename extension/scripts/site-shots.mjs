@@ -192,6 +192,32 @@ async function main() {
       await prompter.waitForTimeout(600);
       await awake();
       await shoot('empty');
+
+      // 7. Pasting cues an AI chat wrote.
+      await prompter.locator('.menu-button').click();
+      await prompter.getByRole('menuitem', { name: /Add cues from Claude/ }).click();
+      await prompter
+        .getByLabel('Cues to add')
+        .fill(
+          '```text\n## Tiers\nThree tiers, one clear upgrade path\n- Starter stays free\n- Team is where most customers land\n- Q: why no monthly Enterprise? → annual only, for support\n```',
+        );
+      await prompter.waitForTimeout(300);
+      await shoot('paste');
+      await prompter.getByRole('button', { name: 'Cancel' }).click();
+
+      // 8. The welcome page, opened once after install.
+      const welcome = await context.newPage();
+      await welcome.setViewportSize({ width: 900, height: 1100 });
+      await welcome.emulateMedia({ colorScheme: theme });
+      await welcome.goto(`chrome-extension://${extensionId}/welcome.html`);
+      await welcome.waitForTimeout(500);
+      await shoot('welcome', welcome, {
+        x: 0,
+        y: 0,
+        width: 900,
+        height: await welcome.evaluate(() => document.body.scrollHeight),
+      });
+      await welcome.close();
     }
 
     writeFileSync(join(data, 'shots.json'), `${JSON.stringify(markers, null, 2)}\n`);

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /** The local pagecue bridge (the Claude Code plugin's server). */
 const BRIDGE = __PAGECUE_BRIDGE__;
@@ -7,6 +7,12 @@ const POLL_MS = 700;
 const POLL_AFTER_COMMAND_MS = 200;
 const POLL_OFFLINE_MS = 5000;
 const HEADERS = { 'content-type': 'application/json', 'x-pagecue': '1' };
+
+/** Whether the bridge answers, and its version (the plugin's), for the prompter to show. */
+export interface BridgeStatus {
+  online: boolean;
+  version?: string;
+}
 
 export interface BridgeCommand {
   id: string;
@@ -20,7 +26,8 @@ export interface BridgeCommand {
  * carries out the commands the agent queued there, answering each with its result. Without a
  * bridge running it just retries now and then; nothing leaves the computer.
  */
-export function useBridge(state: unknown, run: (command: BridgeCommand) => Promise<unknown>): void {
+export function useBridge(state: unknown, run: (command: BridgeCommand) => Promise<unknown>): BridgeStatus {
+  const [status, setStatus] = useState<BridgeStatus>({ online: false });
   const stateRef = useRef(state);
   const runRef = useRef(run);
   useEffect(() => {
@@ -40,7 +47,10 @@ export function useBridge(state: unknown, run: (command: BridgeCommand) => Promi
           body: JSON.stringify(stateRef.current),
           signal: AbortSignal.timeout(1500),
         });
-        const { commands = [] } = (await response.json()) as { commands?: BridgeCommand[] };
+        const { commands = [], version } = (await response.json()) as { commands?: BridgeCommand[]; version?: string };
+        setStatus((current) =>
+          current.online && current.version === version ? current : { online: true, ...(version ? { version } : {}) },
+        );
         for (const command of commands) {
           let reply: { id: string; ok: boolean; result?: unknown; error?: string };
           try {
@@ -56,6 +66,7 @@ export function useBridge(state: unknown, run: (command: BridgeCommand) => Promi
         if (commands.length) delay = POLL_AFTER_COMMAND_MS;
       } catch {
         delay = POLL_OFFLINE_MS;
+        setStatus((current) => (current.online ? { online: false } : current));
       }
       if (!stopped) timer = window.setTimeout(() => void tick(), delay);
     };
@@ -65,4 +76,6 @@ export function useBridge(state: unknown, run: (command: BridgeCommand) => Promi
       window.clearTimeout(timer);
     };
   }, []);
+
+  return status;
 }

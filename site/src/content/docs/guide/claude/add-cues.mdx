@@ -7,11 +7,11 @@ import { Steps, Aside } from '@astrojs/starlight/components';
 
 Writing cues is a conversation with Claude. You say what you want to get across; Claude knows the page, so it puts each point where it belongs and keeps it short enough to read mid-sentence.
 
-This uses the `add-cues` skill from the [Claude plugin](/guide/install/#the-claude-plugin). It needs Claude Code.
+This uses pagecue's `add-cues` skill, in Claude Code (with the [Claude plugin](/guide/install/#the-claude-plugin)) or in claude.ai and the Claude app (see [claude.ai and the Claude app](/guide/claude/apps/)).
 
 ## Ask
 
-In Claude Code, in any language:
+In Claude, in any language:
 
 > Add presenter cues to this report. On the revenue chart I want to say the Q3 jump came from the EU launch.
 
@@ -37,9 +37,9 @@ Open pagecue on a page with no cues and click **Copy**: you get `/pagecue:add-cu
 
 5. **Marks the page**, if the page is yours: it adds a `data-pagecue` attribute to each part in the source, so the cue stays attached even as the text changes. Nothing visible changes. For pages that aren't yours, it attaches cues by their heading text instead.
 
-6. **Hands the cues to pagecue.** They appear in the prompter within seconds. For your own pages, Claude can also ship the cues with the page, so anyone who opens it with pagecue gets them (see [Cue file format](/guide/reference/cue-file/#how-a-page-carries-its-cues)).
+6. **Hands the cues to pagecue.** In Claude Code (or the Claude app with pagecue's [desktop extension](/guide/claude/apps/#live-changes-in-the-claude-app)), they appear in the prompter within seconds. In an artifact Claude builds, they come inside it. For any other page, Claude gives you a block to [add in the prompter](/guide/prompter/#add-cues-from-claude). For your own pages, Claude can also ship the cues with the page, so anyone who opens it with pagecue gets them (see [Cue file format](/guide/reference/cue-file/#how-a-page-carries-its-cues)).
 
-7. **Checks its work** with a checker that confirms every cue finds its place.
+7. **Checks its work**: in Claude Code with a checker that confirms every cue finds its place.
 
 8. **Tells you how to present** it.
 

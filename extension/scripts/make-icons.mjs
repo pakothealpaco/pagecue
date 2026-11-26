@@ -107,4 +107,6 @@ function png(size, design) {
 
 mkdirSync(out, { recursive: true });
 for (const size of [16, 32, 48, 96, 128]) writeFileSync(join(out, `${size}.png`), png(size, size <= 32 ? BARE : TILED));
+// The Claude app shows desktop extensions' icons large.
+writeFileSync(join(out, '../../../plugins/pagecue/desktop/icon.png'), png(512, TILED));
 console.log(`Icons written to ${out}`);

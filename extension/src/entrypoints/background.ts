@@ -57,7 +57,7 @@ async function fetchCueFile(url: string, sender: Browser.runtime.MessageSender):
     return {
       ok: false,
       error:
-        'Chrome does not let extensions read linked files on pages opened from disk. Put the cues inline (<script type="application/vnd.pagecue+json">) or use ⋯ → Import cues.',
+        'Chrome does not let extensions read linked files on pages opened from disk. Put the cues inline (<script type="application/vnd.pagecue+json">) or use ⋯ → Add cues from Claude.',
     };
   }
   if (target.origin !== page.origin) return { ok: false, error: 'the cue file must be on the same site as the page' };
@@ -117,6 +117,13 @@ async function setMainFrame(tabId: number, frameId: number | undefined): Promise
 }
 
 export default defineBackground(() => {
+  // First install only (not updates): a short page to pin the button, try the demo and add Claude.
+  browser.runtime.onInstalled.addListener(({ reason }) => {
+    if (reason === 'install' && !__PAGECUE_TEST__) {
+      void browser.tabs.create({ url: browser.runtime.getURL('/welcome.html') });
+    }
+  });
+
   // Toolbar button: connect the current tab (temporary access) and bring up the prompter.
   browser.action.onClicked.addListener(async (tab) => {
     let tabId: number | null = null;

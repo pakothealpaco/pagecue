@@ -59,7 +59,7 @@ Two seconds after you stop moving the pointer, the title, timer and buttons fade
 
 <Shot name="menu" alt="The prompter's More menu, open." width={340} />
 
-The menu holds **Add a cue here**, **Edit this cue**, **Pause following**, **Theme** (Auto, Dark, Light), **Sites…**, **Import cues…**, **Export cues…**, and links to this **Guide** and to **pagecue on GitHub**. Each is described in [Prompter controls](/guide/reference/controls/#more-menu).
+The menu holds **Add a cue here**, **Edit this cue**, **Pause following**, **Theme** (Auto, Dark, Light), **Sites…**, **Add cues from Claude…**, **Export cues…**, and links to this **Guide** and to **GitHub**. Each is described in [Prompter controls](/guide/reference/controls/#more-menu).
 
 At the bottom, a reminder of the keys for next and previous. Press <kbd>?</kbd> to open the menu there.
 
@@ -75,14 +75,21 @@ Click the page title (or press <kbd>S</kbd>) to see every page you have cues for
 
 ## A page with no cues
 
-<Shot name="empty" alt="The prompter on a page with no cues: the /pagecue:add-cues command to copy into Claude Code, a link to add a cue here, and links to the guide and GitHub." width={340} />
+<Shot name="empty" alt="The prompter on a page with no cues: the /pagecue:add-cues command to copy, a First time? Set up Claude link, a quiet Or write one yourself, and links to the guide and GitHub." width={340} />
 
-The prompter says **No cues on this page yet** and offers two ways in:
+The prompter says **No cues yet** and shows one thing to do:
 
-- **Ask Claude.** Click **Copy** to copy `/pagecue:add-cues` with the page's address, paste it into Claude Code, and add what you want to say. The command starts the [add-cues skill](/guide/claude/add-cues/). No plugin yet? The link under the card shows you how to add it.
-- **Write your own.** Scroll to where a part starts and click **add a cue here**.
+- **Copy** the command, `/pagecue:add-cues` with the page's address, and paste it into Claude Code. The [add-cues skill](/guide/claude/add-cues/) writes the cues with you, and they appear in the prompter by themselves.
+- Under it, a small line: **Connected to Claude** (green) when Claude Code is running with the pagecue plugin; **Update the pagecue plugin** (amber) when the plugin is older than the extension; otherwise **First time? Set up Claude**.
+- **Or write one yourself** (<kbd>N</kbd>) adds a cue where you are on the page.
 
-At the bottom, **Guide** and **GitHub** open this guide and pagecue's source.
+In claude.ai and the Claude app you rarely see this: when Claude builds the page for you, the cues come inside it. See [claude.ai and the Claude app](/guide/claude/apps/).
+
+## Add cues from Claude
+
+<Shot name="paste" alt="The Add cues from Claude sheet with cues pasted in, a Choose a file link and the Add cues button." width={340} />
+
+When Claude can't put the cues into the page itself (a site that isn't yours, in claude.ai), it gives them to you as a block or a `.cues.json` file. In the ··· menu, choose **Add cues from Claude…**, paste the block and click **Add cues**, or click **Choose a file**. You can also drag the file onto the prompter.
 
 ## When it isn't connected
 

@@ -1,0 +1,44 @@
+{
+  "manifest_version": "0.3",
+  "name": "pagecue",
+  "display_name": "pagecue",
+  "version": "0.4.0",
+  "description": "Lets Claude write and change your pagecue speaker cues live in the prompter.",
+  "long_description": "pagecue is a Chrome extension: a private prompter window shows your speaker cues for the web page you present in Zoom, Meet or Teams. With this extension, Claude can see the page the prompter follows and add, change, show or remove cues there while you rehearse (\"make cue 3 shorter\"), and send a whole set of cues for a page. Everything stays on your computer: the extension talks to the pagecue Chrome extension through a small server on 127.0.0.1 only.",
+  "author": {
+    "name": "Daniel Kheyfets",
+    "email": "pakothealpaco@gmail.com",
+    "url": "https://usepagecue.com"
+  },
+  "license": "MIT",
+  "homepage": "https://usepagecue.com",
+  "documentation": "https://usepagecue.com/guide/claude/apps/",
+  "support": "https://github.com/pakothealpaco/pagecue/issues",
+  "repository": { "type": "git", "url": "https://github.com/pakothealpaco/pagecue" },
+  "icon": "icon.png",
+  "keywords": ["presentation", "speaker-notes", "presenter-view", "teleprompter", "chrome-extension"],
+  "server": {
+    "type": "node",
+    "entry_point": "server/bridge.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/bridge.mjs", "mcp"],
+      "env": {}
+    }
+  },
+  "tools": [
+    { "name": "pagecue_status", "description": "The page the prompter follows, its cues and the current one." },
+    { "name": "add_cue", "description": "Add a cue at a heading or where the presenter is now." },
+    { "name": "edit_cue", "description": "Change a cue's headline or points." },
+    { "name": "remove_cue", "description": "Delete a cue (the presenter can undo it)." },
+    { "name": "show_cue", "description": "Scroll the page and the prompter to a cue." },
+    { "name": "set_view", "description": "Section lines, pause, text size and theme." },
+    { "name": "open_page", "description": "Open a page in Chrome and follow it." },
+    { "name": "publish_cues", "description": "Send a whole set of cues for a page to the prompter." },
+    { "name": "list_published_cues", "description": "List pages with published cues." }
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "win32"],
+    "runtimes": { "node": ">=18.0.0" }
+  }
+}

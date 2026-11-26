@@ -18,6 +18,21 @@ export const HANDOFF_ACK = 'pagecue:content-frame-ack';
 
 /** Share of the viewport a frame must cover to count as the page's content. */
 const COVERS = 0.6;
+/**
+ * Sites that only ever serve documents made to be read in a frame (Claude's artifacts). Their frame
+ * counts at a smaller share, so an artifact shown in the panel beside a chat works too.
+ */
+const CONTENT_FRAME_SITES = /(^|\.)claudeusercontent\.com$/i;
+const COVERS_CONTENT_FRAME = 0.25;
+
+/** Share of the viewport a frame at `src` must cover to count as the page's content. */
+export function coverageNeeded(src: string): number {
+  try {
+    return CONTENT_FRAME_SITES.test(new URL(src).hostname) ? COVERS_CONTENT_FRAME : COVERS;
+  } catch {
+    return COVERS;
+  }
+}
 
 /**
  * The iframe that holds this page's content, if the page itself is only a shell around one: the
@@ -39,7 +54,7 @@ export function coveringFrame(doc: Document = document): HTMLIFrameElement | nul
       bestArea = width * height;
     }
   }
-  return best && bestArea >= area * COVERS ? best : null;
+  return best && bestArea >= area * coverageNeeded(best.src) ? best : null;
 }
 
 /** Every iframe in the document, also inside open shadow roots (app shells built from web components). */

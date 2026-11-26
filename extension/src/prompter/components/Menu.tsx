@@ -18,7 +18,7 @@ interface Props {
   onClose: () => void;
   onSettings: (patch: Partial<Settings>) => void;
   onSites: () => void;
-  onImport: () => void;
+  onPaste: () => void;
   onExport: () => void;
 }
 
@@ -68,10 +68,7 @@ export function Menu(props: Props) {
   return (
     <div ref={ref} className={`menu${props.open ? ' is-open' : ''}`} role="menu" aria-hidden={!props.open}>
       <button type="button" role="menuitem" disabled={!props.onAddCue} onClick={run(() => props.onAddCue?.())}>
-        <span>
-          Add a cue here
-          <small>At the reading line on the page</small>
-        </span>
+        <span>Add a cue here</span>
         <kbd>N</kbd>
       </button>
       <button type="button" role="menuitem" disabled={!props.canEdit} onClick={run(props.onEditCurrent)}>
@@ -100,33 +97,26 @@ export function Menu(props: Props) {
       </div>
       <hr />
       <button type="button" role="menuitem" onClick={run(props.onSites)}>
-        <span>
-          Sites…
-          <small>Switch, rename or delete</small>
-        </span>
+        <span>Sites…</span>
         <kbd>S</kbd>
       </button>
-      <button type="button" role="menuitem" onClick={run(props.onImport)}>
-        Import cues…
+      <button type="button" role="menuitem" onClick={run(props.onPaste)}>
+        Add cues from Claude…
       </button>
       <button type="button" role="menuitem" disabled={!props.canExport} onClick={run(props.onExport)}>
         Export cues…
       </button>
       <hr />
-      <a role="menuitem" href={LINKS.guide} target="_blank" rel="noopener noreferrer" onClick={props.onClose}>
-        <span>
+      <div className="menu-links">
+        <a role="menuitem" href={LINKS.guide} target="_blank" rel="noopener noreferrer" onClick={props.onClose}>
+          <BookIcon />
           Guide
-          <small>Every button and key, and how to work with Claude</small>
-        </span>
-        <BookIcon />
-      </a>
-      <a role="menuitem" href={LINKS.github} target="_blank" rel="noopener noreferrer" onClick={props.onClose}>
-        <span>
-          pagecue on GitHub
-          <small>Source, releases and issues</small>
-        </span>
-        <GitHubIcon />
-      </a>
+        </a>
+        <a role="menuitem" href={LINKS.github} target="_blank" rel="noopener noreferrer" onClick={props.onClose}>
+          <GitHubIcon />
+          GitHub
+        </a>
+      </div>
       <hr />
       {/* Only the keys shown nowhere else: the menu items above carry their own (N, Enter, P), and
           the footer buttons name theirs (L, ⌘ + ⌘ −) in their tooltips. */}

@@ -14,10 +14,17 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react'],
   // The local bridge's port. The test build uses its own, so a bridge the developer runs for real
   // does not interfere with the end-to-end test.
-  vite: () => ({ define: { __PAGECUE_BRIDGE__: JSON.stringify(`http://127.0.0.1:${e2e || qa ? 47614 : 47613}`) } }),
+  vite: () => ({
+    define: {
+      __PAGECUE_BRIDGE__: JSON.stringify(`http://127.0.0.1:${e2e || qa ? 47614 : 47613}`),
+      // Test builds skip the welcome tab on install, so tests start from a clean window.
+      __PAGECUE_TEST__: JSON.stringify(e2e || qa),
+    },
+  }),
   manifest: {
     name: 'pagecue',
-    description: 'Speaker notes for any web page, written with Claude: a private prompter that follows your scroll.',
+    description:
+      'Speaker notes for any web page, written with Claude, in a private window that follows the page as you scroll.',
     permissions: ['activeTab', 'scripting', 'storage', 'unlimitedStorage'],
     optional_host_permissions: ['<all_urls>'],
     ...(e2e ? { host_permissions: ['http://127.0.0.1/*'] } : {}),

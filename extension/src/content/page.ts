@@ -127,6 +127,8 @@ export class PageController {
   private generation = 0;
   /** False until the current page's own cues have been imported; placeholders wait for it. */
   private siteImportDone = false;
+  /** The inline cue file as last imported, so one a page renders after load is picked up too. */
+  private inlineCueText = '';
   private unwatch: (() => void) | undefined;
   private stopped = false;
   /** Prompters that asked for section lines on the page. */
@@ -330,9 +332,14 @@ export class PageController {
     if (this.connected) this.importNewAttributes();
   }
 
+  private inlineCueFile(): string {
+    return document.querySelector(`script[type="${CUE_FILE_TYPE}"]`)?.textContent?.trim() ?? '';
+  }
+
   private async readSiteCueFile(): Promise<unknown | null> {
-    const inline = document.querySelector(`script[type="${CUE_FILE_TYPE}"]`);
-    if (inline?.textContent?.trim()) return JSON.parse(inline.textContent);
+    const inline = this.inlineCueFile();
+    this.inlineCueText = inline;
+    if (inline) return JSON.parse(inline);
 
     const link = document.querySelector<HTMLLinkElement>(`link[rel~="alternate"][type="${CUE_FILE_TYPE}"]`);
     if (!link?.href) return null;
@@ -412,6 +419,14 @@ export class PageController {
   /** `data-pagecue` elements that appeared after load (lazy sections, client-side routes). */
   private importNewAttributes(): void {
     if (!this.siteImportDone) return;
+    // Pages built in the browser (Claude artifacts, apps) may add or change their inline cue file
+    // after pagecue loaded: import it again.
+    const inline = this.inlineCueFile();
+    if (inline && inline !== this.inlineCueText) {
+      this.inlineCueText = inline;
+      void this.importSiteCues(this.generation, this.key);
+      return;
+    }
     const known = new Set(this.cues.flatMap((cue) => [cue.id, cue.anchor.cue]));
     const now = Date.now();
     const added = [...document.querySelectorAll(`[${CUE_ATTRIBUTE}]`)]
@@ -537,8 +552,9 @@ export class PageController {
   private readonly noteNavigation = (event: Event): void => {
     const navigation = event as Event & { navigationType?: string; destination?: { url?: string } };
     if (navigation.navigationType === 'replace' && navigation.destination?.url) {
+      // Bounded, and cleared before adding so the address just replaced is always remembered.
+      if (this.replacedUrls.size >= 50) this.replacedUrls.clear();
       this.replacedUrls.add(navigation.destination.url);
-      if (this.replacedUrls.size > 50) this.replacedUrls.clear();
     }
   };
 

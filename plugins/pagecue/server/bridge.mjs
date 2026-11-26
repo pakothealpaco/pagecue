@@ -35,7 +35,7 @@ const STATE_FRESH_MS = 6000;
 /** How long an agent waits for the prompter to carry out a command. */
 const COMMAND_TIMEOUT_MS = 10_000;
 const MAX_BODY_BYTES = 1_000_000;
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 /** A server started by `publish` exits after this long without requests. */
 const IDLE_EXIT_MS = 4 * 60 * 60 * 1000;
 
@@ -242,7 +242,8 @@ export function serve({ exitWhenIdle = false } = {}) {
         (body) => {
           if (url.pathname === '/v1/state') {
             writeState(body);
-            res.writeHead(200, { 'content-type': 'application/json' }).end(JSON.stringify({ commands: takeCommands() }));
+            res.writeHead(200, { 'content-type': 'application/json' })
+              .end(JSON.stringify({ commands: takeCommands(), version: VERSION }));
           } else if (url.pathname === '/v1/results') {
             writeResult(body);
             res.writeHead(204).end();

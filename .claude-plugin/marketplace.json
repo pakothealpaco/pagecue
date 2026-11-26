@@ -5,7 +5,7 @@
     "email": "pakothealpaco@gmail.com"
   },
   "metadata": {
-    "description": "Speaker notes for any web page, written with Claude: a private prompter that follows your scroll."
+    "description": "Speaker notes for any web page, written with Claude, in a private window that follows the page as you scroll."
   },
   "plugins": [
     {

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 (2026-11-26)
+
+- **claude.ai and the Claude app.** The `add-cues` skill now works there too: when Claude builds an artifact, it writes the cues inside it, and pagecue picks them up when you open the artifact (also when the artifact draws its content after loading, and in the panel beside a chat). Releases include `pagecue-skill.zip` to upload with Plugins → Add → Upload plugin.
+- **Live changes in the Claude app.** The bridge ships as a Claude desktop extension, `pagecue.mcpb`: double-click to install, no Node.js needed.
+- **Add cues from Claude** (··· menu): paste the cues Claude gave you for a page it couldn't edit, or choose or drop a `.cues.json` file. It replaces Import cues.
+- A calmer prompter: a page with no cues shows one command to copy and a quiet way to write your own; the ··· menu is shorter.
+- **Cue files:** a cue can say where it starts with `near` (the heading's text), for pages that can't be marked with `data-pagecue`.
+- **A welcome page** opens once after install: pin the button (with a live check), set up Claude, and try the demo.
+- The prompter says whether Claude Code is connected, and when the plugin is older than the extension.
+
 ## 0.3.0 (2026-11-25)
 
 - The prompter's "No cues on this page yet" card now copies `/pagecue:add-cues <page>`, which starts the skill in Claude Code directly, and links to the plugin's install steps when you don't have it yet.

@@ -36,6 +36,11 @@
           "description": "Which element the cue attaches to: another data-pagecue value, or a full anchor as exported by the extension.",
           "oneOf": [{ "type": "string", "minLength": 1 }, { "$ref": "#/$defs/anchor" }]
         },
+        "near": {
+          "description": "Instead of an anchor: the exact visible text where the cue starts, usually a heading. For pages whose source cannot be marked with data-pagecue.",
+          "type": "string",
+          "minLength": 1
+        },
         "title": {
           "description": "One glanceable line, about eight words.",
           "type": "string"
@@ -78,7 +83,8 @@
           "title": "Revenue up 24% in Q3",
           "notes": ["Driven by new EU customers", "Q: will it hold? → two cohorts so far"]
         },
-        { "id": "costs-chart", "anchor": "costs", "title": "Costs rose, then flattened", "notes": "+11% after the March migration" }
+        { "id": "costs-chart", "anchor": "costs", "title": "Costs rose, then flattened", "notes": "+11% after the March migration" },
+        { "id": "risks", "near": "Risks and open questions", "title": "Two risks to watch", "notes": ["Hiring", "FX"] }
       ]
     }
   ]

@@ -1,11 +1,13 @@
-# pagecue plugin for Claude Code
+# pagecue plugin for Claude
 
-Adds presenter cues to a report, dashboard or website that Claude builds, for the [pagecue](../../README.md) Chrome extension's private prompter.
+Write presenter cues with Claude for a report, dashboard or website, one Claude builds or any page you present, and read them in the [pagecue](../../README.md) Chrome extension's private prompter.
 
 ```
 /plugin marketplace add pakothealpaco/pagecue
 /plugin install pagecue@pagecue
 ```
+
+In claude.ai or the Claude app, add the marketplace `pakothealpaco/pagecue` with Plugins → Add → Add marketplace instead (the skill works there; for live changes in the Claude app, install `pagecue.mcpb` from a release).
 
 Then ask Claude, for example: *"Add presenter cues to this report"*, or run `/pagecue:add-cues`. While the prompter is open you can also just ask for changes (*"add a cue here about the price"*, *"turn off the section lines"*): Claude operates the prompter through the plugin's MCP tools.
 
@@ -23,3 +25,4 @@ Then ask Claude, for example: *"Add presenter cues to this report"*, or run `/pa
 | `schema/pagecue.schema.json` | JSON Schema of the cue file (format version 1) |
 | `server/bridge.mjs` | The MCP server and the local link to the extension (127.0.0.1:47613, no dependencies) |
 | `scripts/check-cues.mjs` | Checks a cue file against the page source: format, and that every cue has its element |
+| `desktop/manifest.json`, `scripts/pack-desktop-extension.mjs` | The bridge as a Claude desktop extension (`pagecue.mcpb`) |

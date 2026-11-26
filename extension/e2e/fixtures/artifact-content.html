@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Artifact content</title>
+    <style>
+      body {
+        font:
+          18px/1.6 system-ui,
+          sans-serif;
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      section {
+        min-height: 700px;
+        border-bottom: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <p id="loading">Loading…</p>
+    <script>
+      // Artifacts are rendered in the browser after the frame loads, cue file included.
+      setTimeout(() => {
+        const cues = {
+          pagecue: 1,
+          title: 'Quarterly review',
+          cues: [
+            { id: 'growth', title: 'Sales grew 18%', notes: ['Two new regions'] },
+            { id: 'margin', title: 'Margin held at 31%', notes: [] },
+            { id: 'ask', title: 'One decision today', notes: ['Approve the hire'] },
+          ],
+        };
+        document.body.innerHTML = `
+          <script type="application/vnd.pagecue+json">${JSON.stringify(cues)}<\/script>
+          <h1>Quarterly review</h1>
+          <section data-pagecue="growth"><h2>Growth</h2></section>
+          <section data-pagecue="margin"><h2>Margin</h2></section>
+          <section data-pagecue="ask"><h2>The ask</h2></section>`;
+      }, 3000);
+    </script>
+  </body>
+</html>

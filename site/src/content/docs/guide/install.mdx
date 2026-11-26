@@ -25,6 +25,8 @@ Until pagecue is in the Chrome Web Store, you install it from its release on Git
 
 </Steps>
 
+On first install pagecue opens a short welcome page: it shows whether the button is pinned, links to setting up Claude, and opens the demo report to try.
+
 pagecue is made and tested for Chrome. Other Chromium browsers (Edge, Brave, Arc) should work the same way.
 
 pagecue asks for no access to your sites when you install it. It reaches a page only when you click its button there; see [Permissions](/guide/reference/permissions/).
@@ -35,9 +37,18 @@ To present pages you open from disk (`file://…`), allow pagecue to read local 
 
 ## The Claude plugin
 
-The plugin gives Claude the `add-cues` skill and a set of tools to work the prompter. It needs [Node.js](https://nodejs.org/) 20 or later.
+The plugin gives Claude the `add-cues` skill, for writing cues with you, and live tools that change them in the open prompter. Add it where you use Claude:
 
 <Tabs syncKey="claude">
+<TabItem label="claude.ai and the Claude app">
+
+Open **Plugins** in the sidebar, choose **Add → Add marketplace**, enter `pakothealpaco/pagecue` and add **pagecue**. Or choose **Add → Upload plugin** and upload **`pagecue-skill.zip`** from the [latest release](https://github.com/pakothealpaco/pagecue/releases/latest).
+
+For live changes in the Claude app on Mac or Windows, also install **`pagecue.mcpb`** from the same release: double-click it and click **Install**.
+
+Step by step, with what each part does: [claude.ai and the Claude app](/guide/claude/apps/).
+
+</TabItem>
 <TabItem label="Claude Code">
 
 In Claude Code, run:
@@ -47,25 +58,9 @@ In Claude Code, run:
 /plugin install pagecue@pagecue
 ```
 
-Then ask Claude for cues in your own words, or type `/pagecue:add-cues`.
+The live tools need [Node.js](https://nodejs.org/) 20 or later. Then ask Claude for cues in your own words, or type `/pagecue:add-cues`.
 
-</TabItem>
-<TabItem label="Claude desktop app">
-
-In the Claude desktop app's chat you can add the plugin's live tools (not the `add-cues` skill), so Claude can change cues while the prompter is open. Download or clone [the repository](https://github.com/pakothealpaco/pagecue), then open **Settings → Developer → Edit config** and add the server to `claude_desktop_config.json`, with the full path to your copy:
-
-```json
-{
-  "mcpServers": {
-    "pagecue": {
-      "command": "node",
-      "args": ["/path/to/pagecue/plugins/pagecue/server/bridge.mjs", "mcp"]
-    }
-  }
-}
-```
-
-Restart the app.
+To update later, run `/plugin`, choose the pagecue marketplace and update it, then start a new session.
 
 </TabItem>
 </Tabs>

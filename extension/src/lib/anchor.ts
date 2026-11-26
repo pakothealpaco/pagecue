@@ -57,9 +57,23 @@ function isRendered(element: Element): boolean {
   return typeof element.checkVisibility === 'function' ? element.checkVisibility() : true;
 }
 
+/** Where text given without a tag (a cue file's `near`) is looked for: headings first, then text blocks. */
+const NEAR_SELECTORS = [HEADING_SELECTOR, 'p,li,dt,dd,th,td,figcaption,caption,summary,label,strong,b,span,div'];
+
 function fuzzyMatch(anchor: Anchor, root: Document): Resolution | null {
   if (!anchor.text) return null;
-  const candidates = root.getElementsByTagName(anchor.tag);
+  if (anchor.tag === '*') {
+    for (const selector of NEAR_SELECTORS) {
+      const found = bestMatch(anchor, [...root.querySelectorAll(selector)]);
+      if (found) return found;
+    }
+    return null;
+  }
+  return bestMatch(anchor, root.getElementsByTagName(anchor.tag));
+}
+
+function bestMatch(anchor: Anchor, candidates: ArrayLike<Element>): Resolution | null {
+  if (!anchor.text) return null;
   const limit = Math.min(candidates.length, MAX_FUZZY_CANDIDATES);
 
   let best: Resolution | null = null;

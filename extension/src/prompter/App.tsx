@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LINKS } from '../lib/links';
 import { HelpLinks } from './components/HelpLinks';
+import { PasteSheet } from './components/PasteSheet';
+import { parsePastedCues } from '../lib/paste';
 import { browser } from 'wxt/browser';
 import { forgetSite, injectInto, isRemembered, rememberSite } from '../lib/access';
-import { CueFileError, parseCueFile, toCueFile } from '../lib/cueFile';
+import { CueFileError, toCueFile } from '../lib/cueFile';
 import type { RuntimeMessage } from '../lib/protocol';
 import { SESSION_TARGET, type Target } from '../lib/session';
 import { originPattern } from '../lib/siteKey';
@@ -73,6 +75,8 @@ export function App() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [menuOpen, setMenuOpen] = useState(false);
   const [sitesOpen, setSitesOpen] = useState(false);
+  const [pasteOpen, setPasteOpen] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [remembered, setRemembered] = useState(false);
   const [toast, setToastState] = useState<{ text: string; action?: { label: string; run: () => void } } | null>(null);
   const setToast = useCallback(
@@ -238,7 +242,7 @@ export function App() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent): void => {
-      if (isTyping(event.target) || menuOpen || sitesOpen) return;
+      if (isTyping(event.target) || menuOpen || sitesOpen || pasteOpen) return;
       if ((event.metaKey || event.ctrlKey) && ['=', '+', '-'].includes(event.key)) {
         event.preventDefault();
         updateSettings({ textSize: stepTextSize(settings.textSize, event.key === '-' ? -1 : 1) });
@@ -277,13 +281,15 @@ export function App() {
       window.removeEventListener('keydown', onKey);
       browser.runtime.onMessage.removeListener(onMessage);
     };
-  }, [step, menuOpen, sitesOpen, settings.textSize, toggleLines, updateSettings, cues, activeIndex, send]);
+  }, [step, menuOpen, sitesOpen, pasteOpen, settings.textSize, toggleLines, updateSettings, cues, activeIndex, send]);
 
   // ------------------------------------------------------------ editing and menu actions
 
   const save = useCallback(
     (id: string, patch: Pick<Cue, 'title' | 'notes'>) =>
-      void change({ kind: 'patch', id, patch, at: Date.now() }).catch(() => setToast('Couldn’t save that change.')),
+      void change({ kind: 'patch', id, patch, at: Date.now() }).catch(() =>
+        setToast('Couldn’t save that change. Try again.'),
+      ),
     [change, setToast],
   );
 
@@ -297,7 +303,7 @@ export function App() {
           if (removed)
             setToast('Cue deleted.', { label: 'Undo', run: () => void change({ kind: 'import', cues: [removed] }) });
         })
-        .catch(() => setToast('Couldn’t delete that cue.'));
+        .catch(() => setToast('Couldn’t delete that cue. Try again.'));
     },
     [change, record, setToast],
   );
@@ -307,15 +313,26 @@ export function App() {
     download(`${slug(page.title)}.cues.json`, `${JSON.stringify(toCueFile(record.cues, page.title), null, 2)}\n`);
   };
 
+  /** Adds cues from a cue file or from text Claude wrote (see `paste.ts`). Throws a message to show. */
+  const addCuesFrom = async (text: string): Promise<number> => {
+    if (!page) throw new Error('Open the page you’re presenting and click pagecue there first.');
+    let cues;
+    try {
+      cues = parsePastedCues(text).map((cue) => ({ ...cue, origin: 'local' as const }));
+    } catch (error) {
+      throw new Error(error instanceof CueFileError ? error.message : 'Couldn’t read those cues.', { cause: error });
+    }
+    await change({ kind: 'import', cues });
+    return cues.length;
+  };
+
+  const added = (count: number): void => setToast(`Added ${count} ${count === 1 ? 'cue' : 'cues'}.`);
+
   const importCues = async (file: File): Promise<void> => {
     try {
-      const imported = parseCueFile(JSON.parse(await file.text())).map((cue) => ({ ...cue, origin: 'local' as const }));
-      await change({ kind: 'import', cues: imported });
-      setToast(`Imported ${imported.length} ${imported.length === 1 ? 'cue' : 'cues'}.`);
+      added(await addCuesFrom(await file.text()));
     } catch (error) {
-      setToast(
-        error instanceof CueFileError || error instanceof SyntaxError ? error.message : 'Couldn’t import that file.',
-      );
+      setToast(error instanceof Error ? error.message : 'Couldn’t import that file.');
     }
   };
 
@@ -393,7 +410,7 @@ export function App() {
     [callPage, updateSettings],
   );
 
-  useBridge(
+  const bridge = useBridge(
     {
       status,
       page: page ? { url: page.url, title: page.title, key: page.siteKey } : null,
@@ -407,6 +424,11 @@ export function App() {
   // ------------------------------------------------------------ render
 
   const { light, label } = lightFor(status, paused);
+  const claude: ClaudeLink = !bridge.online
+    ? 'offline'
+    : olderMinor(bridge.version, browser.runtime.getManifest().version)
+      ? 'outdated'
+      : 'online';
   const showChrome = !idle || menuOpen || paused || status !== 'connected' || editingId !== null || cues.length === 0;
   const addCue = status === 'connected' ? () => send({ type: 'add-cue' }) : undefined;
   const alwaysReconnect = async (): Promise<void> => {
@@ -434,8 +456,23 @@ export function App() {
 
   return (
     <div
-      className={`app theme-${theme}${showChrome ? '' : ' is-quiet'}`}
+      className={`app theme-${theme}${showChrome ? '' : ' is-quiet'}${dragging ? ' is-dropping' : ''}`}
       style={{ '--scale': TEXT_SIZES[settings.textSize] } as React.CSSProperties}
+      onDragOver={(event) => {
+        if (!event.dataTransfer.types.includes('Files')) return;
+        event.preventDefault();
+        setDragging(true);
+      }}
+      onDragLeave={(event) => {
+        if (event.currentTarget === event.target) setDragging(false);
+      }}
+      onDrop={(event) => {
+        const file = event.dataTransfer.files[0];
+        if (!file) return;
+        event.preventDefault();
+        setDragging(false);
+        void importCues(file);
+      }}
     >
       <header className="top" dir="ltr">
         <button
@@ -515,6 +552,7 @@ export function App() {
             canRemember={pattern !== null && !remembered}
             onRetry={reconnect}
             onAddCue={addCue}
+            claude={claude}
             onAlwaysReconnect={() => void alwaysReconnect()}
           />
         )}
@@ -555,7 +593,7 @@ export function App() {
           onClose={() => setMenuOpen(false)}
           onSettings={updateSettings}
           onSites={() => setSitesOpen(true)}
-          onImport={() => importRef.current?.click()}
+          onPaste={() => setPasteOpen(true)}
           onExport={exportCues}
         />
       </footer>
@@ -563,7 +601,7 @@ export function App() {
       <input
         ref={importRef}
         type="file"
-        accept=".json,application/json"
+        accept=".json,.md,.txt,application/json,text/markdown,text/plain"
         hidden
         onChange={(event) => {
           const file = event.target.files?.[0];
@@ -590,6 +628,14 @@ export function App() {
         </div>
       )}
 
+      {pasteOpen && (
+        <PasteSheet
+          onAdd={async (text) => added(await addCuesFrom(text))}
+          onChooseFile={() => importRef.current?.click()}
+          onClose={() => setPasteOpen(false)}
+        />
+      )}
+
       {sitesOpen && (
         <SitesSheet
           currentKey={page?.siteKey ?? null}
@@ -601,6 +647,45 @@ export function App() {
         />
       )}
     </div>
+  );
+}
+
+/** The live link with Claude Code (the plugin's bridge on this computer). */
+type ClaudeLink = 'online' | 'outdated' | 'offline';
+
+/** True when `version` (the plugin's) is older than `than` (the extension's) in major or minor. */
+function olderMinor(version: string | undefined, than: string): boolean {
+  if (!version) return true;
+  const [a = 0, b = 0] = version.split('.').map(Number);
+  const [c = 0, d = 0] = than.split('.').map(Number);
+  return a < c || (a === c && b < d);
+}
+
+/** Whether Claude Code can reach this prompter, so a missing or old plugin never fails silently. */
+function ClaudeStatus({ link }: { link: ClaudeLink }) {
+  if (link === 'online') {
+    return (
+      <span className="claude-status is-online">
+        <span className="claude-dot" aria-hidden="true" />
+        Connected to Claude
+      </span>
+    );
+  }
+  if (link === 'outdated') {
+    return (
+      <span className="claude-status is-outdated">
+        <span className="claude-dot" aria-hidden="true" />
+        Update the pagecue plugin
+      </span>
+    );
+  }
+  return (
+    <span className="claude-status">
+      First time?{' '}
+      <a href={LINKS.plugin} target="_blank" rel="noopener noreferrer">
+        Set up Claude
+      </a>
+    </span>
   );
 }
 
@@ -661,6 +746,7 @@ function Empty({
   canRemember,
   onRetry,
   onAddCue,
+  claude,
   onAlwaysReconnect,
 }: {
   status: ConnectionStatus;
@@ -671,6 +757,7 @@ function Empty({
   canRemember: boolean;
   onRetry: () => void;
   onAddCue?: () => void;
+  claude: ClaudeLink;
   onAlwaysReconnect: () => void;
 }) {
   const content: Record<ConnectionStatus, { title: string; body: React.ReactNode }> = {
@@ -700,30 +787,16 @@ function Empty({
           ),
         }
       : {
-          title: 'No cues on this page yet',
+          title: 'No cues yet',
           body: (
             <>
-              <span className="empty-step">
-                <span className="empty-step-label">Ask Claude</span>
-                Paste this into Claude Code and add what you want to say. The pagecue skill plans the cues and writes
-                them with you.
-              </span>
+              Paste this into Claude Code.
               {pageUrl && <AgentPrompt url={pageUrl} />}
-              <span className="empty-hint">
-                No plugin yet?{' '}
-                <a href={LINKS.plugin} target="_blank" rel="noopener noreferrer">
-                  Add it to Claude Code
-                </a>
-              </span>
+              <ClaudeStatus link={claude} />
               {onAddCue && (
-                <span className="empty-step">
-                  <span className="empty-step-label">Or write your own</span>
-                  Scroll to where a part starts, then{' '}
-                  <button type="button" className="link-button" onClick={onAddCue}>
-                    add a cue here
-                  </button>
-                  .
-                </span>
+                <button type="button" className="empty-own" onClick={onAddCue}>
+                  Or write one yourself <kbd>N</kbd>
+                </button>
               )}
             </>
           ),
@@ -750,7 +823,7 @@ function Empty({
       title: 'pagecue can’t run here',
       body: 'Chrome doesn’t let extensions run on its own pages. Open the page you’re presenting and click pagecue there.',
     },
-    closed: { title: 'The page was closed', body: 'Open it again, or click the page title to switch site.' },
+    closed: { title: 'The page was closed', body: 'Open it again, or click the page title to choose another page.' },
   };
   const { title, body } = content[status];
   return (

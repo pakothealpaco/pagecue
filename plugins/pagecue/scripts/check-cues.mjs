@@ -85,6 +85,9 @@ cues.forEach((cue, index) => {
   if (!validAnchor) {
     errors.push(`${where}: "anchor" must be a non-empty data-pagecue value or an anchor object with a "tag".`);
   }
+  if (cue.near !== undefined && (typeof cue.near !== 'string' || !cue.near.trim())) {
+    errors.push(`${where}: "near" must be the exact visible text where the cue starts.`);
+  }
 });
 
 // ---------------------------------------------------------------- sources
@@ -106,6 +109,8 @@ for (const source of sources) {
 const wanted = new Set();
 for (const cue of cues) {
   if (typeof cue?.id !== 'string') continue;
+  // A cue with `near` (and no anchor) is found by its text on the live page, which the checker cannot see.
+  if (cue.anchor === undefined && typeof cue.near === 'string') continue;
   const anchor = cue.anchor === undefined ? cue.id : typeof cue.anchor === 'string' ? cue.anchor : cue.anchor.cue;
   if (!anchor) continue; // full anchors without a data-pagecue value are resolved by the extension at runtime
   wanted.add(anchor);

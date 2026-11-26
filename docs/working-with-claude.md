@@ -1,10 +1,10 @@
 # Working with Claude
 
-Install the plugin (see the [README](../README.md#install)), then ask Claude Code, in any language:
+Install the plugin (see the [README](../README.md#install)), then ask Claude, in any language:
 
 > Add presenter cues to this report. On the revenue chart I want to say the Q3 jump came from the EU launch.
 
-The `add-cues` skill (`/pagecue:add-cues`) plans the breakpoints and asks once what you want to say at each. You can answer by typing or with `/voice`, and say "you write it" for the rest. It then:
+The `add-cues` skill (`/pagecue:add-cues`) plans the breakpoints and asks once what you want to say at each. You can answer by typing or with `/voice`, and say "you write it" for the rest. In Claude Code it then:
 
 - writes the cues: a headline of about eight words, up to three points, only facts from the page or from you;
 - adds `data-pagecue` attributes to the page source, without changing anything visible;
@@ -25,15 +25,9 @@ Every change shows in the prompter at once, with **Undo**.
 
 ## The Claude app
 
-The plugin's MCP server also works in the Claude desktop app. Add it to the app's `claude_desktop_config.json` (Settings → Developer → Edit config):
+In claude.ai and the Claude app, add the `add-cues` skill (Plugins → Add → Add marketplace `pakothealpaco/pagecue`, or upload `pagecue-skill.zip` from a release with Plugins → Add → Upload plugin). When Claude builds an artifact, the skill writes the cues inside it (an inline `<script type="application/vnd.pagecue+json">` plus `data-pagecue` attributes), and the extension reads them when you open the artifact. For other pages it gives you cues to paste in the prompter (⋯ → Add cues from Claude).
 
-```json
-{
-  "mcpServers": {
-    "pagecue": { "command": "node", "args": ["/path/to/pagecue/plugins/pagecue/server/bridge.mjs", "mcp"] }
-  }
-}
-```
+For live changes in the Claude app on macOS and Windows, install the bridge as a desktop extension: `pagecue.mcpb` from a release (double-click, then Install). The app ships its own Node.js. To build it yourself: `node plugins/pagecue/scripts/pack-desktop-extension.mjs`.
 
 ## MCP tools
 

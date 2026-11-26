@@ -168,8 +168,8 @@ async function main() {
     await awake();
     await compose(
       '2-claude',
-      'Written with Claude',
-      'Paste one command into Claude Code. The pagecue skill plans the cues and writes them with you.',
+      'Write your cues with Claude',
+      'No cues yet? Paste this command into Claude Code, then tell Claude what you want to say.',
       await b64(plain),
       await b64(prompter),
     );
@@ -199,8 +199,8 @@ async function main() {
     await prompter.waitForTimeout(300);
     await compose(
       '4-edit',
-      'Your words, too',
-      'Double-click any cue to change it. Press N to add one at the reading line.',
+      'Change any cue in place',
+      'Double-click a cue to edit it. Press N to add one where you are reading.',
       await b64(site),
       await b64(prompter),
     );
@@ -217,8 +217,8 @@ async function main() {
     await awake();
     await compose(
       '5-dark',
-      'Private by how you share',
-      'Share the page’s tab in Zoom, Meet or Teams. Viewers see the page; your cues stay with you.',
+      'Viewers see the page, not your cues',
+      'Share only the page’s tab or window in Zoom, Meet or Teams. The prompter stays with you.',
       await b64(site),
       await b64(prompter),
       true,

@@ -1,0 +1,89 @@
+---
+title: claude.ai and the Claude app
+description: Use pagecue with Claude in the browser or the Claude app, with no terminal. Cues come inside the reports Claude builds for you.
+---
+
+import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+You don't need Claude Code. In claude.ai or the Claude app, add pagecue's skill once, then ask for cues in your own words. When Claude builds the page for you, it writes the cues inside it, so they appear in the prompter by themselves.
+
+## Add the skill, once
+
+The skill teaches Claude how to write cues for pagecue. Pick one way:
+
+<Tabs syncKey="claude-skill">
+<TabItem label="Upload the skill">
+
+<Steps>
+
+1. Download **`pagecue-skill.zip`** from the [latest release](https://github.com/pakothealpaco/pagecue/releases/latest). Don't unzip it.
+
+2. In claude.ai or the Claude app, open **Plugins** in the sidebar, then **Add → Upload plugin**, and choose the zip.
+
+3. Check the preview shows **add-cues**, and click **Upload**.
+
+</Steps>
+
+If Claude doesn't use the skill, turn on **Code execution and file creation** in **Settings → Capabilities**.
+
+</TabItem>
+<TabItem label="Add the plugin">
+
+<Steps>
+
+1. In claude.ai or the Claude app, open **Plugins** in the sidebar and choose **Add → Add marketplace**.
+
+2. Enter `pakothealpaco/pagecue` and add the **pagecue** plugin.
+
+</Steps>
+
+The plugin brings the same skill. It also stays up to date when you turn on updates for the marketplace.
+
+</TabItem>
+</Tabs>
+
+## Cues for a report Claude builds
+
+<Steps>
+
+1. Ask in your own words, in any language:
+
+   > Build a report on our Q3 numbers from this spreadsheet, with presenter cues. On the revenue chart I want to say the jump came from the EU launch.
+
+   Or, for a report Claude already made: "Add presenter cues to this report."
+
+2. Claude asks once what you want to say for each part, then writes the cues **inside the artifact**.
+
+3. Open the artifact in Chrome, in claude.ai or on its own page, and click **pagecue** in the toolbar.
+
+4. The first time, the prompter says **This page shows its content in a frame**. Click **Allow on claudeusercontent.com**, where Claude's artifacts run. Chrome asks you once.
+
+</Steps>
+
+The cues appear. Scroll the artifact and the prompter follows. To change cues, ask Claude ("make cue 3 shorter"), then reload the artifact in Chrome; or double-click a cue in the prompter to change its words yourself.
+
+<Aside type="caution" title="Cues inside an artifact travel with it">
+Anyone you share or publish the artifact with could read its cues in the page's source. If that matters, ask Claude to give you the cues separately instead, and add them with **⋯ → Add cues from Claude**.
+</Aside>
+
+## Cues for any other page
+
+For a page Claude didn't build (your company's dashboard, a live site), Claude writes the cues as a short block, or a `.cues.json` file. In the prompter, choose **⋯ → Add cues from Claude** and paste the block, or drag the file onto the prompter. See [Add cues from Claude](/guide/prompter/#add-cues-from-claude).
+
+## Live changes in the Claude app
+
+In the Claude app on Mac or Windows, add pagecue's desktop extension and Claude can change cues in the open prompter while you rehearse, the same way as [in Claude Code](/guide/claude/live/): "add a cue here", "shorten cue 3", "turn off the section lines".
+
+<Steps>
+
+1. Download **`pagecue.mcpb`** from the [latest release](https://github.com/pakothealpaco/pagecue/releases/latest).
+
+2. Double-click it, or drag it into the Claude app. Review what it does and click **Install**.
+
+</Steps>
+
+The extension runs a small server on your computer (`127.0.0.1`) that only pagecue's Chrome extension talks to; nothing leaves your computer. The Claude app brings its own Node.js, so there is nothing else to install. When a new version of pagecue comes out, download and install the new file the same way.
+
+<Aside type="note">
+Live changes need Claude running on your computer: the Claude app with this extension, or Claude Code. claude.ai in a browser can't reach the prompter, so there you ask Claude for new cues instead.
+</Aside>

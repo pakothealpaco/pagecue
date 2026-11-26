@@ -1,3 +1,4 @@
+import { normalizeText } from './text';
 import type { Anchor, Cue } from './types';
 
 /**
@@ -13,7 +14,9 @@ import type { Anchor, Cue } from './types';
  * ```
  *
  * `anchor` may be omitted (the cue attaches to the element with `data-pagecue="<id>"`), a string
- * (another `data-pagecue` value), or a full anchor object as exported by the extension.
+ * (another `data-pagecue` value), or a full anchor object as exported by the extension. Instead of
+ * an anchor, `near` gives the exact visible text where the cue starts (usually a heading), for pages
+ * whose source cannot be marked.
  * The JSON Schema lives in `plugins/pagecue/schema/pagecue.schema.json` at the repository root.
  */
 export const CUE_FILE_VERSION = 1;
@@ -24,6 +27,8 @@ export const CUE_FILE_TYPE = 'application/vnd.pagecue+json';
 export interface CueFileEntry {
   id: string;
   anchor?: string | Anchor;
+  /** Exact visible text where the cue starts, usually a heading. Used when there is no `anchor`. */
+  near?: string;
   title: string;
   notes?: string | string[];
   /** Where the cue starts, moved by a share of its section's height (see `Cue.startAt`). */
@@ -43,7 +48,12 @@ export class CueFileError extends Error {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-function parseAnchor(value: unknown, id: string, where: string): Anchor {
+function parseAnchor(value: unknown, near: unknown, id: string, where: string): Anchor {
+  if (value === undefined && near !== undefined) {
+    if (typeof near !== 'string' || !normalizeText(near)) throw new CueFileError(`${where}: "near" must be text.`);
+    const text = normalizeText(near);
+    return { tag: '*', text, heading: text };
+  }
   if (value === undefined) return { cue: id, tag: '*' };
   if (typeof value === 'string' && value.trim()) return { cue: value.trim(), tag: '*' };
   if (isRecord(value) && typeof value.tag === 'string') {
@@ -94,7 +104,7 @@ export function parseCueFile(input: unknown, now = Date.now()): Cue[] {
 
     return {
       id,
-      anchor: parseAnchor(entry.anchor, id, `${where} ("${id}")`),
+      anchor: parseAnchor(entry.anchor, entry.near, id, `${where} ("${id}")`),
       title,
       notes: parseNotes(entry.notes, `${where} ("${id}")`),
       ...(startAt ? { startAt } : {}),

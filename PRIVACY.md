@@ -34,7 +34,7 @@ pagecue runs no remote code: everything it runs ships inside the extension.
 
 ## Sharing your screen
 
-The prompter is a separate window. When you present, share only the page's tab or window: anyone watching sees the page, not the prompter. If you share your whole screen, the prompter is in it. pagecue draws nothing on the page, except section lines while you turn them on, which viewers do see.
+The prompter is a separate window. When you present, share only the page's tab or window: anyone watching sees the page, not the prompter. If you share your whole screen, the prompter is in it. pagecue draws nothing on the page except section lines, and only while you have them on; viewers do see those.
 
 ## The website
 

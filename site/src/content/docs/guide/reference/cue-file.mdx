@@ -23,7 +23,7 @@ The JSON Schema is [`pagecue.schema.json`](https://github.com/pakothealpaco/page
     },
     {
       "id": "churn",
-      "anchor": { "tag": "h2", "text": "Churn" },
+      "near": "Churn",
       "title": "Churn down to 2.1%",
       "notes": ["Was 3.4%", "Q: will it hold? → two cohorts so far"]
     }
@@ -48,7 +48,8 @@ The JSON Schema is [`pagecue.schema.json`](https://github.com/pakothealpaco/page
 | `id` | Yes | Unique within the file. Keep it stable: it's how your own edits stay attached when the file changes. |
 | `title` | Yes | The headline. About eight words reads best. |
 | `notes` | | The points: an array of strings, or one string with a point per line. Three or fewer read best. |
-| `anchor` | | Where the cue starts. Without it, the cue attaches to the element with `data-pagecue="<id>"`. |
+| `anchor` | | Where the cue starts. Without it (and without `near`), the cue attaches to the element with `data-pagecue="<id>"`. |
+| `near` | | Instead of an anchor: the exact visible text where the cue starts, usually a heading. For pages you can't mark. Small differences are tolerated. |
 | `startAt` | | Fine-tunes where the cue starts, as a share of its part of the page. Set when you drag a section line. |
 
 ### Anchors
@@ -57,7 +58,7 @@ An anchor is either a `data-pagecue` value as a string, or an object describing 
 
 | Field | Description |
 |---|---|
-| `tag` | Required. The element's tag, such as `h2` or `section`. |
+| `tag` | Required. The element's tag, such as `h2` or `section`, or `*` for any. |
 | `cue` | Its `data-pagecue` value. |
 | `id` | Its `id`. |
 | `testId` | A test id, as `{ "attr": "data-testid", "value": "…" }`. |
@@ -84,7 +85,7 @@ An element with `data-pagecue` but no matching cue still becomes a cue, titled a
 |---|---|---|
 | **Linked** | `<link rel="alternate" type="application/vnd.pagecue+json" href="report.cues.json">` in `<head>` | Pages on the web. The file must be on the same site, up to 1 MB. |
 | **Inline** | `<script type="application/vnd.pagecue+json">{ … }</script>` | Files opened from disk, which can't use a linked file. |
-| **Import** | ··· menu → **Import cues…** | Private notes for a public page. |
+| **Import** | ··· menu → **Add cues from Claude…** → **Choose a file** | Private notes for a public page. |
 | **Handed over by Claude** | The `publish_cues` tool | Any page, yours or not. |
 
 <Aside type="caution" title="Linked and inline cues are public">

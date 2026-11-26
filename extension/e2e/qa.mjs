@@ -185,7 +185,7 @@ async function main() {
       result.connected = Boolean(
         await until(async () => {
           const t = await emptyTitle();
-          return t === 'No cues on this page yet' || (await titles()).length > 0 || t?.includes('frame');
+          return t === 'No cues yet' || (await titles()).length > 0 || t?.includes('frame');
         }, 15000),
       );
       // A page that hands itself to a frame does so within a few seconds: wait until that settles.

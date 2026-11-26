@@ -54,6 +54,7 @@ export default defineConfig({
           label: 'Write cues with Claude',
           items: [
             { label: 'Add cues to a page', slug: 'guide/claude/add-cues' },
+            { label: 'claude.ai and the Claude app', slug: 'guide/claude/apps' },
             { label: 'Change cues while you rehearse', slug: 'guide/claude/live' },
             { label: 'Prompts that work', slug: 'guide/claude/prompts' },
           ],

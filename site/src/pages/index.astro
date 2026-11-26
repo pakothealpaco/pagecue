@@ -13,7 +13,7 @@ import Mark from '../assets/mark.svg?raw';
 const repo = 'https://github.com/pakothealpaco/pagecue';
 const title = 'pagecue: speaker notes for any web page, written with Claude';
 const description =
-  'Tell Claude what you want to say. Your cues sit in a private window that follows the page as you scroll. Free and open source, for Chrome.';
+  'Write speaker notes for any report, dashboard or site with Claude, and read them in a private window that follows the page as you scroll. Free and open source, for Chrome.';
 
 // The demo report's cues (site/public/demo), shortened to five parts for the stage.
 const parts = [
@@ -91,12 +91,13 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
       <section class="hero wrap">
         <h1>Speaker notes for any web page, written with&nbsp;Claude.</h1>
         <p class="lede">
-          You made the report with Claude. Now you're presenting it. Tell Claude what you want to say: it writes a short
-          cue for each part, in a window you don't share that follows the page as you scroll.
+          You made the report with Claude. Now you have to present it. Tell Claude what you want to say, and it shapes
+          your words into a short cue for each part of the page. Your cues sit in a window you don't share, and follow
+          the page as you scroll.
         </p>
         <div class="actions">
           <a class="button primary" href="#install">Install for Chrome</a>
-          <a class="button" href="/guide/quick-start/">Your first presentation</a>
+          <a class="button" href="/guide/quick-start/">Try it in five minutes</a>
         </div>
       </section>
 
@@ -178,16 +179,16 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
 
       <section class="block wrap" aria-labelledby="claude-title">
         <div class="block-text">
-          <h2 id="claude-title">Written with Claude</h2>
+          <h2 id="claude-title">You say what matters. Claude puts it in place.</h2>
           <p>
-            The pagecue plugin gives Claude an add-cues skill. Claude reads the page, so it knows the numbers and where
-            each part starts. You bring what only you know: who's in the room, and what they should remember.
+            Claude reads the page, so it knows the numbers and where each part starts. You bring what only you know:
+            who's in the room, and what they should remember. It works in claude.ai, the Claude app and Claude Code.
           </p>
           <ol class="steps">
             <li><b>Ask in your own words.</b> "Add presenter cues to this report", in any language.</li>
             <li><b>Claude asks once what you want to say</b> at each part. Type it, dictate it, or say "you write it".</li>
-            <li><b>It writes each cue</b>: a headline of about eight words and up to three points, only from your words and the page's facts.</li>
-            <li><b>While you rehearse, it changes them on the spot.</b> "Make cue 3 shorter." Every change shows with Undo.</li>
+            <li><b>Claude shapes each cue</b>: a headline of about eight words and up to three points, from your words and the page's facts only. When Claude builds the report, the cues come inside it.</li>
+            <li><b>Rehearse, and ask for changes.</b> "Make cue 3 shorter." In Claude Code or the Claude app, each change shows in the prompter at once, with Undo.</li>
           </ol>
           <p><a href="/guide/claude/add-cues/">How Claude writes cues</a></p>
         </div>
@@ -206,10 +207,11 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
 
       <section class="block wrap" aria-labelledby="private-title">
         <div class="block-text">
-          <h2 id="private-title">Private by how you share</h2>
+          <h2 id="private-title">Viewers see the page, not your cues</h2>
           <p>
-            The prompter is a window of its own. In Zoom, Meet or Teams, share the page's tab or window: viewers see the
-            page, and your cues stay with you. pagecue draws nothing on the page you share, except section lines while you turn them on.
+            The prompter is a window of its own. In Zoom, Meet or Teams, share the page's tab or window, and the prompter
+            stays with you, like presenter view. pagecue draws nothing on the page you share, except section lines, and only
+            while you have them on.
           </p>
           <p><a href="/guide/sharing/">Share your screen privately</a></p>
         </div>
@@ -243,19 +245,19 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
             <dd>One cue lit at a time, level with your eye. The rest fades back.</dd>
           </div>
           <div>
-            <dt>Both ways</dt>
+            <dt>Scroll either side</dt>
             <dd>Scroll the page and the prompter follows. Click a cue, press <kbd>↓</kbd>, or use your clicker, and the page follows.</dd>
           </div>
           <div>
-            <dt>Your words, too</dt>
-            <dd>Double-click a cue to change it. Press <kbd>N</kbd> to add one. Your edits always win.</dd>
+            <dt>Change any cue yourself</dt>
+            <dd>Double-click a cue to change its words. Press <kbd>N</kbd> to add one. Your edits always win.</dd>
           </div>
           <div>
-            <dt>Placed where you want them</dt>
+            <dt>Cues start where you want</dt>
             <dd>Press <kbd>L</kbd> to see where each cue starts, and drag to adjust. Then hide the lines.</dd>
           </div>
           <div>
-            <dt>Any page</dt>
+            <dt>Works on the pages you present</dt>
             <dd>Reports, dashboards, docs, apps, Claude artifacts and local files. Any language.</dd>
           </div>
           <div>
@@ -279,10 +281,15 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
           </div>
           <div>
             <h3>2. The Claude plugin</h3>
-            <p>In Claude Code:</p>
+            <p>
+              In claude.ai or the Claude app: <b>Plugins → Add → Add marketplace</b>, then
+              <code>pakothealpaco/pagecue</code>. In Claude Code:
+            </p>
             <pre><code>/plugin marketplace add pakothealpaco/pagecue
 /plugin install pagecue@pagecue</code></pre>
-            <p class="small">Needs Node.js 20 or later. <a href="/guide/install/#the-claude-plugin">Claude desktop app</a></p>
+            <p class="small">
+              Step by step: <a href="/guide/claude/apps/">claude.ai and the Claude app</a>.
+            </p>
           </div>
         </div>
       </section>

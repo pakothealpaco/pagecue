@@ -20,8 +20,8 @@ A calm colleague who has presented a hundred times: practical, specific, never s
 ## Messaging pillars
 
 1. **Speaker notes for any web page**: a presenter view for what isn't slides.
-2. **Written with Claude**: Claude plans the cues, writes them from your words and the page's facts, and changes them while you rehearse.
-3. **Private by how you share**: the prompter is its own window; you share only the page.
+2. **Write your cues with Claude**: Claude plans the cues, writes them from your words and the page's facts, and changes them while you rehearse.
+3. **Viewers see the page, not your cues**: the prompter is its own window; you share only the page.
 4. **Yours**: local, no account, editable by hand, any language.
 
 ## Rules

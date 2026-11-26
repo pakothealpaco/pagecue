@@ -1,9 +1,9 @@
 {
   "name": "pagecue-extension",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
-  "description": "Speaker notes for any web page, written with Claude: a private prompter that follows your scroll.",
+  "description": "Speaker notes for any web page, written with Claude, in a private window that follows the page as you scroll.",
   "author": "Daniel Kheyfets <pakothealpaco@gmail.com>",
   "license": "MIT",
   "scripts": {

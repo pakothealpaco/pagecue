@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { frameAccess } from '../src/content/frames';
+import { coverageNeeded, frameAccess } from '../src/content/frames';
 
 describe('frameAccess', () => {
   it('covers a site whose frames get a new subdomain per document', () => {
@@ -22,5 +22,17 @@ describe('frameAccess', () => {
   it('ignores frames pagecue cannot run in', () => {
     expect(frameAccess('about:blank')).toBeNull();
     expect(frameAccess('not a url')).toBeNull();
+  });
+});
+
+describe('coverageNeeded', () => {
+  it('lets a Claude artifact in the panel beside a chat count as the page', () => {
+    expect(coverageNeeded('https://7ddc6888.frame.claudeusercontent.com/_t?x=1')).toBeLessThan(0.5);
+  });
+
+  it('asks other frames to fill most of the window', () => {
+    expect(coverageNeeded('https://www.youtube.com/embed/x')).toBe(0.6);
+    expect(coverageNeeded('https://claudeusercontent.com.evil.example/x')).toBe(0.6);
+    expect(coverageNeeded('about:blank')).toBe(0.6);
   });
 });
