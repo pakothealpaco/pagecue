@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <!-- A: the letter P is Paco's head. Ears and wool on the stem, the counter is the eye. -->
+  <rect width="800" height="800" fill="#2f45ff"/>
+  <g fill="#ffffff">
+    <!-- ears -->
+    <path d="M300 280 C284 230 286 170 306 128 C330 166 340 226 336 280 Z"/>
+    <path d="M352 280 C346 228 356 172 384 136 C398 180 396 236 386 280 Z"/>
+    <!-- the P -->
+    <path d="M270 660 L270 330 Q270 270 330 270 L460 270 A130 130 0 0 1 460 530 L390 530 L390 660
+             Q390 680 370 680 L290 680 Q270 680 270 660 Z"/>
+    <!-- wool on the crown -->
+    <circle cx="282" cy="296" r="34"/><circle cx="326" cy="270" r="34"/><circle cx="372" cy="270" r="30"/>
+  </g>
+  <!-- counter = eye, with a nostril on the muzzle -->
+  <circle cx="470" cy="378" r="34" fill="#2f45ff"/>
+  <circle cx="481" cy="368" r="10" fill="#ffffff"/>
+  <path d="M586 440 Q572 452 556 448" fill="none" stroke="#2f45ff" stroke-width="10" stroke-linecap="round"/>
+</svg>

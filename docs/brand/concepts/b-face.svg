@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <!-- B: a calm, geometric front face. Heavy-lidded eyes give Paco a relaxed character. -->
+  <rect width="800" height="800" fill="#ffb627"/>
+  <!-- ears -->
+  <path d="M300 330 C262 290 246 222 262 170 C300 190 330 250 338 312 Z" fill="#fff6ea"/>
+  <path d="M500 330 C538 290 554 222 538 170 C500 190 470 250 462 312 Z" fill="#fff6ea"/>
+  <path d="M306 304 C284 278 274 236 280 204 C302 222 318 260 322 296 Z" fill="#1d1a2e"/>
+  <path d="M494 304 C516 278 526 236 520 204 C498 222 482 260 478 296 Z" fill="#1d1a2e"/>
+  <!-- neck and face -->
+  <rect x="330" y="560" width="140" height="300" fill="#fff6ea"/>
+  <rect x="298" y="290" width="204" height="380" rx="102" fill="#fff6ea"/>
+  <!-- wool -->
+  <g fill="#fff6ea">
+    <circle cx="330" cy="300" r="42"/><circle cx="372" cy="262" r="46"/><circle cx="428" cy="262" r="46"/>
+    <circle cx="470" cy="300" r="42"/><circle cx="400" cy="300" r="46"/>
+  </g>
+  <!-- sleepy eyes: a lid over a half circle -->
+  <path d="M332 440 A26 26 0 0 0 384 440 Z" fill="#1d1a2e"/>
+  <path d="M416 440 A26 26 0 0 0 468 440 Z" fill="#1d1a2e"/>
+  <path d="M326 438 L390 438 M410 438 L474 438" stroke="#1d1a2e" stroke-width="10" stroke-linecap="round"/>
+  <!-- nose and mouth -->
+  <path d="M380 560 Q400 550 420 560 Q412 576 400 578 Q388 576 380 560 Z" fill="#1d1a2e"/>
+  <path d="M400 578 L400 596 M376 600 Q388 614 400 596 Q412 614 424 600" fill="none" stroke="#1d1a2e"
+        stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>pagecue: store submission</title>
+<style>
+body{font:15px/1.5 -apple-system,system-ui,sans-serif;max-width:860px;margin:24px auto;padding:0 16px;color:#1d1a2e;background:#fbfaf7}
+h1{font-size:22px}h2{font-size:18px;margin:32px 0 8px;padding-top:12px;border-top:2px solid #1d1a2e}
+.f{background:#fff;border:1px solid #ddd;border-radius:8px;padding:10px 12px;margin:10px 0}
+.l{font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px}
+pre{white-space:pre-wrap;margin:6px 0 0;font:13px/1.45 ui-monospace,Menlo,monospace;background:#f4f2ee;padding:8px;border-radius:6px}
+button{font:inherit;font-size:13px;padding:4px 12px;border-radius:6px;border:1px solid #1d1a2e;background:#ffb627;cursor:pointer}
+button.ok{background:#2e9d5b;color:#fff;border-color:#2e9d5b}
+.n{color:#555;font-weight:400}
+</style></head><body>
+<h1>pagecue: Chrome Web Store submission</h1>
+<p>Each page of the dashboard, in order. Click Copy and paste it into the field. Files are in <b>Desktop/pagecue-store</b>.</p>
+
+<h2>1. Store listing</h2>
+<div class="f"><div class="l">Description<button>Copy</button></div><pre>Speaker notes for any web page, written with Claude.
+
+You made a report, a dashboard or a site with Claude. Now you have to present it to partners, clients or your team. pagecue gives it speaker notes, the way presenter view does for slides.
+
+Your notes, called cues, sit in a small window of their own: the prompter. As you scroll the page, the prompter shows the cue for the part on screen. Click a cue, or press the arrow keys or your clicker, and the page scrolls there.
+
+WRITE YOUR CUES WITH CLAUDE
+Add the free pagecue plugin to Claude (claude.ai, the Claude app or Claude Code) and ask in your own words: "Add presenter cues to this report." Claude reads the page and asks what you want to say. Then it turns your words and the page's facts into a short headline and up to three points for each part. When Claude builds the report, the cues come inside it. While you rehearse in Claude Code or the Claude app, ask for changes: "Make cue 3 shorter." Each one shows in the prompter at once, with Undo.
+
+VIEWERS SEE THE PAGE, YOU SEE YOUR CUES
+The prompter is a separate window. In Zoom, Google Meet or Microsoft Teams, share the page's tab or window, and the prompter stays with you. pagecue draws nothing on the page you share, except section lines, and only while you have them on.
+
+MADE FOR TALKING
+• One cue lit at a time, level with your eye.
+• Scroll the page or the prompter: the other follows.
+• Double-click a cue to change its words; press N to add one.
+• Press L to see on the page where each cue starts, and drag to adjust.
+• Works on reports, dashboards, docs, web apps, Claude artifacts and local files, in any language.
+
+NO ACCOUNT, NO CLOUD
+Your cues stay on your computer. pagecue asks for no access to your sites when you install it: it reaches a page only when you click its button there. Free and open source under the MIT licence.
+
+Guide: https://usepagecue.com/guide/
+Source: https://github.com/pakothealpaco/pagecue</pre></div>
+<div class="f"><div class="l">Category <span class="n">choose: Productivity → Tools</span></div></div>
+<div class="f"><div class="l">Language <span class="n">choose: English</span></div></div>
+<div class="f"><div class="l">Store icon <span class="n">upload: icon-128.png</span></div></div>
+<div class="f"><div class="l">Global promo video<button>Copy</button></div><pre>https://www.youtube.com/watch?v=gCTruNZXxYg</pre></div>
+<div class="f"><div class="l">Screenshots <span class="n">upload in order: 1-follows, 2-claude, 3-lines, 4-edit, 5-dark</span></div></div>
+<div class="f"><div class="l">Small promo tile <span class="n">upload: promo-small.png</span></div></div>
+<div class="f"><div class="l">Marquee promo tile <span class="n">leave empty</span></div></div>
+<div class="f"><div class="l">Official URL <span class="n">leave empty</span></div></div>
+<div class="f"><div class="l">Homepage URL<button>Copy</button></div><pre>https://usepagecue.com</pre></div>
+<div class="f"><div class="l">Support URL<button>Copy</button></div><pre>https://github.com/pakothealpaco/pagecue/issues</pre></div>
+<div class="f"><div class="l">Mature content <span class="n">off</span></div></div>
+<p>→ Save draft</p>
+
+<h2>2. Privacy</h2>
+<div class="f"><div class="l">Single purpose description<button>Copy</button></div><pre>pagecue shows the presenter's speaker notes (cues) for the web page they are presenting, in a separate prompter window that follows the page as it scrolls.</pre></div>
+<div class="f"><div class="l">activeTab justification<button>Copy</button></div><pre>When the user clicks pagecue's toolbar button, pagecue connects to that tab only, to find where each cue belongs on the page and follow its scrolling.</pre></div>
+<div class="f"><div class="l">scripting justification<button>Copy</button></div><pre>Injects pagecue's own content script into the tab the user clicked pagecue on (and into its frames), which reads the page's layout to follow scrolling and draws section lines only when the user turns them on.</pre></div>
+<div class="f"><div class="l">storage justification<button>Copy</button></div><pre>Saves the user's cues and prompter settings locally in the browser.</pre></div>
+<div class="f"><div class="l">unlimitedStorage justification<button>Copy</button></div><pre>Users keep cues for many pages; this keeps them from hitting the default local storage quota. Nothing leaves the computer.</pre></div>
+<div class="f"><div class="l">Host permission justification<button>Copy</button></div><pre>Never granted at install. Requested at run time, one site at a time, only when the user asks: "Always reconnect on {site}" so pagecue reconnects after a reload, or "Allow on {site}" when the page shows its content in a frame from another site (for example Claude artifacts on claudeusercontent.com).</pre></div>
+<div class="f"><div class="l">Are you using remote code? <span class="n">No, I am not using remote code</span></div></div>
+<div class="f"><div class="l">Data usage: what user data do you collect? <span class="n">tick nothing</span></div></div>
+<div class="f"><div class="l">The three certifications <span class="n">tick all three</span></div></div>
+<div class="f"><div class="l">Privacy policy URL<button>Copy</button></div><pre>https://github.com/pakothealpaco/pagecue/blob/main/PRIVACY.md</pre></div>
+<p>→ Save draft</p>
+
+<h2>3. Distribution</h2>
+<div class="f"><div class="l">Payments <span class="n">Free of charge</span></div></div>
+<div class="f"><div class="l">Visibility <span class="n">Public</span></div></div>
+<div class="f"><div class="l">Regions <span class="n">All regions</span></div></div>
+<p>→ Save draft</p>
+
+<h2>4. Test instructions</h2>
+<div class="f"><div class="l">Username / password <span class="n">leave empty (no account needed)</span></div></div>
+<div class="f"><div class="l">Additional instructions<button>Copy</button></div><pre>No account needed.
+1. Open https://usepagecue.com/demo/ (a sample report with six cues).
+2. Click the pagecue toolbar icon (or Alt+Shift+P). The prompter window opens.
+3. Scroll the report: the lit cue follows. Click a cue: the report scrolls to it. Press L to show section lines, L again to hide them.
+The Claude plugin is optional; the extension works fully without it. It talks only to 127.0.0.1 on the user's own computer.</pre></div>
+<p>→ Save draft → Submit for review (if it stays grey: "Why can't I submit?")</p>
+<script>
+document.querySelectorAll('button').forEach(b=>b.onclick=()=>{navigator.clipboard.writeText(b.closest('.f').querySelector('pre').textContent);b.textContent='Copied';b.className='ok';setTimeout(()=>{b.textContent='Copy';b.className=''},1500)});
+</script>
+</body></html>

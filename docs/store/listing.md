@@ -51,6 +51,8 @@ Source: https://github.com/pakothealpaco/pagecue
 | Screenshots (1280×800) | `1-follows.jpg`, `2-claude.jpg`, `3-lines.jpg`, `4-edit.jpg`, `5-dark.jpg`, in that order |
 | Small promo tile (440×280) | `promo-small.png` |
 
+**Global promo video (YouTube):** https://www.youtube.com/watch?v=gCTruNZXxYg
+
 **Official URL:** none (it needs Search Console verification of the domain; can be added later).
 
 **Homepage URL:** https://usepagecue.com
@@ -87,10 +89,12 @@ Certify all three disclosures (no selling, no unrelated use, no creditworthiness
 
 ## Notes for the reviewer
 
+The Test instructions field takes 500 characters at most.
+
 ```text
-pagecue needs no account. To test it:
-1. Open https://usepagecue.com/demo/ (a sample report that ships with six cues).
-2. Click the pagecue icon in the toolbar (or press Alt+Shift+P). The prompter window opens with the cues.
-3. Scroll the report: the lit cue in the prompter follows. Click a cue: the report scrolls to it. Press L to show section lines on the page, L again to hide them.
-On first install a welcome page (bundled in the extension) opens once. The Claude plugin is optional and runs separately; the extension works fully without it. When a user runs it, the prompter talks to it on the user's own computer only (http://127.0.0.1:47613); nothing is sent elsewhere.
+No account needed.
+1. Open https://usepagecue.com/demo/ (a sample report with six cues).
+2. Click the pagecue toolbar icon (or Alt+Shift+P). The prompter window opens.
+3. Scroll the report: the lit cue follows. Click a cue: the report scrolls to it. Press L to show section lines, L again to hide them.
+The Claude plugin is optional; the extension works fully without it. It talks only to 127.0.0.1 on the user's own computer.
 ```

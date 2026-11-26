@@ -26,3 +26,5 @@ docs/store/*.zip
 
 # Raw takes and intermediate files for the video
 docs/video/build/
+# The rendered video lives on YouTube (docs/video/youtube.md)
+docs/video/*.mp4
