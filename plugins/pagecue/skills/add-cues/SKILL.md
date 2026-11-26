@@ -61,6 +61,7 @@ Write cues in the language the user speaks to you (any language: English, Hebrew
 Add `data-pagecue="<id>"` to the element each cue belongs to: the container that holds the whole topic (a `section`, `figure`, `table` or card), not a single word. Rules:
 
 - Each value must appear on exactly one element of the rendered page.
+- Cues follow the page from top to bottom: each one runs from where its element starts down to the next cue. So mark parts that stack vertically. Never mark an element inside another marked element, or two elements side by side (columns, a chart beside its text, cards in one row): mark their shared container once and cover both in one cue.
 - Edit the **source** the page is built from (HTML, JSX, TSX, Vue, Svelte, Markdown/MDX, or the artifact's code), not a build output. In JSX write `data-pagecue="revenue-chart"`; it passes through to the DOM. For a component rendered several times, pass the id as a prop (`data-pagecue={id}`) and confirm each one renders.
 - Do not change anything else: no layout, style, text or behaviour changes. The attribute is invisible.
 - For a chart drawn on a `<canvas>` or in an SVG, mark its wrapping element.
