@@ -78,8 +78,7 @@ export function publish(url, cueFile) {
   mkdirSync(INBOX, { recursive: true });
   const entry = { key, url, publishedAt: Date.now(), cueFile };
   const path = entryPath(key);
-  writeFileSync(`${path}.tmp`, JSON.stringify(entry));
-  renameSync(`${path}.tmp`, path);
+  writeJson(path, entry);
   return entry;
 }
 
@@ -98,9 +97,22 @@ export function listPublished() {
 
 // ---------------------------------------------------------------- live link with the open prompter
 
+/**
+ * Writes a JSON file whole: a temporary file, then a rename over the old one. On Windows the rename
+ * fails for a moment while another process (a reader, an antivirus scan) has the file open, so it
+ * tries again for up to a second.
+ */
 function writeJson(path, value) {
   writeFileSync(`${path}.tmp`, JSON.stringify(value));
-  renameSync(`${path}.tmp`, path);
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      renameSync(`${path}.tmp`, path);
+      return;
+    } catch (error) {
+      if (attempt >= 20 || !['EPERM', 'EACCES', 'EBUSY'].includes(error?.code)) throw error;
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 50);
+    }
+  }
 }
 
 /** The prompter's latest report: page, cues, current cue, view. Kept in a file so every bridge process sees it. */
@@ -307,6 +319,8 @@ async function ensureServer() {
   const child = spawn(process.execPath, [fileURLToPath(import.meta.url), 'serve', '--exit-when-idle'], {
     detached: true,
     stdio: 'ignore',
+    // On Windows a detached process gets a console window of its own unless it is hidden.
+    windowsHide: true,
   });
   child.unref();
   for (let i = 0; i < 20; i += 1) {

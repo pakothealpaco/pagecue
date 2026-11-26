@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { modKey } from '../../lib/platform';
 import { scriptLanguage, textDirection } from '../../lib/text';
 import type { Cue } from '../../lib/types';
 
@@ -202,7 +203,7 @@ export const CueCard = forwardRef<HTMLLIElement, Props>(function CueCard(
             <button
               type="button"
               className="done-button"
-              title="Save (⌘ Enter)"
+              title={`Save (${modKey('Enter')})`}
               onMouseDown={(event) => event.preventDefault()}
               onClick={commit}
             >

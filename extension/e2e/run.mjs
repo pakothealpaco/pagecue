@@ -31,7 +31,9 @@ function findChromium() {
   const cache =
     process.platform === 'darwin'
       ? join(homedir(), 'Library/Caches/ms-playwright')
-      : join(homedir(), '.cache/ms-playwright');
+      : process.platform === 'win32'
+        ? join(process.env.LOCALAPPDATA ?? join(homedir(), 'AppData/Local'), 'ms-playwright')
+        : join(homedir(), '.cache/ms-playwright');
   for (const dir of existsSync(cache)
     ? readdirSync(cache)
         .filter((d) => /^chromium-\d+$/.test(d))

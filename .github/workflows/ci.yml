@@ -30,6 +30,27 @@ jobs:
       - run: npx playwright-core install --with-deps chromium
       - run: npm run e2e
 
+  # The same unit tests (the bridge's included) and the real-Chromium run, on Windows.
+  extension-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: extension
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: extension/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npx playwright-core install chromium
+      - run: npm run e2e
+
   plugin:
     runs-on: ubuntu-latest
     steps:
@@ -42,6 +63,22 @@ jobs:
       - name: Plugin manifests are valid JSON
         run: |
           node -e "for (const f of ['.claude-plugin/marketplace.json','plugins/pagecue/.claude-plugin/plugin.json','plugins/pagecue/.mcp.json','plugins/pagecue/schema/pagecue.schema.json']) JSON.parse(require('fs').readFileSync(f,'utf8'))"
+      - name: The bridge starts and answers MCP
+        run: |
+          printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"ci","version":"1"}}}' | PAGECUE_HOME=$RUNNER_TEMP/pagecue PAGECUE_PORT=47699 timeout 10 node plugins/pagecue/server/bridge.mjs mcp | grep -q '"serverInfo"'
+
+  plugin-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Cue checker runs on the example
+        run: node plugins/pagecue/scripts/check-cues.mjs extension/e2e/fixtures/report.cues.json extension/e2e/fixtures
       - name: The bridge starts and answers MCP
         run: |
           printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"ci","version":"1"}}}' | PAGECUE_HOME=$RUNNER_TEMP/pagecue PAGECUE_PORT=47699 timeout 10 node plugins/pagecue/server/bridge.mjs mcp | grep -q '"serverInfo"'

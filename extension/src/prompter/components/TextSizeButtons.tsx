@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { modKey } from '../../lib/platform';
 import { stepTextSize, TEXT_SIZE_ORDER, type TextSize } from '../useSettings';
 
 interface Props {
@@ -20,7 +21,7 @@ export function TextSizeButtons({ size, onChange }: Props) {
         type="button"
         className="icon-button size-smaller"
         aria-label="Smaller text"
-        title="Smaller text (⌘−)"
+        title={`Smaller text (${modKey('−')})`}
         disabled={size === TEXT_SIZE_ORDER[0]}
         onClick={() => step(-1)}
       >
@@ -30,7 +31,7 @@ export function TextSizeButtons({ size, onChange }: Props) {
         type="button"
         className="icon-button size-larger"
         aria-label="Larger text"
-        title="Larger text (⌘+)"
+        title={`Larger text (${modKey('+')})`}
         disabled={size === TEXT_SIZE_ORDER.at(-1)}
         onClick={() => step(1)}
       >

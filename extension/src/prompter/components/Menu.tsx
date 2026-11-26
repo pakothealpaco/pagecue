@@ -119,7 +119,7 @@ export function Menu(props: Props) {
       </div>
       <hr />
       {/* Only the keys shown nowhere else: the menu items above carry their own (N, Enter, P), and
-          the footer buttons name theirs (L, ⌘ + ⌘ −) in their tooltips. */}
+          the footer buttons name theirs (L, ⌘+ ⌘−, Ctrl on Windows) in their tooltips. */}
       <dl className="shortcuts" aria-label="Keyboard shortcuts">
         <dt>Next, previous</dt>
         <dd>↓ ↑ Space</dd>

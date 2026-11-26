@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { browser } from 'wxt/browser';
 import { LINKS } from '../lib/links';
-
-const isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+import { isMac } from '../lib/platform';
 
 /** A shortcut as Chrome stores it ("Alt+Shift+P"), written the way this computer's keyboard shows it. */
 function keysOf(shortcut: string): string[] {
