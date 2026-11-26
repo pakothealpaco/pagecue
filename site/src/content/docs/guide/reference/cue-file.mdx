@@ -77,6 +77,8 @@ On pages you control, mark where each cue starts with `data-pagecue`. It's the s
 <figure data-pagecue="churn">…</figure>
 ```
 
+Cues follow the page from top to bottom: each runs from where its element starts down to where the next cue starts. So mark parts that sit one below another. Don't mark an element inside another marked one, or two elements side by side (columns, a chart beside its text, cards in one row); mark the container that holds both instead.
+
 An element with `data-pagecue` but no matching cue still becomes a cue, titled after the element.
 
 ## How a page carries its cues

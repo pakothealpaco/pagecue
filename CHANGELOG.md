@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Skill:** Claude marks only parts that stack vertically, never one inside or beside another, so no cue is squeezed out by its neighbour.
+
 ## 0.4.0 (2026-11-26)
 
 - **claude.ai and the Claude app.** The `add-cues` skill now works there too: when Claude builds an artifact, it writes the cues inside it, and pagecue picks them up when you open the artifact (also when the artifact draws its content after loading, and in the panel beside a chat). Releases include `pagecue-skill.zip` to upload with Plugins → Add → Upload plugin.

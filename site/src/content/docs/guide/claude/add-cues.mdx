@@ -35,7 +35,7 @@ Open pagecue on a page with no cues and click **Copy**: you get `/pagecue:add-cu
 
 4. **Writes the cues** in your language. Each gets a headline of about eight words that makes a point (not a label), and up to three points of about twelve words: a number or fact to say, why it matters, maybe a likely question and your answer. It uses only facts from the page and from you, and keeps your own wording.
 
-5. **Marks the page**, if the page is yours: it adds a `data-pagecue` attribute to each part in the source, so the cue stays attached even as the text changes. Nothing visible changes. For pages that aren't yours, it attaches cues by their heading text instead.
+5. **Marks the page**, if the page is yours: it adds a `data-pagecue` attribute to each part in the source, so the cue stays attached even as the text changes. It marks parts that sit one below another, never one inside or beside another, so each cue gets its own stretch of the page. Nothing visible changes. For pages that aren't yours, it attaches cues by their heading text instead.
 
 6. **Hands the cues to pagecue.** In Claude Code (or the Claude app with pagecue's [desktop extension](/guide/claude/apps/#live-changes-in-the-claude-app)), they appear in the prompter within seconds. In an artifact Claude builds, they come inside it. For any other page, Claude gives you a block to [add in the prompter](/guide/prompter/#add-cues-from-claude). For your own pages, Claude can also ship the cues with the page, so anyone who opens it with pagecue gets them (see [Cue file format](/guide/reference/cue-file/#how-a-page-carries-its-cues)).
 
