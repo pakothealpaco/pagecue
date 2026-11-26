@@ -1,0 +1,42 @@
+---
+title: Present a website in Zoom, Meet or Teams with speaker notes
+description: Share a website, report or web app in a video call and keep your speaker notes beside it, in a window viewers don't see.
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+Slides have presenter view. A website doesn't: when you share a report, a dashboard or a web app in a call, your notes are on paper, on a phone, or in your head. pagecue gives the page speaker notes of its own, in a small window that follows the page as you scroll and that you simply don't share.
+
+## How it works
+
+- **Your notes, called cues,** belong to parts of the page: one for the opening numbers, one for the chart, one for the ask.
+- **The prompter** is a separate Chrome window that shows the cue for the part on screen. Scroll the page and the next cue lights up. Click a cue, or press <kbd>↓</kbd> or your clicker, and the page scrolls there.
+- **You share the page's tab or window,** not your screen. Viewers see the website; the prompter stays with you.
+
+## Set it up
+
+<Steps>
+
+1. **Install pagecue** for Chrome. It's free. See [Install](/guide/install/).
+
+2. **Write the cues with Claude.** Give Claude the page and say what you want to get across: "Add speaker notes to this page. I'm presenting it to our partners on Thursday." Claude writes a short headline and up to three points for each part. See [Add cues to a page](/guide/claude/add-cues/).
+
+3. **Open the page and click pagecue** in the toolbar, or press <kbd>Alt</kbd> <kbd>Shift</kbd> <kbd>P</kbd>. The prompter opens with your cues.
+
+4. **Place the prompter** beside the page on one screen, close to your camera, or on a second screen.
+
+5. **Share the page, not the screen.** In Google Meet, choose the Chrome tab. In Zoom or Teams, choose the Chrome window that holds the page. See [Share your screen privately](/guide/sharing/).
+
+</Steps>
+
+<Aside type="caution" title="Share a tab or a window">
+If you share your entire screen, the prompter is on it like any other window. Share the page's tab or window instead.
+</Aside>
+
+## Which pages work
+
+Any page Chrome opens: your own site, a client's site, a Claude artifact, a report on your computer, a web app with its own scrolling panels. Pages that show their content in a frame from another site ask for your permission once. See [Site access, frames and local files](/guide/sites/).
+
+## Rehearse first
+
+Try it on the [demo report](/demo/), which already has cues, before you write your own: [Your first presentation](/guide/quick-start/) takes five minutes.

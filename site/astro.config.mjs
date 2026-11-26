@@ -57,6 +57,15 @@ export default defineConfig({
           ],
         },
         {
+          label: 'Use cases',
+          items: [
+            { label: 'Present a website in a call', slug: 'present-a-website-in-zoom' },
+            { label: 'Present a dashboard', slug: 'present-a-dashboard' },
+            { label: 'A teleprompter for screen sharing', slug: 'teleprompter-for-screen-sharing' },
+            { label: 'AI speaker notes with Claude', slug: 'ai-speaker-notes' },
+          ],
+        },
+        {
           label: 'Write cues with Claude',
           items: [
             { label: 'Add cues to a page', slug: 'guide/claude/add-cues' },

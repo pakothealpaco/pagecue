@@ -1,0 +1,32 @@
+---
+title: AI speaker notes for any report or web page, with Claude
+description: Ask Claude for speaker notes for a report, dashboard or site. It writes a short cue for each part, from your words and the page's facts.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Claude can write speaker notes for any page you present: a report it built for you, a dashboard, your company's site. With pagecue, those notes become cues: one short card per part of the page, shown in a private window that follows the page while you present.
+
+## Ask in your own words
+
+> Add speaker notes to this report. I'm presenting it to the board tomorrow. The point is that the EU launch drove the Q3 jump.
+
+Claude reads the page, asks you once what you want to say about each part, then writes the cues. Answer as much as you like, or say "you write it" for the rest. It works in any language, and in claude.ai, the Claude app and Claude Code. See [Add cues to a page](/guide/claude/add-cues/).
+
+## Short enough to read mid-sentence
+
+Each cue has a headline of about eight words that makes a point, and up to three points of about twelve words: a number to say, why it matters, maybe a likely question and your answer. Claude uses only facts from the page and from you, and keeps your own wording.
+
+For example, for a revenue chart:
+
+- **September doubled March**
+- Spike = the cold brew launch, August 12
+- Not a one-off: October tracking +6%
+
+## Change them as you rehearse
+
+Ask for changes in plain words: "make cue 3 shorter", "add a cue before the summary", "drop the cue on churn". With the prompter open in Claude Code or the Claude app, each change shows up at once, with Undo. See [Change cues while you rehearse](/guide/claude/live/) and [Prompts that work](/guide/claude/prompts/).
+
+<Aside type="note">
+pagecue is the part that shows the notes while you present: a free, open-source Chrome extension. Your cues stay on your computer; there is no account. See [Install](/guide/install/).
+</Aside>

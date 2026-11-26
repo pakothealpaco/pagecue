@@ -1,0 +1,34 @@
+---
+title: A teleprompter for screen sharing that follows the page
+description: Keep your talking points in view while you share a web page in a call. pagecue shows them in a window you don't share, in step with your scroll.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Most teleprompters scroll a script at a steady speed. When you present a web page, your words depend on what's on screen, and you scroll at your own pace: you stop on a chart, answer a question, jump back. pagecue keeps your talking points in step with the page instead of with a clock.
+
+## Notes that follow the page, not a timer
+
+- Each **cue** belongs to a part of the page: a headline of about eight words, and up to three short points.
+- The **prompter**, a narrow window of its own, lights the cue for the part at a reading line a third of the way down the page.
+- Scroll the page, and the prompter follows. Click a cue, press <kbd>↓</kbd> or <kbd>Space</kbd>, or use a presentation clicker, and the page scrolls to it.
+
+You read a few words at a glance and keep talking, instead of reading a script aloud.
+
+## Keep it to yourself
+
+The prompter is a separate window, so it isn't part of what you share when you share **the page's tab or window** in Zoom, Google Meet or Microsoft Teams. Put it close to your camera so your eyes stay near the lens. See [Share your screen privately](/guide/sharing/).
+
+<Aside type="caution">
+Sharing your entire screen shares every window on it, the prompter included. Share the tab or window.
+</Aside>
+
+pagecue draws nothing on the page you share, except section lines, which you turn on yourself to see where each cue starts (<kbd>L</kbd>), and turn off before you present.
+
+## Write the points with Claude
+
+You don't have to write the cues by hand. Tell Claude what you want to say about the page, and it shapes your words into one short cue per part, using only facts from the page and from you. See [Add cues to a page](/guide/claude/add-cues/). You can also write or change any cue yourself: double-click it in the prompter. See [Edit cues yourself](/guide/editing/).
+
+## Try it
+
+pagecue is free and open source, for Chrome. [Install it](/guide/install/), then open the [demo report](/demo/), which already has cues.

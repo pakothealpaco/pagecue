@@ -1,0 +1,42 @@
+---
+title: Present a dashboard with speaker notes
+description: Walk a team or a client through a dashboard in a call, with a cue for each chart in a private window that follows your scroll.
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+A dashboard is dense: a dozen numbers, several charts, and one or two things you actually need people to remember. pagecue gives each part of the dashboard a cue, the point to make and the number to say, in a small window beside it that you don't share.
+
+## A cue for each chart
+
+For a monthly review, the cues might read:
+
+- **Revenue up 31%: best quarter yet.** Thank the team. One ask at the end.
+- **September doubled March.** The spike is the August launch, not a one-off.
+- **Churn is the one to watch.** Down 0.6 points, still above target.
+
+Each cue sits where its chart starts. Scroll the dashboard and the prompter lights the cue for the chart on screen; click a cue and the dashboard scrolls there.
+
+## Dashboards that scroll inside a panel
+
+Many dashboards don't scroll the whole page: they scroll an inner panel, or show the report inside a frame. pagecue finds the panel that holds the cues and follows it. A frame from another site needs your permission once; the prompter asks. See [Site access, frames and local files](/guide/sites/).
+
+When a dashboard changes its address without reloading, for example when you switch tabs inside it, pagecue loads the cues for the new address.
+
+## Set it up
+
+<Steps>
+
+1. **Install pagecue** for Chrome. See [Install](/guide/install/).
+
+2. **Ask Claude for the cues.** Give it the dashboard (a link, a file, or the one Claude just built) and say what matters: "Add speaker notes to this dashboard. The point is that churn is improving but still above target." See [Add cues to a page](/guide/claude/add-cues/).
+
+3. **Open the dashboard, click pagecue,** and put the prompter beside it or on a second screen.
+
+4. **In the call, share the dashboard's tab or window,** not your screen. See [Share your screen privately](/guide/sharing/).
+
+</Steps>
+
+<Aside type="tip">
+Built the dashboard with Claude? Ask for the cues in the same chat, and they come inside the dashboard. See [claude.ai and the Claude app](/guide/claude/apps/).
+</Aside>
