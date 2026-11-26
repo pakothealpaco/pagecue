@@ -123,8 +123,8 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
       <a class="brand" href="/" aria-label="pagecue home"><span class="mark" set:html={Mark} />pagecue</a>
       <nav aria-label="Main">
         <a href="/guide/">Guide</a>
-        <a class="nav-github" href={repo}>GitHub</a>
-        <a class="nav-cta" href="#install">Install</a>
+        <a class="nav-github" href={repo} data-goatcounter-click="click-github-nav">GitHub</a>
+        <a class="nav-cta" href="#install" data-goatcounter-click="click-install-nav">Install</a>
       </nav>
     </header>
 
@@ -137,9 +137,9 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
           the page as you scroll.
         </p>
         <div class="actions">
-          <a class="button primary" href="#install">Install for Chrome</a>
-          <a class="button" href="/guide/quick-start/">Try it in five minutes</a>
-          <a class="button watch" href="https://youtu.be/gCTruNZXxYg">
+          <a class="button primary" href="#install" data-goatcounter-click="click-install-hero">Install for Chrome</a>
+          <a class="button" href="/guide/quick-start/" data-goatcounter-click="click-try-hero">Try it in five minutes</a>
+          <a class="button watch" href="https://youtu.be/gCTruNZXxYg" data-goatcounter-click="click-watch-video">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6L12.6 8z" /></svg>Watch the video
           </a>
         </div>
@@ -333,8 +333,8 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
               Coming soon to the Chrome Web Store. Until then, download it from GitHub and load it in Chrome: it takes a
               minute.
             </p>
-            <a class="button primary" href={`${repo}/releases/latest`}>Download pagecue</a>
-            <p class="small"><a href="/guide/install/">Step-by-step install</a></p>
+            <a class="button primary" href={`${repo}/releases/latest`} data-goatcounter-click="click-download-extension">Download pagecue</a>
+            <p class="small"><a href="/guide/install/" data-goatcounter-click="click-install-guide">Step-by-step install</a></p>
           </div>
           <div>
             <h3>2. The Claude plugin</h3>
@@ -355,7 +355,7 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
     <footer class="foot wrap">
       <nav aria-label="Footer">
         <a href="/guide/">Guide</a>
-        <a href={repo}>GitHub</a>
+        <a href={repo} data-goatcounter-click="click-github-footer">GitHub</a>
         <a href="/guide/privacy/">Privacy</a>
         <a href={`${repo}/blob/main/CHANGELOG.md`}>Changelog</a>
         <a href={`${repo}/issues/new/choose`}>Report an issue</a>
@@ -370,6 +370,15 @@ const months = [820, 860, 910, 990, 1080, 1180, 1300, 1460, 1620];
     </footer>
 
     <script>
+      // Count two moments that show interest, as cookieless GoatCounter events (see /guide/privacy/):
+      // copying the Claude plugin commands, and the first touch of the demo.
+      type Counter = { count?: (o: { path: string; title?: string; event: boolean }) => void };
+      const countEvent = (path: string) => (window as unknown as { goatcounter?: Counter }).goatcounter?.count?.({ path, event: true });
+      document.querySelector('.install pre')?.addEventListener('copy', () => countEvent('copy-plugin-command'));
+      document
+        .querySelector('[data-stage]')
+        ?.addEventListener('pointerdown', () => countEvent('demo-touched'), { once: true, passive: true });
+
       // The stage: the report's parts and the prompter's cues, kept in step both ways, as in pagecue.
       const stage = document.querySelector<HTMLElement>('[data-stage]');
       if (stage) {
